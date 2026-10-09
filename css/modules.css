@@ -388,8 +388,8 @@
 
 .search-input-wrapper {
   position: relative;
-  flex: 1;
-  max-width: 450px;
+  flex: 1 1 360px;
+  max-width: 580px;
 }
 
 .search-input-wrapper i {
@@ -464,6 +464,16 @@
   color: #556c5e;
 }
 
+.task-check-col {
+  flex: 0 0 28px !important;
+  width: 28px !important;
+  min-width: 28px !important;
+  max-width: 28px !important;
+  display: flex;
+  align-items: flex-start;
+  padding-top: 2px;
+}
+
 .task-check-circle {
   width: 28px;
   height: 28px;
@@ -477,6 +487,12 @@
   color: transparent;
   flex-shrink: 0;
   transition: all 0.15s ease;
+  user-select: none;
+}
+
+.task-check-circle i,
+.task-check-circle svg {
+  pointer-events: none;
 }
 
 .task-check-circle:hover {
@@ -492,7 +508,10 @@
   box-shadow: 0 2px 6px rgba(47, 133, 90, 0.35);
 }
 
-.task-card-body { flex: 1; }
+.task-card-body {
+  flex: 1 1 auto !important;
+  min-width: 0 !important;
+}
 
 .task-main-row {
   display: flex;
@@ -651,21 +670,40 @@
 
 .subtasks-checklist {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-  gap: 6px;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 8px 16px;
+  margin-top: 8px;
 }
 
 .subtask-checkbox-item {
-  display: flex;
+  display: inline-flex;
   align-items: center;
-  gap: 8px;
-  font-size: 0.82rem;
+  gap: 10px;
+  font-size: 0.84rem;
+  color: var(--text-main);
   cursor: pointer;
+  padding: 4px 8px;
+  border-radius: 4px;
+  transition: all 0.15s ease;
+  user-select: none;
+}
+
+.subtask-checkbox-item:hover {
+  background: #f4ece1;
+}
+
+.subtask-checkbox-item input[type="checkbox"] {
+  width: 17px;
+  height: 17px;
+  accent-color: #2F855A;
+  cursor: pointer;
+  margin: 0;
+  flex-shrink: 0;
 }
 
 .subtask-checkbox-item.completed .subtask-label {
   text-decoration: line-through;
-  color: var(--text-light);
+  color: #7d8b82;
 }
 
 .task-card-actions {
@@ -1945,7 +1983,7 @@
   border-color: #a8d5b5;
 }
 
-.task-card-left {
+.va-task-item-card .task-card-left {
   display: flex;
   align-items: center;
   gap: 12px;

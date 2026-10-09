@@ -314,9 +314,33 @@ Las siguientes características forman la base consolidada del sistema y **NO de
   - `js/tasks.js`
   - `MEMORIA_CAMBIOS.md`
 
+### [Entrada 009] — 09/10/2026 · Corrección Definitiva de Checkboxes (Prevención de Acumulación de Listeners) y Eliminación de Espacio Blanco en Tarjetas
+* **Petición del Usuario:**
+  > *"los checkbox no funcionan nuevamente y hay mucho espacio blanco desaprovechado, arreglalo como te pedi anteriormente"* (Acompañado de captura donde la tarjeta de tarea mostraba un espacio blanco masivo del 50% a la izquierda entre el círculo y el contenido).
+* **Diagnóstico de Causas Raíz:**
+  1. **Checkboxes inoperantes tras clics sucesivos:** Cada ejecución de `render(container)` vinculaba nuevos escuchas de eventos sobre el contenedor persistente `#planner-active-page`. Al acumularse listeners duplicados, un único clic ejecutaba múltiples toggles instantáneos, cancelándose entre sí.
+  2. **Espacio blanco desaprovechado:** La regla CSS `.task-card-left { flex: 1; min-width: 200px; }` (originada en VA Hub) colisionaba con la clase del checkbox en las tarjetas de tareas, forzando a que la columna de la casilla circular ocupara la mitad del ancho de la tarjeta como un bloque en blanco vacío.
+* **Acciones Realizadas:**
+  1. **Solución a Acumulación de Listeners:**
+     - Se encapsuló todo el módulo de tareas dentro de un contenedor raíz dinámico `<div id="tasks-module-root">`.
+     - Los event listeners (`change`, `click`, `input`) se asocian exclusivamente a dicho elemento raíz. Al re-renderizar, el elemento anterior y sus escuchas son destruidos limpiamente por el navegador, evitando cualquier duplicación.
+     - Se creó el método nativo `toggleTaskComplete(taskId)` en `window.plannerStore` para centralizar la alternancia de estado y guardado en `localStorage`.
+     - Se añadió `pointer-events: none` a los SVG e iconos internos de `.task-check-circle` para garantizar que el clic se capture infaliblemente en el botón.
+  2. **Eliminación Total del Espacio Blanco en Tarjetas:**
+     - Se acotó la regla genérica a `.va-task-item-card .task-card-left` para que no contamine otros módulos.
+     - Se renombró la columna del checkbox en las tarjetas a `.task-check-col`, asignándole `flex: 0 0 28px !important; width: 28px !important; max-width: 28px !important; margin-right: 14px;`.
+     - Se otorgó `flex: 1 1 auto !important; min-width: 0 !important;` a `.task-card-body`, haciendo que el título, descripción, metadatos y subtareas aprovechen el ancho completo disponible de la tarjeta.
+     - Se mejoró la cuadrícula de subtareas con `auto-fill, minmax(280px, 1fr)` y el buscador a `max-width: 580px`.
+* **Archivos Modificados:**
+  - `css/modules.css`
+  - `js/store.js`
+  - `js/tasks.js`
+  - `MEMORIA_CAMBIOS.md`
+
 ---
 
 <!-- Las siguientes entradas se añadirán aquí secuencialmente con cada nueva solicitud del usuario -->
+
 
 
 

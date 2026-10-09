@@ -35,81 +35,83 @@ class TasksModule {
     const progressPct = totalCount ? Math.round((completedCount / totalCount) * 100) : 0;
 
     container.innerHTML = `
-      <div class="module-header">
-        <div>
-          <div class="planner-page-eyebrow"><i data-lucide="check-square"></i> Módulo 01 · Tareas & Entregables</div>
-          <h2 class="planner-page-title">Gestión de Tareas & Flujo de Trabajo</h2>
-          <p class="planner-page-desc">Optimiza tu tiempo sin distracciones: divide en subtareas, prioriza según la regla 80/20 y gestiona el estado en lista o tablero Kanban.</p>
-        </div>
-        <div class="header-actions">
-          <div class="view-toggle-group">
-            <button class="view-toggle-btn ${this.currentView === 'list' ? 'active' : ''}" id="btn-tasks-view-list">
-              <i data-lucide="list"></i> Lista
-            </button>
-            <button class="view-toggle-btn ${this.currentView === 'kanban' ? 'active' : ''}" id="btn-tasks-view-kanban">
-              <i data-lucide="layout-grid"></i> Kanban
-            </button>
+      <div id="tasks-module-root" class="tasks-module-root">
+        <div class="module-header">
+          <div>
+            <div class="planner-page-eyebrow"><i data-lucide="check-square"></i> Módulo 01 · Tareas & Entregables</div>
+            <h2 class="planner-page-title">Gestión de Tareas & Flujo de Trabajo</h2>
+            <p class="planner-page-desc">Optimiza tu tiempo sin distracciones: divide en subtareas, prioriza según la regla 80/20 y gestiona el estado en lista o tablero Kanban.</p>
           </div>
-          <button class="action-btn primary" id="btn-add-task-modal">
-            <i data-lucide="plus"></i> Nueva Tarea
-          </button>
-        </div>
-      </div>
-
-      <!-- Barra de métricas y filtros rápidos -->
-      <div class="tasks-toolbar">
-        <div class="tasks-summary-bar">
-          <div class="summary-chip">
-            <span class="chip-num">${totalCount}</span>
-            <span class="chip-label">Total Tareas</span>
-          </div>
-          <div class="summary-chip urgent">
-            <span class="chip-num">${tasks.filter(t => t.priority === 'urgente' && t.status !== 'completada').length}</span>
-            <span class="chip-label">Urgentes Hoy</span>
-          </div>
-          <div class="summary-chip success">
-            <span class="chip-num">${completedCount}</span>
-            <span class="chip-label">Completadas</span>
-          </div>
-          <div class="progress-mini-bar">
-            <div class="progress-labels">
-              <span>Progreso Global</span>
-              <span><strong>${progressPct}%</strong></span>
+          <div class="header-actions">
+            <div class="view-toggle-group">
+              <button class="view-toggle-btn ${this.currentView === 'list' ? 'active' : ''}" id="btn-tasks-view-list">
+                <i data-lucide="list"></i> Lista
+              </button>
+              <button class="view-toggle-btn ${this.currentView === 'kanban' ? 'active' : ''}" id="btn-tasks-view-kanban">
+                <i data-lucide="layout-grid"></i> Kanban
+              </button>
             </div>
-            <div class="progress-track"><div class="progress-fill" style="width: ${progressPct}%"></div></div>
+            <button class="action-btn primary" id="btn-add-task-modal">
+              <i data-lucide="plus"></i> Nueva Tarea
+            </button>
           </div>
         </div>
 
-        <div class="filters-row">
-          <div class="search-input-wrapper">
-            <i data-lucide="search"></i>
-            <input type="text" id="tasks-search-input" placeholder="Buscar tarea, etiqueta o cliente..." value="${this.searchQuery}">
+        <!-- Barra de métricas y filtros rápidos -->
+        <div class="tasks-toolbar">
+          <div class="tasks-summary-bar">
+            <div class="summary-chip">
+              <span class="chip-num">${totalCount}</span>
+              <span class="chip-label">Total Tareas</span>
+            </div>
+            <div class="summary-chip urgent">
+              <span class="chip-num">${tasks.filter(t => t.priority === 'urgente' && t.status !== 'completada').length}</span>
+              <span class="chip-label">Urgentes Hoy</span>
+            </div>
+            <div class="summary-chip success">
+              <span class="chip-num">${completedCount}</span>
+              <span class="chip-label">Completadas</span>
+            </div>
+            <div class="progress-mini-bar">
+              <div class="progress-labels">
+                <span>Progreso Global</span>
+                <span><strong>${progressPct}%</strong></span>
+              </div>
+              <div class="progress-track"><div class="progress-fill" style="width: ${progressPct}%"></div></div>
+            </div>
           </div>
 
-          <div class="filter-dropdowns">
-            <select id="filter-task-priority" class="form-select-sm">
-              <option value="all" ${this.filterPriority === 'all' ? 'selected' : ''}>Todas las Prioridades</option>
-              <option value="urgente" ${this.filterPriority === 'urgente' ? 'selected' : ''}>🔴 Urgente</option>
-              <option value="alta" ${this.filterPriority === 'alta' ? 'selected' : ''}>🟠 Alta</option>
-              <option value="media" ${this.filterPriority === 'media' ? 'selected' : ''}>🟡 Media</option>
-              <option value="baja" ${this.filterPriority === 'baja' ? 'selected' : ''}>🟢 Baja</option>
-            </select>
+          <div class="filters-row">
+            <div class="search-input-wrapper">
+              <i data-lucide="search"></i>
+              <input type="text" id="tasks-search-input" placeholder="Buscar tarea, etiqueta o cliente..." value="${this.searchQuery}">
+            </div>
 
-            <select id="filter-task-status" class="form-select-sm">
-              <option value="all" ${this.filterStatus === 'all' ? 'selected' : ''}>Todos los Estados</option>
-              <option value="pendiente" ${this.filterStatus === 'pendiente' ? 'selected' : ''}>Pendientes</option>
-              <option value="en_proceso" ${this.filterStatus === 'en_proceso' ? 'selected' : ''}>En Proceso</option>
-              <option value="completada" ${this.filterStatus === 'completada' ? 'selected' : ''}>Completadas</option>
-            </select>
+            <div class="filter-dropdowns">
+              <select id="filter-task-priority" class="form-select-sm">
+                <option value="all" ${this.filterPriority === 'all' ? 'selected' : ''}>Todas las Prioridades</option>
+                <option value="urgente" ${this.filterPriority === 'urgente' ? 'selected' : ''}>🔴 Urgente</option>
+                <option value="alta" ${this.filterPriority === 'alta' ? 'selected' : ''}>🟠 Alta</option>
+                <option value="media" ${this.filterPriority === 'media' ? 'selected' : ''}>🟡 Media</option>
+                <option value="baja" ${this.filterPriority === 'baja' ? 'selected' : ''}>🟢 Baja</option>
+              </select>
+
+              <select id="filter-task-status" class="form-select-sm">
+                <option value="all" ${this.filterStatus === 'all' ? 'selected' : ''}>Todos los Estados</option>
+                <option value="pendiente" ${this.filterStatus === 'pendiente' ? 'selected' : ''}>Pendientes</option>
+                <option value="en_proceso" ${this.filterStatus === 'en_proceso' ? 'selected' : ''}>En Proceso</option>
+                <option value="completada" ${this.filterStatus === 'completada' ? 'selected' : ''}>Completadas</option>
+              </select>
+            </div>
           </div>
         </div>
-      </div>
 
-      <!-- Contenedor dinámico según vista seleccionada -->
-      <div id="tasks-content-wrapper">
-        ${this.currentView === 'list' 
-          ? this.renderListView(filteredTasks, team, projects) 
-          : this.renderKanbanView(filteredTasks, team, projects)}
+        <!-- Contenedor dinámico según vista seleccionada -->
+        <div id="tasks-content-wrapper">
+          ${this.currentView === 'list' 
+            ? this.renderListView(filteredTasks, team, projects) 
+            : this.renderKanbanView(filteredTasks, team, projects)}
+        </div>
       </div>
     `;
 
@@ -138,10 +140,11 @@ class TasksModule {
 
           return `
             <div class="task-card-notes ${task.status === 'completada' ? 'is-completed' : ''} priority-${task.priority}" data-task-id="${task.id}">
-              <div class="task-card-left">
+              <div class="task-check-col">
                 <button class="task-check-circle ${task.status === 'completada' ? 'checked' : ''}" 
                         data-action="toggle-complete" 
                         data-task-id="${task.id}" 
+                        type="button"
                         title="${task.status === 'completada' ? 'Marcar como pendiente' : 'Marcar como terminado'}"
                         role="checkbox"
                         aria-checked="${task.status === 'completada'}">
@@ -200,7 +203,7 @@ class TasksModule {
                 <!-- Subtareas / Lista de verificación -->
                 ${subtasks.length > 0 ? `
                   <div class="subtasks-container">
-                    <div class="subtasks-header" data-action="toggle-subtasks-view">
+                    <div class="subtasks-header">
                       <span class="subtasks-count">
                         <i data-lucide="list-checks"></i> Subtareas (${subtasksCompleted}/${subtasks.length})
                       </span>
@@ -307,9 +310,11 @@ class TasksModule {
   }
 
   attachEvents(container) {
+    const root = container.querySelector('#tasks-module-root') || container;
+
     // Alternar vistas Lista / Kanban
-    const btnList = container.querySelector('#btn-tasks-view-list');
-    const btnKanban = container.querySelector('#btn-tasks-view-kanban');
+    const btnList = root.querySelector('#btn-tasks-view-list');
+    const btnKanban = root.querySelector('#btn-tasks-view-kanban');
     if (btnList && btnKanban) {
       btnList.addEventListener('click', () => {
         this.currentView = 'list';
@@ -324,11 +329,11 @@ class TasksModule {
     }
 
     // Buscador
-    const searchInput = container.querySelector('#tasks-search-input');
+    const searchInput = root.querySelector('#tasks-search-input');
     if (searchInput) {
       searchInput.addEventListener('input', (e) => {
         this.searchQuery = e.target.value;
-        const wrapper = container.querySelector('#tasks-content-wrapper');
+        const wrapper = root.querySelector('#tasks-content-wrapper');
         const tasks = window.plannerStore.get('tasks') || [];
         const team = window.plannerStore.get('team') || [];
         const projects = window.plannerStore.get('projects') || [];
@@ -342,22 +347,24 @@ class TasksModule {
           return true;
         });
 
-        wrapper.innerHTML = this.currentView === 'list'
-          ? this.renderListView(filtered, team, projects)
-          : this.renderKanbanView(filtered, team, projects);
-        if (window.lucide) window.lucide.createIcons();
+        if (wrapper) {
+          wrapper.innerHTML = this.currentView === 'list'
+            ? this.renderListView(filtered, team, projects)
+            : this.renderKanbanView(filtered, team, projects);
+          if (window.lucide) window.lucide.createIcons();
+        }
       });
     }
 
     // Filtros dropdown
-    const filterPri = container.querySelector('#filter-task-priority');
+    const filterPri = root.querySelector('#filter-task-priority');
     if (filterPri) {
       filterPri.addEventListener('change', (e) => {
         this.filterPriority = e.target.value;
         this.render(container);
       });
     }
-    const filterSta = container.querySelector('#filter-task-status');
+    const filterSta = root.querySelector('#filter-task-status');
     if (filterSta) {
       filterSta.addEventListener('change', (e) => {
         this.filterStatus = e.target.value;
@@ -366,18 +373,19 @@ class TasksModule {
     }
 
     // Modal Crear Tarea
-    const btnAdd = container.querySelector('#btn-add-task-modal');
+    const btnAdd = root.querySelector('#btn-add-task-modal');
     if (btnAdd) {
       btnAdd.addEventListener('click', () => {
         window.plannerApp.openTaskModal();
       });
     }
 
-    // Escucha de cambios rápidos (Asignar responsable, vincular proyecto o checkbox de subtarea)
-    container.addEventListener('change', (e) => {
+    // Escucha de eventos de cambio (subtareas, responsable y proyecto)
+    root.addEventListener('change', (e) => {
       // Toggle subtarea (independiente)
       const subtaskBox = e.target.closest('[data-action="toggle-subtask"]');
       if (subtaskBox) {
+        e.stopPropagation();
         const taskId = subtaskBox.dataset.taskId;
         const subtaskId = subtaskBox.dataset.subtaskId;
         window.plannerStore.toggleSubtask(taskId, subtaskId);
@@ -408,26 +416,16 @@ class TasksModule {
     });
 
     // Delegación de clics en tareas
-    container.addEventListener('click', (e) => {
-      // Toggle completar tarea principal (INDEPENDIENTE de las subtareas: NO altera subtareas individuales)
+    root.addEventListener('click', (e) => {
+      // Toggle completar tarea principal (INDEPENDIENTE de las subtareas)
       const toggleCompleteBtn = e.target.closest('[data-action="toggle-complete"]');
       if (toggleCompleteBtn) {
+        e.preventDefault();
+        e.stopPropagation();
         const taskId = toggleCompleteBtn.dataset.taskId;
-        const task = window.plannerStore.get('tasks').find(t => t.id === taskId);
-        if (task) {
-          const isDone = task.status === 'completada';
-          // Si ya estaba completada, al desmarcarla regresa a 'en_proceso' si tiene alguna subtarea marcada, o 'pendiente' si no.
-          // Si no estaba completada, pasa a 'completada' (aparece como TERMINADO).
-          let newStatus = 'completada';
-          if (isDone) {
-            const hasCheckedSubtasks = (task.subtasks || []).some(s => s.completed);
-            newStatus = hasCheckedSubtasks ? 'en_proceso' : 'pendiente';
-          }
-          // Las subtareas se mantienen INTACTAS e INDEPENDIENTES
-          window.plannerStore.updateTask(taskId, { status: newStatus });
-          window.plannerAudio.playCheck();
-          this.render(container);
-        }
+        window.plannerStore.toggleTaskComplete(taskId);
+        window.plannerAudio.playCheck();
+        this.render(container);
         return;
       }
 

@@ -776,6 +776,23 @@ class Store {
     this.saveData();
   }
 
+  toggleTaskComplete(taskId) {
+    const task = this.data.tasks.find(t => t.id === taskId);
+    if (task) {
+      const isDone = task.status === 'completada';
+      if (isDone) {
+        const hasCompletedSubtasks = (task.subtasks || []).some(s => s.completed);
+        task.status = hasCompletedSubtasks ? 'en_proceso' : 'pendiente';
+      } else {
+        task.status = 'completada';
+      }
+      // Las subtareas individuales son independientes y no se alteran
+      this.saveData();
+      return task;
+    }
+    return null;
+  }
+
   toggleSubtask(taskId, subtaskId) {
     const task = this.data.tasks.find(t => t.id === taskId);
     if (task && task.subtasks) {
@@ -783,28 +800,24 @@ class Store {
       if (sub) {
         sub.completed = !sub.completed;
         
-        // Las subtareas son independientes del checkbox de la tarea principal.
-        // Si todas las subtareas se completan, el estatus pasa automáticamente a completada.
-        // Si no todas están completas y la tarea NO había sido marcada manualmente como completada,
-        // se ajusta entre 'en_proceso' (1 o más hechas) y 'pendiente' (0 hechas).
         const total = task.subtasks.length;
         const completedCount = task.subtasks.filter(s => s.completed).length;
 
         if (total > 0) {
           if (completedCount === total) {
             task.status = 'completada';
-          } else if (task.status !== 'completada') {
-            if (completedCount >= 1) {
-              task.status = 'en_proceso';
-            } else {
-              task.status = 'pendiente';
-            }
+          } else if (completedCount >= 1) {
+            task.status = 'en_proceso';
+          } else {
+            task.status = 'pendiente';
           }
         }
 
         this.saveData();
+        return sub;
       }
     }
+    return null;
   }
 
   // Operaciones de Calendario / Eventos
