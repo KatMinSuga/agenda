@@ -752,6 +752,21 @@ class Store {
       const sub = task.subtasks.find(s => s.id === subtaskId);
       if (sub) {
         sub.completed = !sub.completed;
+        
+        // Cambio automático de estatus según objetivos/subtareas
+        const total = task.subtasks.length;
+        const completedCount = task.subtasks.filter(s => s.completed).length;
+
+        if (total > 0) {
+          if (completedCount === total) {
+            task.status = 'completada';
+          } else if (completedCount >= 1) {
+            task.status = 'en_proceso';
+          } else {
+            task.status = 'pendiente';
+          }
+        }
+
         this.saveData();
       }
     }
@@ -778,6 +793,16 @@ class Store {
   deleteEvent(id) {
     this.data.events = this.data.events.filter(e => e.id !== id);
     this.saveData();
+  }
+
+  toggleEventComplete(id) {
+    const ev = (this.data.events || []).find(e => e.id === id);
+    if (ev) {
+      ev.completed = !ev.completed;
+      this.saveData();
+      return ev;
+    }
+    return null;
   }
 
   checkScheduleConflict(date, startTime, endTime, excludeEventId = null) {

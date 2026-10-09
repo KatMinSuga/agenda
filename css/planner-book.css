@@ -75,24 +75,29 @@ body {
   align-items: center;
   margin-bottom: 16px;
   color: #f5ede4;
-  padding: 0 8px;
+  padding: 0 4px;
+  box-sizing: border-box;
+  flex-wrap: nowrap;
 }
 
 .top-bar-left {
   display: flex;
   align-items: center;
-  gap: 16px;
+  gap: 14px;
+  min-width: 0;
+  flex-shrink: 0;
 }
 
 .planner-logo {
   font-family: var(--font-serif);
-  font-size: 1.35rem;
+  font-size: 1.3rem;
   font-weight: 700;
   letter-spacing: 0.5px;
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 8px;
   color: #fff;
+  white-space: nowrap;
 }
 
 .planner-logo-badge {
@@ -100,7 +105,7 @@ body {
   color: #2b1f0c;
   font-size: 0.65rem;
   font-weight: 800;
-  padding: 3px 7px;
+  padding: 2px 6px;
   border-radius: 4px;
   text-transform: uppercase;
   letter-spacing: 0.8px;
@@ -108,32 +113,37 @@ body {
 }
 
 .top-date-indicator {
-  font-size: 0.88rem;
+  font-size: 0.84rem;
   color: rgba(255, 255, 255, 0.75);
   border-left: 1px solid rgba(255, 255, 255, 0.2);
-  padding-left: 14px;
+  padding-left: 12px;
+  white-space: nowrap;
 }
 
 .top-bar-right {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 8px;
+  flex-shrink: 1;
+  min-width: 0;
 }
 
 .top-nav-btn {
   background: rgba(255, 255, 255, 0.12);
   color: #f7f3ef;
   border: 1px solid rgba(255, 255, 255, 0.18);
-  padding: 7px 14px;
-  border-radius: 8px;
-  font-size: 0.84rem;
+  padding: 6px 11px;
+  border-radius: 7px;
+  font-size: 0.81rem;
   font-weight: 500;
   display: inline-flex;
   align-items: center;
-  gap: 7px;
+  gap: 6px;
   cursor: pointer;
   transition: all 0.2s ease;
   backdrop-filter: blur(8px);
+  white-space: nowrap;
+  flex-shrink: 0;
 }
 
 .top-nav-btn:hover {
@@ -153,27 +163,29 @@ body {
 }
 
 .kbd-shortcut {
-  font-size: 0.72rem;
+  font-size: 0.68rem;
   background: rgba(0, 0, 0, 0.25);
-  padding: 2px 5px;
-  border-radius: 4px;
+  padding: 1px 4px;
+  border-radius: 3px;
   color: rgba(255, 255, 255, 0.8);
-  margin-left: 4px;
+  margin-left: 3px;
 }
 
-/* Perfil de Usuario en Barra Superior (Anti-deformación) */
+/* Perfil de Usuario en Barra Superior (Ajustado, Anti-desborde y Anti-deformación) */
 .user-profile-badge {
-  display: flex;
+  display: inline-flex;
   align-items: center;
-  gap: 10px;
-  margin-left: 10px;
+  gap: 8px;
+  margin-left: 4px;
   flex-shrink: 0;
   cursor: pointer;
-  background: rgba(255, 255, 255, 0.08);
-  padding: 4px 12px 4px 5px;
-  border-radius: 40px;
-  border: 1px solid rgba(255, 255, 255, 0.16);
+  background: rgba(255, 255, 255, 0.09);
+  padding: 2px 10px 2px 3px;
+  border-radius: 30px;
+  border: 1px solid rgba(255, 255, 255, 0.18);
   transition: all 0.2s ease;
+  max-width: 195px;
+  box-sizing: border-box;
 }
 
 .user-profile-badge:hover {
@@ -181,23 +193,50 @@ body {
   border-color: var(--accent-gold);
 }
 
+.user-header-text {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  overflow: hidden;
+  line-height: 1.15;
+}
+
+#user-header-name {
+  font-size: 0.76rem;
+  font-weight: 700;
+  color: #fff;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: block;
+}
+
+#user-header-role {
+  font-size: 0.64rem;
+  color: rgba(255, 255, 255, 0.72);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: block;
+}
+
 #user-header-avatar,
 .user-avatar-circle {
-  width: 40px;
-  height: 40px;
-  min-width: 40px;
-  min-height: 40px;
-  max-width: 40px;
-  max-height: 40px;
-  aspect-ratio: 1 / 1;
+  width: 32px !important;
+  height: 32px !important;
+  min-width: 32px !important;
+  min-height: 32px !important;
+  max-width: 32px !important;
+  max-height: 32px !important;
+  aspect-ratio: 1 / 1 !important;
   border-radius: 50% !important;
-  flex-shrink: 0;
-  overflow: hidden;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.35);
-  border: 2px solid var(--accent-gold);
+  flex-shrink: 0 !important;
+  overflow: hidden !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.35);
+  border: 1.5px solid var(--accent-gold);
   background: #fdf3e7;
   padding: 0;
 }
@@ -205,11 +244,11 @@ body {
 #user-header-avatar img,
 #user-header-avatar svg,
 .user-avatar-img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  display: block;
-  border-radius: 50%;
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover !important;
+  display: block !important;
+  border-radius: 50% !important;
 }
 
 .profile-avatar-big {
@@ -656,6 +695,31 @@ body.zen-focus-mode #floating-exit-zen {
 /* ==========================================================================
    ADAPTABILIDAD RESPONSIVE (MÓVIL / TABLET)
    ========================================================================== */
+@media (max-width: 1240px) {
+  .top-date-indicator {
+    display: none;
+  }
+  .top-bar-right .kbd-shortcut {
+    display: none;
+  }
+}
+
+@media (max-width: 900px) {
+  .user-header-text {
+    display: none;
+  }
+  .user-profile-badge {
+    padding: 2px;
+    max-width: 38px;
+  }
+  .top-nav-btn span {
+    display: none;
+  }
+  .top-nav-btn {
+    padding: 6px 8px;
+  }
+}
+
 @media (max-width: 1024px) {
   body {
     padding: 10px 8px;

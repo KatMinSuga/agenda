@@ -358,6 +358,21 @@ class PlannerApp {
     const priSelect = document.getElementById('modal-task-priority');
     const catInput = document.getElementById('modal-task-category');
     const idInput = document.getElementById('modal-task-id');
+    const projSelect = document.getElementById('modal-task-project');
+    const assignSelect = document.getElementById('modal-task-assignee');
+
+    // Poblar selectores dinámicos de proyectos y equipo
+    const projects = window.plannerStore.get('projects') || [];
+    if (projSelect) {
+      projSelect.innerHTML = `<option value="">(Sin proyecto vinculado)</option>` + 
+        projects.map(p => `<option value="${p.id}">${p.title}</option>`).join('');
+    }
+
+    const team = window.plannerStore.get('team') || [];
+    if (assignSelect) {
+      assignSelect.innerHTML = `<option value="">(Sin asignar)</option>` + 
+        team.map(m => `<option value="${m.id}">${m.name} (${m.role})</option>`).join('');
+    }
 
     if (taskToEdit) {
       idInput.value = taskToEdit.id;
@@ -367,7 +382,9 @@ class PlannerApp {
       startIn.value = taskToEdit.startTime || '09:00';
       endIn.value = taskToEdit.endTime || '10:00';
       priSelect.value = taskToEdit.priority;
-      catInput.value = taskToEdit.category || 'General';
+      catInput.value = taskToEdit.category || 'Operaciones';
+      if (projSelect) projSelect.value = taskToEdit.projectId || '';
+      if (assignSelect) assignSelect.value = taskToEdit.assigneeId || '';
     } else {
       idInput.value = '';
       titleInput.value = '';
@@ -377,6 +394,8 @@ class PlannerApp {
       endIn.value = '11:00';
       priSelect.value = 'alta';
       catInput.value = 'Operaciones';
+      if (projSelect) projSelect.value = '';
+      if (assignSelect) assignSelect.value = team.length > 0 ? team[0].id : ''; // Hermione Granger por defecto
     }
     titleInput.focus();
   }
@@ -482,6 +501,11 @@ class PlannerApp {
       formTask.addEventListener('submit', (e) => {
         e.preventDefault();
         const taskId = document.getElementById('modal-task-id').value;
+        const existingTask = taskId ? (window.plannerStore.get('tasks') || []).find(t => t.id === taskId) : null;
+
+        const projSelect = document.getElementById('modal-task-project');
+        const assignSelect = document.getElementById('modal-task-assignee');
+
         const taskObj = {
           title: document.getElementById('modal-task-title').value.trim(),
           description: document.getElementById('modal-task-desc').value.trim(),
@@ -490,7 +514,9 @@ class PlannerApp {
           endTime: document.getElementById('modal-task-end').value,
           priority: document.getElementById('modal-task-priority').value,
           category: document.getElementById('modal-task-category').value.trim(),
-          status: 'pendiente'
+          projectId: projSelect ? (projSelect.value || null) : null,
+          assigneeId: assignSelect ? (assignSelect.value || null) : null,
+          status: existingTask ? existingTask.status : 'pendiente'
         };
 
         if (taskId) {

@@ -187,6 +187,52 @@ Las siguientes características forman la base consolidada del sistema y **NO de
   - `js/projects.js`
   - `MEMORIA_CAMBIOS.md`
 
+### [Entrada 006] — 09/10/2026 · Ajuste de Tamaño de Perfil, Rediseño del Calendario (4 Vistas, Colores, Horarios, Checkboxes) y Gestión Dinámica de Tareas
+* **Petición del Usuario:**
+  > *"como primera instancia ajusta el perfil de tamaño, se sale del borde y desajusta la pagina, segundo quiero que en Módulo 02 · Agenda & Cronograma, ajustes el diseño y los tamaños del calendario, tanto en dia, semana,mes y año, deben tener manera de organizar por colores, horarios y tener checkboxes para cualquier cambio, tercero en Módulo 01 · Tareas & Entregables, debes cambiar el estatus de las tareas segun se vayan completando los objetivos, si tiene 1 o mas subtareas marcada como hecha(debe poder desmarcarse tambien) debe cambiar el estatus a "en proceso", tambien debe poderse editar a quien esta asignada, y eso tambien debe poder escogerse desde que se crea una tarea nueva, debe poder escogerse tanto el proyecto vinculado, como el responsable o equipo responsable"*
+* **Acciones Realizadas:**
+  1. **Ajuste y Contención Total del Perfil Superior (Anti-Desborde):**
+     - Se corrigió el desborde en `.planner-top-bar` y `.user-profile-badge` en [planner-book.css](file:///c:/Users/KATMIN/Desktop/portafolio/pro%201%20agenda/css/planner-book.css):
+       - Avatar escalado a `32px × 32px` manteniendo `aspect-ratio: 1 / 1 !important` y `border-radius: 50% !important`.
+       - Contenedor `.user-profile-badge` con `max-width: 195px`, padding contenido `2px 10px 2px 3px`, y elipsis en texto para evitar que empuje los botones hacia afuera.
+       - Espaciado `gap: 8px` en `.top-bar-right` y botones de navegación compactos (`padding: 6px 11px`).
+       - Reglas responsive con `@media (max-width: 1240px)` para ocultar el indicador de fecha y atajos, y `@media (max-width: 900px)` para compactar a modo icono, garantizando que el perfil permanezca 100% dentro de los márgenes en cualquier monitor o portátil.
+  2. **Módulo 02 · Agenda & Cronograma (Rediseño, 4 Vistas, Colores, Horarios y Checkboxes):**
+     - **Organizador por Colores:** Barra interactiva de chips en la cabecera del calendario para filtrar y organizar citas por categoría:
+       - *Todos los Colores*, *🔴 Compromisos (#9C523B)*, *🟢 Reuniones (#3F6253)*, *🟡 Citas (#B27D32)*, *🟣 Estrategia (#5B4B70)* y *⚪ Personal (#7E6B5A)*.
+     - **Organizador de Horarios:**
+       - Selector de franjas horarias: *Todo el día (07:00 - 22:00)*, *🌅 Mañanas (07:00 - 13:00)*, *🌇 Tardes (13:00 - 18:00)* y *🌙 Noches (18:00 - 22:00)*.
+       - Ordenamiento cronológico estricto en cada celda del mes, semana y día.
+     - **Checkboxes Interactivos para cualquier cambio:**
+       - Cada cita/evento en las vistas de Mes, Semana y Día cuenta con un checkbox interactivo (`data-action="toggle-event-complete"`).
+       - Al marcarse, el evento se tacha visualmente, se marca como realizado en el Store (`window.plannerStore.toggleEventComplete()`) y emite confirmación auditiva táctil.
+       - Interruptor rápido en cabecera: `[☑ Ocultar realizados]` para limpiar la vista al instante.
+     - **Rediseño de las 4 Vistas:**
+       - *Vista Mes:* Celdas optimizadas de 105px de alto, píldoras con hora destacada, borde de color y checkboxes.
+       - *Vista Semana:* Cuadrícula de 7 columnas + escala horaria de 07:00 a 21:00 con tarjetas de evento que muestran checkbox, intervalo horario y título.
+       - *Vista Día:* Línea horaria completa con time blocking estructurado, tarjetas con checkboxes, panel de prioridades Ivy Lee y notas pautadas.
+       - *Vista Año:* 12 mini calendarios interactivos reales con cuadrículas de días, indicadores de citas programadas y acceso directo con un clic.
+  3. **Módulo 01 · Tareas & Entregables (Estatus Dinámico, Proyecto y Responsable):**
+     - **Transición Automática de Estatus según Subtareas:**
+       - En `js/store.js` (`toggleSubtask`): Si una tarea tiene subtareas y se marca 1 o más, su estatus cambia automáticamente a `"en_proceso"`.
+       - Si se completan todas las subtareas, cambia a `"completada"`.
+       - Si se desmarcan todas las subtareas, regresa a `"pendiente"`.
+       - En `js/tasks.js`, marcar el checkbox principal de una tarea sincroniza todas sus subtareas (completar o desmarcar todo).
+     - **Asignación de Responsable y Vinculación de Proyecto:**
+       - Se agregaron los campos `Proyecto Vinculado` (`#modal-task-project`) y `Responsable Asignado` (`#modal-task-assignee`) al modal de tareas en `index.html`.
+       - `openTaskModal()` en `js/app.js` carga dinámicamente todos los proyectos y miembros del equipo (Hermione Granger, Harry Potter, Ron Weasley, Luna Lovegood).
+       - Permite elegir el responsable y proyecto tanto al **crear una tarea nueva** como al **editar una tarea existente**.
+       - En `js/tasks.js` se añadieron selectores rápidos directos en las tarjetas de la vista Lista y vista Kanban para cambiar el responsable o proyecto sin tener que abrir el modal.
+* **Archivos Modificados:**
+  - `css/planner-book.css`
+  - `css/modules.css`
+  - `index.html`
+  - `js/store.js`
+  - `js/calendar.js`
+  - `js/tasks.js`
+  - `js/app.js`
+  - `MEMORIA_CAMBIOS.md`
+
 ---
 
 <!-- Las siguientes entradas se añadirán aquí secuencialmente con cada nueva solicitud del usuario -->

@@ -169,18 +169,21 @@ class TasksModule {
                       <span>${task.startTime} - ${task.endTime || 'fin'}</span>
                     </div>
                   ` : ''}
-                  ${project ? `
-                    <div class="meta-item project-pill" title="Proyecto vinculado">
-                      <i data-lucide="folder-kanban"></i>
-                      <span>${project.title.substring(0, 24)}...</span>
-                    </div>
-                  ` : ''}
-                  ${assignee ? `
-                    <div class="meta-item assignee-pill" title="Responsable: ${assignee.name}">
-                      <span class="avatar-dot" style="background: ${assignee.avatarColor || '#666'}">${assignee.name.charAt(0)}</span>
-                      <span>${assignee.name}</span>
-                    </div>
-                  ` : ''}
+                  <div class="meta-item project-pill-wrap" title="Proyecto vinculado (clic para reasignar)">
+                    <i data-lucide="folder-kanban" style="width:12px; height:12px; color:var(--accent-primary);"></i>
+                    <select class="mini-meta-select" data-action="quick-change-project" data-task-id="${task.id}">
+                      <option value="">📁 Sin proyecto</option>
+                      ${projects.map(p => `<option value="${p.id}" ${task.projectId === p.id ? 'selected' : ''}>${p.title.length > 22 ? p.title.substring(0, 22) + '...' : p.title}</option>`).join('')}
+                    </select>
+                  </div>
+
+                  <div class="meta-item assignee-pill-wrap" title="Responsable asignado (clic para cambiar)">
+                    <span class="avatar-dot" style="background: ${assignee ? (assignee.avatarColor || '#666') : '#999'}">${assignee ? assignee.name.charAt(0) : '?'}</span>
+                    <select class="mini-meta-select" data-action="quick-change-assignee" data-task-id="${task.id}">
+                      <option value="">👤 Sin asignar</option>
+                      ${team.map(m => `<option value="${m.id}" ${task.assigneeId === m.id ? 'selected' : ''}>${m.name}</option>`).join('')}
+                    </select>
+                  </div>
                   ${task.category ? `
                     <div class="meta-item category-badge">
                       <i data-lucide="tag"></i>
@@ -279,12 +282,13 @@ class TasksModule {
                       ` : ''}
 
                       <div class="kanban-card-footer">
-                        <span class="kanban-date"><i data-lucide="calendar"></i> ${t.dueDate || 'Hoy'}</span>
-                        ${assignee ? `
-                          <span class="avatar-dot-sm" style="background: ${assignee.avatarColor}" title="${assignee.name}">
-                            ${assignee.name.charAt(0)}
-                          </span>
-                        ` : ''}
+                        <span class="kanban-date"><i data-lucide="calendar" style="width:11px; height:11px;"></i> ${t.dueDate || 'Hoy'}</span>
+                        <div class="kanban-assignee-wrap" title="Cambiar responsable">
+                          <select class="mini-meta-select kanban" data-action="quick-change-assignee" data-task-id="${t.id}">
+                            <option value="">👤 Sin asignar</option>
+                            ${team.map(m => `<option value="${m.id}" ${t.assigneeId === m.id ? 'selected' : ''}>${m.name}</option>`).join('')}
+                          </select>
+                        </div>
                       </div>
                     </div>
                   `;
@@ -364,23 +368,51 @@ class TasksModule {
       });
     }
 
+    // Escucha de cambios rápidos (Asignar responsable o vincular proyecto)
+    container.addEventListener('change', (e) => {
+      const assigneeSelect = e.target.closest('[data-action="quick-change-assignee"]');
+      if (assigneeSelect) {
+        const taskId = assigneeSelect.dataset.taskId;
+        const newAssigneeId = assigneeSelect.value || null;
+        window.plannerStore.updateTask(taskId, { assigneeId: newAssigneeId });
+        window.plannerAudio.playCheck();
+        this.render(container);
+        return;
+      }
+
+      const projectSelect = e.target.closest('[data-action="quick-change-project"]');
+      if (projectSelect) {
+        const taskId = projectSelect.dataset.taskId;
+        const newProjectId = projectSelect.value || null;
+        window.plannerStore.updateTask(taskId, { projectId: newProjectId });
+        window.plannerAudio.playCheck();
+        this.render(container);
+        return;
+      }
+    });
+
     // Delegación de clics en tareas
     container.addEventListener('click', (e) => {
-      // Toggle completar tarea
+      // Toggle completar tarea principal (sincroniza subtareas)
       const toggleCompleteBtn = e.target.closest('[data-action="toggle-complete"]');
       if (toggleCompleteBtn) {
         const taskId = toggleCompleteBtn.dataset.taskId;
         const task = window.plannerStore.get('tasks').find(t => t.id === taskId);
         if (task) {
-          const newStatus = task.status === 'completada' ? 'pendiente' : 'completada';
-          window.plannerStore.updateTask(taskId, { status: newStatus });
+          const isDone = task.status === 'completada';
+          const newStatus = isDone ? 'pendiente' : 'completada';
+          const updates = { status: newStatus };
+          if (task.subtasks && task.subtasks.length > 0) {
+            updates.subtasks = task.subtasks.map(s => ({ ...s, completed: !isDone }));
+          }
+          window.plannerStore.updateTask(taskId, updates);
           window.plannerAudio.playCheck();
           this.render(container);
         }
         return;
       }
 
-      // Toggle subtarea
+      // Toggle subtarea (cambia automáticamente estatus a en_proceso, completada o pendiente)
       const subtaskBox = e.target.closest('[data-action="toggle-subtask"]');
       if (subtaskBox) {
         const taskId = subtaskBox.dataset.taskId;
