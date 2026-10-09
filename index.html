@@ -1,0 +1,564 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Agenda Digital Notes · Planificador de Alto Rendimiento</title>
+  
+  <!-- Tipografías Google Fonts: Inter para máxima legibilidad y Playfair Display para el toque de papelería de lujo -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,600;0,700;1,600&display=swap" rel="stylesheet">
+  
+  <!-- Iconos Lucide (livianos y limpios) -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <!-- Chart.js para métricas visuales -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <!-- Hojas de Estilo del Planificador -->
+  <link rel="stylesheet" href="css/planner-book.css">
+  <link rel="stylesheet" href="css/modules.css">
+  <link rel="stylesheet" href="css/themes.css">
+</head>
+<body class="theme-caramel">
+
+  <!-- ========================================================================
+       BARRA SUPERIOR DE ACCIONES RÁPIDAS & NAVEGACIÓN
+       ======================================================================== -->
+  <header class="planner-top-bar">
+    <div class="top-bar-left">
+      <div class="planner-logo">
+        <i data-lucide="book-marked"></i>
+        <span>MÉNDEZ</span>
+        <span class="planner-logo-badge">NOTES WEB</span>
+      </div>
+      <div class="top-date-indicator">
+        <span>Jueves, 8 de Octubre de 2026 · Tiempo Optimizado</span>
+      </div>
+    </div>
+
+    <div class="top-bar-right">
+      <!-- Búsqueda Universal Spotlight / Paleta (Ctrl+K) -->
+      <button class="top-nav-btn" id="top-btn-search" title="Buscar en toda la agenda">
+        <i data-lucide="search"></i>
+        <span>Buscar</span>
+        <span class="kbd-shortcut">Ctrl+K</span>
+      </button>
+
+      <!-- Modo Enfoque Zen (F) -->
+      <button class="top-nav-btn" id="top-btn-zen" title="Modo sin distracciones">
+        <i data-lucide="eye-off"></i>
+        <span>Modo Zen</span>
+        <span class="kbd-shortcut">F</span>
+      </button>
+
+      <!-- Alertas & Notificaciones -->
+      <button class="top-nav-btn" id="top-btn-notifications" title="Ver alertas del sistema">
+        <i data-lucide="bell"></i>
+        <span>Alertas</span>
+      </button>
+
+      <!-- Botón + Rápido (N) -->
+      <button class="top-nav-btn primary" id="top-btn-quick-add" title="Crear elemento rápido">
+        <i data-lucide="plus"></i>
+        <span>Nuevo</span>
+        <span class="kbd-shortcut">N</span>
+      </button>
+
+      <!-- Chip de Perfil -->
+      <div class="user-profile-badge" style="display:flex; align-items:center; gap:8px; margin-left:8px;">
+        <span id="user-header-avatar" style="width:32px; height:32px; border-radius:50%; background:var(--accent-gold); color:#2b1f0c; font-weight:800; display:flex; align-items:center; justify-content:center; font-size:0.78rem;">CM</span>
+        <div style="font-size:0.75rem; line-height:1.2;">
+          <strong id="user-header-name" style="display:block; color:#fff;">Carolina Méndez</strong>
+          <span id="user-header-role" style="color:rgba(255,255,255,0.7);">Executive VA</span>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- ========================================================================
+       CINTAS MARCAPÁGINAS SUPERIORES (BOOKMARKS HIPERVINCULADOS)
+       ======================================================================== -->
+  <div class="bookmarks-ribbons-bar">
+    <div class="ribbon-bookmark" data-target-tab="dashboard">
+      <i data-lucide="bookmark"></i> HOY
+    </div>
+    <div class="ribbon-bookmark gold" data-target-tab="projects">
+      <i data-lucide="folder"></i> PROYECTOS
+    </div>
+    <div class="ribbon-bookmark green" data-target-tab="vabox">
+      <i data-lucide="clock"></i> VA HUB
+    </div>
+  </div>
+
+  <!-- ========================================================================
+       ESTRUCTURA DEL CUADERNO / BINDER DIGITAL NOTES
+       ======================================================================== -->
+  <main class="planner-notebook-container">
+    
+    <!-- Carpeta Exterior de Cuero con Costuras -->
+    <div class="planner-leather-cover">
+      
+      <!-- Espiral de anillas metálicas en el lomo -->
+      <div class="planner-spine-rings">
+        <div class="spiral-ring"></div>
+        <div class="spiral-ring"></div>
+        <div class="spiral-ring"></div>
+        <div class="spiral-ring"></div>
+        <div class="spiral-ring"></div>
+        <div class="spiral-ring"></div>
+        <div class="spiral-ring"></div>
+        <div class="spiral-ring"></div>
+        <div class="spiral-ring"></div>
+        <div class="spiral-ring"></div>
+        <div class="spiral-ring"></div>
+        <div class="spiral-ring"></div>
+      </div>
+
+      <!-- Hoja Interior de Papel Marfil Punteado (Dot Grid) -->
+      <section class="planner-paper-sheet">
+        <!-- Contenedor dinámico donde se renderiza la pestaña activa -->
+        <div id="planner-active-page" class="planner-content-area">
+          <!-- Se inyecta dinámicamente vía JavaScript -->
+        </div>
+      </section>
+
+    </div>
+
+    <!-- ======================================================================
+         PESTAÑAS LATERALES HIPERVINCULADAS (TABS DIVISORIAS NOTES)
+         ====================================================================== -->
+    <nav class="planner-tabs-sidebar" aria-label="Navegación de Secciones">
+      <button class="planner-tab active" data-tab="dashboard" title="1. Portada y Hoy (Atajo: 1)">
+        <div class="tab-icon-wrap">
+          <i data-lucide="compass"></i>
+          <span class="tab-label">HOY</span>
+        </div>
+      </button>
+
+      <button class="planner-tab" data-tab="calendar" title="2. Agenda y Calendario (Atajo: 2)">
+        <div class="tab-icon-wrap">
+          <i data-lucide="calendar"></i>
+          <span class="tab-label">AGENDA</span>
+        </div>
+      </button>
+
+      <button class="planner-tab" data-tab="tasks" title="3. Tareas y Kanban (Atajo: 3)">
+        <div class="tab-icon-wrap">
+          <i data-lucide="check-square"></i>
+          <span class="tab-label">TAREAS</span>
+        </div>
+      </button>
+
+      <button class="planner-tab" data-tab="projects" title="4. Proyectos (Atajo: 4)">
+        <div class="tab-icon-wrap">
+          <i data-lucide="folder-kanban"></i>
+          <span class="tab-label">PROY</span>
+        </div>
+      </button>
+
+      <button class="planner-tab" data-tab="vabox" title="5. Asistente Virtual & Horas (Atajo: 5)">
+        <div class="tab-icon-wrap">
+          <i data-lucide="briefcase"></i>
+          <span class="tab-label">VA HUB</span>
+        </div>
+      </button>
+
+      <button class="planner-tab" data-tab="contacts" title="6. Contactos & Equipo (Atajo: 6)">
+        <div class="tab-icon-wrap">
+          <i data-lucide="users"></i>
+          <span class="tab-label">EQUIPO</span>
+        </div>
+      </button>
+
+      <button class="planner-tab" data-tab="finance" title="7. Finanzas & Flujo de Caja (Atajo: 7)">
+        <div class="tab-icon-wrap">
+          <i data-lucide="wallet"></i>
+          <span class="tab-label">DINERO</span>
+        </div>
+      </button>
+
+      <button class="planner-tab" data-tab="notes" title="8. Notas y Minutas (Atajo: 8)">
+        <div class="tab-icon-wrap">
+          <i data-lucide="book-open"></i>
+          <span class="tab-label">NOTAS</span>
+        </div>
+      </button>
+
+      <button class="planner-tab" data-tab="personal" title="9. Hábitos & Vida Personal (Atajo: 9)">
+        <div class="tab-icon-wrap">
+          <i data-lucide="heart"></i>
+          <span class="tab-label">VIDA</span>
+        </div>
+      </button>
+
+      <button class="planner-tab" data-tab="automations" title="10. Automatizaciones & Alertas">
+        <div class="tab-icon-wrap">
+          <i data-lucide="zap"></i>
+          <span class="tab-label">AUTO</span>
+        </div>
+      </button>
+
+      <button class="planner-tab" data-tab="reports" title="11. Reportes y Productividad">
+        <div class="tab-icon-wrap">
+          <i data-lucide="bar-chart-3"></i>
+          <span class="tab-label">MÉTRIC</span>
+        </div>
+      </button>
+
+      <button class="planner-tab" data-tab="settings" title="12. Ajustes y Respaldos">
+        <div class="tab-icon-wrap">
+          <i data-lucide="settings"></i>
+          <span class="tab-label">AJUST</span>
+        </div>
+      </button>
+    </nav>
+
+  </main>
+
+  <!-- Botón flotante para salir del Modo Zen -->
+  <button id="floating-exit-zen">
+    <i data-lucide="maximize-2"></i> Salir de Modo Zen (F)
+  </button>
+
+  <!-- ========================================================================
+       MODALES GLOBALES & PALETAS
+       ======================================================================== -->
+
+  <!-- 1. Paleta de Comandos Universal (Spotlight Ctrl+K) -->
+  <div class="planner-modal-backdrop" id="command-palette-modal">
+    <div class="command-palette-box">
+      <div class="cmd-input-bar">
+        <i data-lucide="search" style="color:var(--text-light);"></i>
+        <input type="text" id="command-search-input" placeholder="Escribe para buscar tareas, citas, clientes o notas...">
+        <button class="modal-close-btn">&times;</button>
+      </div>
+      <div class="cmd-results-wrap" id="command-results-list">
+        <!-- Inyectado dinámicamente -->
+      </div>
+    </div>
+  </div>
+
+  <!-- 2. Modal de Entrada Rápida Inteligente (N) -->
+  <div class="planner-modal-backdrop" id="quick-entry-modal">
+    <div class="planner-modal-dialog">
+      <div class="modal-header-clean">
+        <h3 style="font-family:var(--font-serif); font-size:1.2rem;"><i data-lucide="plus-circle"></i> ¿Qué deseas registrar?</h3>
+        <button class="modal-close-btn">&times;</button>
+      </div>
+      <div class="modal-body-clean">
+        <div class="quick-options-grid">
+          <button class="quick-opt-btn" data-quick-action="task">
+            <i data-lucide="check-square"></i>
+            <span>Nueva Tarea</span>
+          </button>
+          <button class="quick-opt-btn" data-quick-action="event">
+            <i data-lucide="calendar"></i>
+            <span>Nueva Cita</span>
+          </button>
+          <button class="quick-opt-btn" data-quick-action="trx">
+            <i data-lucide="dollar-sign"></i>
+            <span>Movimiento $</span>
+          </button>
+          <button class="quick-opt-btn" data-quick-action="client">
+            <i data-lucide="user-plus"></i>
+            <span>Nuevo Cliente</span>
+          </button>
+          <button class="quick-opt-btn" data-quick-action="note">
+            <i data-lucide="edit-3"></i>
+            <span>Nota Rápida</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 3. Modal Editor de Tarea -->
+  <div class="planner-modal-backdrop" id="task-editor-modal">
+    <div class="planner-modal-dialog">
+      <div class="modal-header-clean">
+        <h3 style="font-family:var(--font-serif); font-size:1.2rem;"><i data-lucide="check-square"></i> Detalle de Tarea</h3>
+        <button class="modal-close-btn">&times;</button>
+      </div>
+      <form id="form-modal-task">
+        <input type="hidden" id="modal-task-id">
+        <div class="modal-body-clean">
+          <div class="form-group-clean">
+            <label>Título de la Tarea *</label>
+            <input type="text" id="modal-task-title" class="form-control-clean" required placeholder="ej: Enviar propuesta de automatización">
+          </div>
+          <div class="form-group-clean">
+            <label>Descripción / Instrucciones</label>
+            <textarea id="modal-task-desc" class="form-control-clean" rows="2" placeholder="Detalles clave, enlaces o checklist previo..."></textarea>
+          </div>
+          <div class="form-row-2">
+            <div class="form-group-clean">
+              <label>Fecha Límite</label>
+              <input type="date" id="modal-task-date" class="form-control-clean" value="2026-10-08">
+            </div>
+            <div class="form-group-clean">
+              <label>Prioridad</label>
+              <select id="modal-task-priority" class="form-control-clean">
+                <option value="urgente">🔴 Urgente (Hacer hoy)</option>
+                <option value="alta" selected>🟠 Alta</option>
+                <option value="media">🟡 Media</option>
+                <option value="baja">🟢 Baja</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-row-2">
+            <div class="form-group-clean">
+              <label>Hora Inicio</label>
+              <input type="time" id="modal-task-start" class="form-control-clean" value="10:00">
+            </div>
+            <div class="form-group-clean">
+              <label>Hora Fin</label>
+              <input type="time" id="modal-task-end" class="form-control-clean" value="11:00">
+            </div>
+          </div>
+          <div class="form-group-clean">
+            <label>Categoría / Etiqueta</label>
+            <input type="text" id="modal-task-category" class="form-control-clean" value="Operaciones">
+          </div>
+          <div class="modal-footer-clean">
+            <button type="button" class="action-btn secondary modal-close-btn">Cancelar</button>
+            <button type="submit" class="action-btn primary">Guardar Tarea</button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- 4. Modal Editor de Evento / Cita con Conflicto -->
+  <div class="planner-modal-backdrop" id="event-editor-modal">
+    <div class="planner-modal-dialog">
+      <div class="modal-header-clean">
+        <h3 style="font-family:var(--font-serif); font-size:1.2rem;"><i data-lucide="calendar"></i> Programar Cita o Evento</h3>
+        <button class="modal-close-btn">&times;</button>
+      </div>
+      <form id="form-modal-event">
+        <div class="modal-body-clean">
+          <div class="form-group-clean">
+            <label>Título del Evento *</label>
+            <input type="text" id="modal-event-title" class="form-control-clean" required placeholder="ej: Demostración técnica de CRM">
+          </div>
+          <div class="form-row-2">
+            <div class="form-group-clean">
+              <label>Fecha</label>
+              <input type="date" id="modal-event-date" class="form-control-clean" value="2026-10-08" required>
+            </div>
+            <div class="form-group-clean">
+              <label>Tipo de Evento</label>
+              <select id="modal-event-type" class="form-control-clean">
+                <option value="reunion">Reunión de Equipo</option>
+                <option value="compromiso">Compromiso Directivo</option>
+                <option value="cita" selected>Cita con Cliente</option>
+                <option value="personal">Personal / Descanso</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-row-2">
+            <div class="form-group-clean">
+              <label>Hora Inicio *</label>
+              <input type="time" id="modal-event-start" class="form-control-clean" value="11:30" required>
+            </div>
+            <div class="form-group-clean">
+              <label>Hora Fin *</label>
+              <input type="time" id="modal-event-end" class="form-control-clean" value="12:30" required>
+            </div>
+          </div>
+          <div class="form-group-clean">
+            <label>Ubicación / Enlace de Videollamada</label>
+            <input type="text" id="modal-event-location" class="form-control-clean" placeholder="Google Meet / Zoom / Presencial">
+          </div>
+          <div class="form-row-2">
+            <div class="form-group-clean">
+              <label>Participantes</label>
+              <input type="text" id="modal-event-attendees" class="form-control-clean" placeholder="ej: Carolina M., Dr. Salgado">
+            </div>
+            <div class="form-group-clean">
+              <label>Color de Etiqueta</label>
+              <select id="modal-event-color" class="form-control-clean">
+                <option value="#9C523B">Terracota (#9C523B)</option>
+                <option value="#3F6253">Verde Bosque (#3F6253)</option>
+                <option value="#B27D32">Oro Viejo (#B27D32)</option>
+                <option value="#5B4B70">Lavanda (#5B4B70)</option>
+              </select>
+            </div>
+          </div>
+          <div class="modal-footer-clean">
+            <button type="button" class="action-btn secondary modal-close-btn">Cancelar</button>
+            <button type="submit" class="action-btn primary">Guardar y Verificar Conflicto</button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- 5. Modal Registro Financiero -->
+  <div class="planner-modal-backdrop" id="trx-editor-modal">
+    <div class="planner-modal-dialog">
+      <div class="modal-header-clean">
+        <h3 style="font-family:var(--font-serif); font-size:1.2rem;"><i data-lucide="wallet"></i> Registrar Movimiento</h3>
+        <button class="modal-close-btn">&times;</button>
+      </div>
+      <form id="form-modal-trx">
+        <div class="modal-body-clean">
+          <div class="form-row-2">
+            <div class="form-group-clean">
+              <label>Tipo</label>
+              <select id="modal-trx-type" class="form-control-clean">
+                <option value="ingreso">🟢 Ingreso / Cobro</option>
+                <option value="gasto">🔴 Gasto / Pago</option>
+              </select>
+            </div>
+            <div class="form-group-clean">
+              <label>Monto ($)</label>
+              <input type="number" step="0.01" id="modal-trx-amount" class="form-control-clean" required placeholder="0.00">
+            </div>
+          </div>
+          <div class="form-group-clean">
+            <label>Concepto / Detalle *</label>
+            <input type="text" id="modal-trx-desc" class="form-control-clean" required placeholder="ej: Anticipo 50% Proyecto">
+          </div>
+          <div class="form-row-2">
+            <div class="form-group-clean">
+              <label>Categoría</label>
+              <input type="text" id="modal-trx-category" class="form-control-clean" value="Servicios VA">
+            </div>
+            <div class="form-group-clean">
+              <label>Cliente / Proveedor</label>
+              <input type="text" id="modal-trx-client" class="form-control-clean" placeholder="ej: Alpha Capital">
+            </div>
+          </div>
+          <div class="form-row-2">
+            <div class="form-group-clean">
+              <label>Fecha</label>
+              <input type="date" id="modal-trx-date" class="form-control-clean" value="2026-10-08">
+            </div>
+            <div class="form-group-clean">
+              <label>Estado</label>
+              <select id="modal-trx-status" class="form-control-clean">
+                <option value="cobrado">Liquidado / Pagado</option>
+                <option value="pendiente">Pendiente de Cobro</option>
+              </select>
+            </div>
+          </div>
+          <div class="modal-footer-clean">
+            <button type="button" class="action-btn secondary modal-close-btn">Cancelar</button>
+            <button type="submit" class="action-btn primary">Guardar Movimiento</button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- 6. Modal Nuevo Cliente -->
+  <div class="planner-modal-backdrop" id="client-editor-modal">
+    <div class="planner-modal-dialog">
+      <div class="modal-header-clean">
+        <h3 style="font-family:var(--font-serif); font-size:1.2rem;"><i data-lucide="user-plus"></i> Registrar Nuevo Cliente</h3>
+        <button class="modal-close-btn">&times;</button>
+      </div>
+      <form id="form-modal-client">
+        <div class="modal-body-clean">
+          <div class="form-group-clean">
+            <label>Empresa / Marca *</label>
+            <input type="text" id="modal-client-company" class="form-control-clean" required placeholder="ej: Nova Innovations S.L.">
+          </div>
+          <div class="form-group-clean">
+            <label>Contacto Principal</label>
+            <input type="text" id="modal-client-name" class="form-control-clean" placeholder="Nombre y Apellido">
+          </div>
+          <div class="form-row-2">
+            <div class="form-group-clean">
+              <label>Correo</label>
+              <input type="email" id="modal-client-email" class="form-control-clean" placeholder="cliente@empresa.com">
+            </div>
+            <div class="form-group-clean">
+              <label>Teléfono</label>
+              <input type="text" id="modal-client-phone" class="form-control-clean" placeholder="+34 600...">
+            </div>
+          </div>
+          <div class="form-row-2">
+            <div class="form-group-clean">
+              <label>Tarifa Horaria ($/h)</label>
+              <input type="number" id="modal-client-rate" class="form-control-clean" value="45">
+            </div>
+            <div class="form-group-clean">
+              <label>Paquete Horas Contratadas</label>
+              <input type="number" id="modal-client-hours" class="form-control-clean" value="30">
+            </div>
+          </div>
+          <div class="form-group-clean">
+            <label>Servicios Contratados</label>
+            <input type="text" id="modal-client-services" class="form-control-clean" placeholder="ej: Asistencia Ejecutiva, Facturación">
+          </div>
+          <div class="form-group-clean">
+            <label>Instrucciones & Reglas</label>
+            <textarea id="modal-client-instructions" class="form-control-clean" rows="2" placeholder="Canal preferido, horarios de atención..."></textarea>
+          </div>
+          <div class="modal-footer-clean">
+            <button type="button" class="action-btn secondary modal-close-btn">Cancelar</button>
+            <button type="submit" class="action-btn primary">Guardar Cliente</button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- 7. Modal Nuevo Proyecto -->
+  <div class="planner-modal-backdrop" id="project-editor-modal">
+    <div class="planner-modal-dialog">
+      <div class="modal-header-clean">
+        <h3 style="font-family:var(--font-serif); font-size:1.2rem;"><i data-lucide="folder-kanban"></i> Crear Nuevo Proyecto</h3>
+        <button class="modal-close-btn">&times;</button>
+      </div>
+      <form id="form-modal-project">
+        <div class="modal-body-clean">
+          <div class="form-group-clean">
+            <label>Nombre del Proyecto *</label>
+            <input type="text" id="modal-project-title" class="form-control-clean" required placeholder="ej: Reestructuración de Procesos">
+          </div>
+          <div class="form-group-clean">
+            <label>Objetivo Principal</label>
+            <textarea id="modal-project-desc" class="form-control-clean" rows="2" placeholder="Qué se logrará al completar este proyecto..."></textarea>
+          </div>
+          <div class="form-row-2">
+            <div class="form-group-clean">
+              <label>Fecha Límite</label>
+              <input type="date" id="modal-project-deadline" class="form-control-clean" value="2026-11-30">
+            </div>
+            <div class="form-group-clean">
+              <label>Presupuesto Estimado ($)</label>
+              <input type="number" id="modal-project-budget" class="form-control-clean" value="3500">
+            </div>
+          </div>
+          <div class="modal-footer-clean">
+            <button type="button" class="action-btn secondary modal-close-btn">Cancelar</button>
+            <button type="submit" class="action-btn primary">Crear Proyecto</button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Scripts en orden de dependencias -->
+  <script src="js/store.js"></script>
+  <script src="js/audio.js"></script>
+  <script src="js/tasks.js"></script>
+  <script src="js/calendar.js"></script>
+  <script src="js/projects.js"></script>
+  <script src="js/vabox.js"></script>
+  <script src="js/contacts-team.js"></script>
+  <script src="js/finance.js"></script>
+  <script src="js/notes.js"></script>
+  <script src="js/personal.js"></script>
+  <script src="js/automations.js"></script>
+  <script src="js/reports.js"></script>
+  <script src="js/dashboard.js"></script>
+  <script src="js/settings.js"></script>
+  <script src="js/app.js"></script>
+
+</body>
+</html>

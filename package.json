@@ -1,0 +1,22 @@
+{
+  "name": "agenda-digital-notes-web",
+  "version": "1.0.0",
+  "description": "Agenda Digital Web inspirada en los planificadores hipervinculados de Notes para organización ejecutiva y Asistente Virtual (VA)",
+  "main": "index.html",
+  "scripts": {
+    "start": "npx serve -l 3000 .",
+    "dev": "npx serve -l 3000 ."
+  },
+  "keywords": [
+    "agenda",
+    "notes",
+    "digital-planner",
+    "virtual-assistant",
+    "productivity",
+    "kanban",
+    "calendar",
+    "time-blocking"
+  ],
+  "author": "Antigravity & Carolina Méndez",
+  "license": "MIT"
+}

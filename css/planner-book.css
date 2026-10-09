@@ -1,0 +1,630 @@
+/* ==========================================================================
+   ESTILOS BASE: CUADERNO / AGENDA DIGITAL NOTES CON ANILLAS Y PESTAÑAS
+   Inspirado en los planificadores digitales de hipervínculos de iPad/Notes
+   ========================================================================== */
+
+:root {
+  /* Variables de Color Tema Clásico (Caramel & Marfil) */
+  --bg-desk: #2b2622;
+  --binder-leather: #5a3825;
+  --binder-border: #3d2315;
+  --binder-stitch: rgba(255, 230, 200, 0.25);
+  --paper-ivory: #faf7f2;
+  --paper-edge: #eee7db;
+  --paper-shadow: 0 15px 35px rgba(0, 0, 0, 0.45);
+  
+  --text-main: #24211e;
+  --text-muted: #6e675f;
+  --text-light: #9c9389;
+
+  --accent-primary: #9c523b;
+  --accent-primary-hover: #82412d;
+  --accent-secondary: #3f6253;
+  --accent-gold: #c29547;
+  --accent-dark: #1f1d1b;
+
+  --border-subtle: #e6dfd5;
+  --border-focus: #9c523b;
+
+  /* Colores de Prioridad */
+  --pri-urgente: #d32f2f;
+  --pri-urgente-bg: #ffebee;
+  --pri-alta: #e65100;
+  --pri-alta-bg: #fff3e0;
+  --pri-media: #f57f17;
+  --pri-media-bg: #fffde7;
+  --pri-baja: #2e7d32;
+  --pri-baja-bg: #e8f5e9;
+
+  /* Sombras y Radios */
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 16px;
+  --radius-tab: 0 12px 12px 0;
+  
+  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  --font-serif: "Playfair Display", Georgia, serif;
+}
+
+/* Reset y Base */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: var(--font-sans);
+  background: var(--bg-desk);
+  color: var(--text-main);
+  min-height: 100vh;
+  padding: 24px 20px 40px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  overflow-x: hidden;
+  transition: background 0.3s ease;
+}
+
+/* Contenedor Superior de Barra de Control Rápido */
+.planner-top-bar {
+  width: 100%;
+  max-width: 1380px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+  color: #f5ede4;
+  padding: 0 8px;
+}
+
+.top-bar-left {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.planner-logo {
+  font-family: var(--font-serif);
+  font-size: 1.35rem;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: #fff;
+}
+
+.planner-logo-badge {
+  background: var(--accent-gold);
+  color: #2b1f0c;
+  font-size: 0.65rem;
+  font-weight: 800;
+  padding: 3px 7px;
+  border-radius: 4px;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  font-family: var(--font-sans);
+}
+
+.top-date-indicator {
+  font-size: 0.88rem;
+  color: rgba(255, 255, 255, 0.75);
+  border-left: 1px solid rgba(255, 255, 255, 0.2);
+  padding-left: 14px;
+}
+
+.top-bar-right {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.top-nav-btn {
+  background: rgba(255, 255, 255, 0.12);
+  color: #f7f3ef;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  padding: 7px 14px;
+  border-radius: 8px;
+  font-size: 0.84rem;
+  font-weight: 500;
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  backdrop-filter: blur(8px);
+}
+
+.top-nav-btn:hover {
+  background: rgba(255, 255, 255, 0.22);
+  color: #fff;
+}
+
+.top-nav-btn.primary {
+  background: var(--accent-gold);
+  color: #261b0c;
+  border-color: var(--accent-gold);
+  font-weight: 600;
+}
+
+.top-nav-btn.primary:hover {
+  background: #d4a755;
+}
+
+.kbd-shortcut {
+  font-size: 0.72rem;
+  background: rgba(0, 0, 0, 0.25);
+  padding: 2px 5px;
+  border-radius: 4px;
+  color: rgba(255, 255, 255, 0.8);
+  margin-left: 4px;
+}
+
+/* MARCAPÁGINAS SUPERIORES (RIBBON BOOKMARKS) */
+.bookmarks-ribbons-bar {
+  width: 100%;
+  max-width: 1380px;
+  display: flex;
+  justify-content: flex-end;
+  gap: 14px;
+  margin-bottom: -10px;
+  z-index: 10;
+  padding-right: 80px;
+}
+
+.ribbon-bookmark {
+  background: #9c523b;
+  color: #fff;
+  padding: 6px 14px 10px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+  border-radius: 4px 4px 0 0;
+  cursor: pointer;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+  position: relative;
+  transition: transform 0.2s ease;
+}
+
+.ribbon-bookmark:hover {
+  transform: translateY(-3px);
+}
+
+.ribbon-bookmark.gold { background: var(--accent-gold); color: #2a1f0a; }
+.ribbon-bookmark.green { background: var(--accent-secondary); color: #fff; }
+
+/* ==========================================================================
+   ESTRUCTURA DEL CUADERNO / BINDER DE NOTES
+   ========================================================================== */
+.planner-notebook-container {
+  width: 100%;
+  max-width: 1380px;
+  display: flex;
+  position: relative;
+}
+
+/* Cubierta Exterior de Cuero con Costuras */
+.planner-leather-cover {
+  flex: 1;
+  background: var(--binder-leather);
+  border: 4px solid var(--binder-border);
+  border-radius: 20px;
+  padding: 16px 14px 16px 20px;
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.6), inset 0 2px 6px rgba(255, 255, 255, 0.15);
+  position: relative;
+  display: flex;
+  min-height: 860px;
+}
+
+/* Línea de costura perimetral artesanal */
+.planner-leather-cover::before {
+  content: "";
+  position: absolute;
+  top: 6px;
+  left: 6px;
+  right: 6px;
+  bottom: 6px;
+  border: 1px dashed var(--binder-stitch);
+  border-radius: 16px;
+  pointer-events: none;
+}
+
+/* Hojas de Papel Marfil (Interior del Cuaderno) */
+.planner-paper-sheet {
+  flex: 1;
+  background: var(--paper-ivory);
+  border-radius: 12px;
+  box-shadow: var(--paper-shadow);
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  border-right: 3px solid var(--paper-edge);
+  border-bottom: 4px solid var(--paper-edge);
+}
+
+/* Textura sutil punteada de papel (Dot Grid 5mm clásico Notes) */
+.planner-paper-sheet::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image: radial-gradient(#d3c9ba 1px, transparent 1px);
+  background-size: 24px 24px;
+  opacity: 0.45;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* Lomo con espiral / anillas metálicas en el borde izquierdo */
+.planner-spine-rings {
+  position: absolute;
+  top: 30px;
+  bottom: 30px;
+  left: -14px;
+  width: 28px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  z-index: 15;
+  pointer-events: none;
+}
+
+.spiral-ring {
+  width: 28px;
+  height: 12px;
+  background: linear-gradient(180deg, #e0e0e0 0%, #ffffff 30%, #a8a8a8 70%, #5e5e5e 100%);
+  border-radius: 12px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.5), inset 0 1px 2px rgba(255, 255, 255, 0.9);
+  position: relative;
+}
+
+.spiral-ring::after {
+  content: "";
+  position: absolute;
+  top: 2px;
+  left: 6px;
+  right: 6px;
+  height: 2px;
+  background: rgba(255, 255, 255, 0.8);
+  border-radius: 2px;
+}
+
+/* Contenedor del contenido de la página activa */
+.planner-content-area {
+  position: relative;
+  z-index: 1;
+  padding: 32px 38px 48px 42px;
+  min-height: 800px;
+  overflow-y: auto;
+  transition: opacity 0.12s ease, transform 0.12s ease;
+}
+
+.planner-content-area.page-flipping {
+  opacity: 0;
+  transform: scale(0.995) translateX(4px);
+}
+
+/* ==========================================================================
+   PESTAÑAS DIVISORIAS LATERALES (TABS HIPERVINCULADOS DE NOTES)
+   ========================================================================== */
+.planner-tabs-sidebar {
+  width: 64px;
+  display: flex;
+  flex-direction: column;
+  margin-top: 24px;
+  margin-bottom: 24px;
+  gap: 5px;
+  z-index: 5;
+}
+
+.planner-tab {
+  height: 58px;
+  background: #c9b49b;
+  border-radius: var(--radius-tab);
+  border: 1px solid rgba(0, 0, 0, 0.15);
+  border-left: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #3d3023;
+  position: relative;
+  box-shadow: 3px 3px 6px rgba(0, 0, 0, 0.25);
+  transition: all 0.2s cubic-bezier(0.2, 0, 0.1, 1);
+  padding: 0 6px 0 2px;
+}
+
+.planner-tab .tab-icon-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+  pointer-events: none;
+}
+
+.planner-tab i {
+  width: 18px;
+  height: 18px;
+}
+
+.planner-tab .tab-label {
+  font-size: 0.62rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+}
+
+.planner-tab:hover {
+  transform: translateX(6px);
+  box-shadow: 5px 4px 10px rgba(0, 0, 0, 0.35);
+  color: #1a140e;
+}
+
+/* Pestaña activa (resaltada como en Notes) */
+.planner-tab.active {
+  width: 76px;
+  background: var(--paper-ivory) !important;
+  color: var(--accent-primary) !important;
+  font-weight: 800;
+  box-shadow: 6px 4px 14px rgba(0, 0, 0, 0.3);
+  transform: translateX(10px);
+  border-left: 3px solid var(--accent-primary);
+  z-index: 12;
+}
+
+/* Paleta de colores temáticos para las pestañas */
+.planner-tab[data-tab="dashboard"]   { background: #d7b59e; color: #422617; }
+.planner-tab[data-tab="calendar"]    { background: #b8c8be; color: #203a28; }
+.planner-tab[data-tab="tasks"]       { background: #dfc89d; color: #453512; }
+.planner-tab[data-tab="projects"]    { background: #c2c3d8; color: #2c2d46; }
+.planner-tab[data-tab="vabox"]       { background: #d9bfb7; color: #47261d; }
+.planner-tab[data-tab="contacts"]    { background: #b6cdd4; color: #1e3740; }
+.planner-tab[data-tab="finance"]     { background: #c5d8ba; color: #29401e; }
+.planner-tab[data-tab="notes"]       { background: #dfd0bb; color: #45341f; }
+.planner-tab[data-tab="personal"]    { background: #e0bbca; color: #4a2133; }
+.planner-tab[data-tab="automations"] { background: #cfc2df; color: #322147; }
+.planner-tab[data-tab="reports"]     { background: #d8c7b8; color: #3d2a1b; }
+.planner-tab[data-tab="settings"]    { background: #bfb8b2; color: #2e2a27; }
+
+/* ==========================================================================
+   CABECERAS DE MÓDULO & ELEMENTOS EDITORIALES
+   ========================================================================== */
+.module-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 24px;
+  padding-bottom: 16px;
+  border-bottom: 2px solid var(--border-subtle);
+  gap: 20px;
+}
+
+.planner-page-eyebrow {
+  font-size: 0.78rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--accent-primary);
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 4px;
+}
+
+.planner-page-title {
+  font-family: var(--font-serif);
+  font-size: 1.9rem;
+  font-weight: 700;
+  color: var(--text-main);
+  line-height: 1.25;
+}
+
+.planner-page-desc {
+  font-size: 0.88rem;
+  color: var(--text-muted);
+  max-width: 680px;
+  margin-top: 4px;
+  line-height: 1.45;
+}
+
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-shrink: 0;
+}
+
+/* Botones de Acción Estilo Papelería */
+.action-btn {
+  padding: 9px 18px;
+  border-radius: var(--radius-sm);
+  font-size: 0.86rem;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  border: 1px solid transparent;
+  transition: all 0.2s ease;
+  font-family: var(--font-sans);
+}
+
+.action-btn.primary {
+  background: var(--accent-primary);
+  color: #fff;
+  box-shadow: 0 4px 10px rgba(156, 82, 59, 0.3);
+}
+
+.action-btn.primary:hover {
+  background: var(--accent-primary-hover);
+  transform: translateY(-1px);
+}
+
+.action-btn.secondary {
+  background: #ede6dc;
+  color: var(--text-main);
+  border-color: #dcd3c5;
+}
+
+.action-btn.secondary:hover {
+  background: #e2d9cd;
+}
+
+.action-btn.zen-btn {
+  background: #3f6253;
+  color: #fff;
+  box-shadow: 0 4px 10px rgba(63, 98, 83, 0.25);
+}
+
+.action-btn.zen-btn:hover {
+  background: #324f42;
+}
+
+/* Botones de Alternancia de Vistas (Lista / Kanban / Días) */
+.view-toggle-group {
+  display: inline-flex;
+  background: #ece4d8;
+  padding: 3px;
+  border-radius: 8px;
+  border: 1px solid #ddd3c5;
+}
+
+.view-toggle-btn {
+  background: transparent;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: all 0.15s ease;
+}
+
+.view-toggle-btn.active {
+  background: #fff;
+  color: var(--text-main);
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+/* ==========================================================================
+   MODO ENFOQUE ZEN (ANTI-DISTRACCIÓN)
+   ========================================================================== */
+body.zen-focus-mode {
+  padding: 0;
+  background: var(--paper-ivory);
+}
+
+body.zen-focus-mode .planner-top-bar,
+body.zen-focus-mode .bookmarks-ribbons-bar,
+body.zen-focus-mode .planner-tabs-sidebar,
+body.zen-focus-mode .planner-spine-rings,
+body.zen-focus-mode .planner-leather-cover::before {
+  display: none !important;
+}
+
+body.zen-focus-mode .planner-leather-cover {
+  border: none;
+  border-radius: 0;
+  box-shadow: none;
+  padding: 0;
+  background: transparent;
+  min-height: 100vh;
+}
+
+body.zen-focus-mode .planner-paper-sheet {
+  border-radius: 0;
+  border: none;
+  box-shadow: none;
+}
+
+body.zen-focus-mode .planner-content-area {
+  padding: 32px 10% 60px;
+  max-width: 1400px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+/* Botón flotante para salir de Modo Zen */
+#floating-exit-zen {
+  display: none;
+  position: fixed;
+  bottom: 24px;
+  right: 28px;
+  background: var(--text-main);
+  color: #fff;
+  border: none;
+  padding: 10px 18px;
+  border-radius: 30px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+  cursor: pointer;
+  z-index: 1000;
+  align-items: center;
+  gap: 8px;
+}
+
+body.zen-focus-mode #floating-exit-zen {
+  display: inline-flex;
+}
+
+/* ==========================================================================
+   ADAPTABILIDAD RESPONSIVE (MÓVIL / TABLET)
+   ========================================================================== */
+@media (max-width: 1024px) {
+  body {
+    padding: 10px 8px;
+  }
+  
+  .planner-notebook-container {
+    flex-direction: column;
+  }
+
+  .planner-tabs-sidebar {
+    width: 100%;
+    height: auto;
+    flex-direction: row;
+    overflow-x: auto;
+    margin: 12px 0 0;
+    padding-bottom: 8px;
+    order: 2;
+  }
+
+  .planner-tab {
+    flex-shrink: 0;
+    width: auto;
+    min-width: 70px;
+    height: 48px;
+    border-radius: 8px 8px 0 0;
+    border: 1px solid rgba(0, 0, 0, 0.12);
+  }
+
+  .planner-tab.active {
+    width: auto;
+    transform: translateY(-4px);
+    border-left: none;
+    border-top: 3px solid var(--accent-primary);
+  }
+
+  .planner-leather-cover {
+    padding: 10px 8px;
+    border-radius: 12px;
+  }
+
+  .planner-content-area {
+    padding: 20px 16px;
+  }
+
+  .planner-spine-rings {
+    display: none;
+  }
+}

@@ -1,0 +1,221 @@
+/**
+ * Módulo de Ajustes, Temas, Seguridad y Respaldo
+ * Personalización visual estilo Notes, exportación/importación JSON,
+ * roles de usuario y control de privacidad local.
+ */
+
+class SettingsModule {
+  constructor() {}
+
+  render(container) {
+    const profile = window.plannerStore.get('profile') || {};
+    const settings = window.plannerStore.get('settings') || {};
+
+    container.innerHTML = `
+      <div class="module-header">
+        <div>
+          <div class="planner-page-eyebrow"><i data-lucide="shield-check"></i> Módulo 11 · Seguridad & Personalización</div>
+          <h2 class="planner-page-title">Ajustes del Sistema & Respaldos</h2>
+          <p class="planner-page-desc">Tus datos se almacenan de forma privada y local en tu navegador. Exporta copias de seguridad con un solo clic.</p>
+        </div>
+      </div>
+
+      <div class="settings-grid-layout">
+        <!-- Tarjeta 1: Perfil y Rol Activo -->
+        <div class="settings-card">
+          <h4><i data-lucide="user-check"></i> Perfil de Usuario & Rol</h4>
+          <div class="profile-preview-box">
+            <div class="profile-avatar-big">${profile.avatar || 'CM'}</div>
+            <div class="profile-fields">
+              <input type="text" id="setting-prof-name" class="form-input-clean" value="${profile.name}" placeholder="Tu Nombre">
+              <input type="text" id="setting-prof-role" class="form-input-clean role" value="${profile.role}" placeholder="Tu Cargo">
+              <input type="text" id="setting-prof-business" class="form-input-clean business" value="${profile.business}" placeholder="Negocio / Empresa">
+            </div>
+          </div>
+          <div class="role-selector-row">
+            <label class="setting-label">Rol Activo del Sistema:</label>
+            <select id="setting-user-role-select" class="form-select-sm">
+              <option value="directora" selected>Director / Asistente Virtual Principal (Acceso Total)</option>
+              <option value="gerente">Gerente de Proyectos</option>
+              <option value="colaborador">Colaborador / Asignado</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Tarjeta 2: Apariencia & Temas de Cuaderno Notes -->
+        <div class="settings-card">
+          <h4><i data-lucide="palette"></i> Cubierta & Tema del Planificador</h4>
+          <p class="settings-subtext">Selecciona la encuadernación y textura de tu agenda digital:</p>
+          <div class="themes-selector-grid">
+            <div class="theme-option-box ${settings.theme === 'caramel' ? 'is-active' : ''}" data-theme="caramel">
+              <div class="theme-swatch caramel"></div>
+              <strong>Cuero Caramelo</strong>
+              <small>Clásico Notes Marfil</small>
+            </div>
+            <div class="theme-option-box ${settings.theme === 'rose' ? 'is-active' : ''}" data-theme="rose">
+              <div class="theme-swatch rose"></div>
+              <strong>Rosa Cuarzo</strong>
+              <small>Pastel & Detalles Oro</small>
+            </div>
+            <div class="theme-option-box ${settings.theme === 'midnight' ? 'is-active' : ''}" data-theme="midnight">
+              <div class="theme-swatch midnight"></div>
+              <strong>Medianoche</strong>
+              <small>Modo Oscuro Ejecutivo</small>
+            </div>
+            <div class="theme-option-box ${settings.theme === 'sage' ? 'is-active' : ''}" data-theme="sage">
+              <div class="theme-swatch sage"></div>
+              <strong>Verde Salvia</strong>
+              <small>Zen Nórdico Relajante</small>
+            </div>
+          </div>
+
+          <div class="toggle-setting-row">
+            <div>
+              <strong>Efectos de sonido táctiles</strong>
+              <p class="setting-help">Sonido suave al pasar hojas y marcar tareas (Web Audio sintetizado).</p>
+            </div>
+            <label class="switch-toggle">
+              <input type="checkbox" id="setting-sound-toggle" ${settings.soundEnabled ? 'checked' : ''}>
+              <span class="slider round"></span>
+            </label>
+          </div>
+        </div>
+
+        <!-- Tarjeta 3: Copias de Seguridad & Portabilidad de Datos -->
+        <div class="settings-card">
+          <h4><i data-lucide="database"></i> Respaldo & Restauración de Datos</h4>
+          <p class="settings-subtext">Descarga una copia completa de tus tareas, clientes, finanzas y notas para no perder jamás tu información.</p>
+
+          <div class="backup-actions-grid">
+            <button class="backup-btn-big export" id="btn-export-backup">
+              <i data-lucide="download"></i>
+              <div>
+                <strong>Exportar Copia de Seguridad</strong>
+                <small>Descarga un archivo .json con toda tu agenda</small>
+              </div>
+            </button>
+
+            <label class="backup-btn-big import">
+              <i data-lucide="upload"></i>
+              <div>
+                <strong>Restaurar desde Archivo</strong>
+                <small>Sube tu archivo .json de respaldo</small>
+              </div>
+              <input type="file" id="input-import-backup" accept=".json" style="display:none">
+            </label>
+          </div>
+
+          <div class="reset-zone">
+            <button class="btn-text-danger" id="btn-reset-demo-data">
+              <i data-lucide="refresh-cw"></i> Restablecer a los datos iniciales de demostración
+            </button>
+          </div>
+        </div>
+
+        <!-- Tarjeta 4: Seguridad & Privacidad -->
+        <div class="settings-card security-card">
+          <h4><i data-lucide="lock"></i> Privacidad & Almacenamiento Cero Servidor</h4>
+          <div class="security-item">
+            <i data-lucide="check-circle" class="text-success"></i>
+            <div>
+              <strong>Almacenamiento Local Aislado (Sandbox)</strong>
+              <p>Tus datos permanecen exclusivamente en tu navegador. Ningún dato sensible viaja a servidores externos sin tu consentimiento explícito.</p>
+            </div>
+          </div>
+          <div class="security-item">
+            <i data-lucide="shield" class="text-success"></i>
+            <div>
+              <strong>Bóvedas de Contraseñas Seguras</strong>
+              <p>Las contraseñas de clientes se gestionan vinculando URLs externas de 1Password o Bitwarden, cumpliendo estándares empresariales.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    `;
+
+    this.attachEvents(container);
+    if (window.lucide) window.lucide.createIcons();
+  }
+
+  attachEvents(container) {
+    // Cambio de tema
+    container.querySelectorAll('.theme-option-box').forEach(box => {
+      box.addEventListener('click', (e) => {
+        const theme = e.currentTarget.dataset.theme;
+        window.plannerApp.setTheme(theme);
+        this.render(container);
+      });
+    });
+
+    // Toggle sonido
+    const soundToggle = container.querySelector('#setting-sound-toggle');
+    if (soundToggle) {
+      soundToggle.addEventListener('change', (e) => {
+        window.plannerStore.data.settings.soundEnabled = e.target.checked;
+        window.plannerAudio.enabled = e.target.checked;
+        window.plannerStore.saveData();
+      });
+    }
+
+    // Exportar respaldo
+    const btnExport = container.querySelector('#btn-export-backup');
+    if (btnExport) {
+      btnExport.addEventListener('click', () => {
+        window.plannerStore.exportBackup();
+      });
+    }
+
+    // Importar respaldo
+    const inputImport = container.querySelector('#input-import-backup');
+    if (inputImport) {
+      inputImport.addEventListener('change', (e) => {
+        const file = e.target.files[0];
+        if (file) {
+          const reader = new FileReader();
+          reader.onload = (event) => {
+            const success = window.plannerStore.importBackup(event.target.result);
+            if (success) {
+              alert("¡Copia de seguridad restaurada correctamente!");
+              window.location.reload();
+            } else {
+              alert("Error: El archivo no tiene un formato válido de respaldo de la agenda.");
+            }
+          };
+          reader.readAsText(file);
+        }
+      });
+    }
+
+    // Restablecer demo
+    const btnReset = container.querySelector('#btn-reset-demo-data');
+    if (btnReset) {
+      btnReset.addEventListener('click', () => {
+        if (confirm("¿Seguro que deseas restablecer la agenda a sus datos de demostración originales?")) {
+          window.plannerStore.resetToInitial();
+          alert("Agenda restablecida.");
+          window.location.reload();
+        }
+      });
+    }
+
+    // Guardado de perfil
+    const nameIn = container.querySelector('#setting-prof-name');
+    const roleIn = container.querySelector('#setting-prof-role');
+    const bizIn = container.querySelector('#setting-prof-business');
+
+    const saveProf = () => {
+      window.plannerStore.data.profile.name = nameIn.value;
+      window.plannerStore.data.profile.role = roleIn.value;
+      window.plannerStore.data.profile.business = bizIn.value;
+      window.plannerStore.data.profile.avatar = (nameIn.value || 'CM').split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase();
+      window.plannerStore.saveData();
+      window.plannerApp.updateTopHeader();
+    };
+
+    if (nameIn) nameIn.addEventListener('input', saveProf);
+    if (roleIn) roleIn.addEventListener('input', saveProf);
+    if (bizIn) bizIn.addEventListener('input', saveProf);
+  }
+}
+
+window.settingsModule = new SettingsModule();

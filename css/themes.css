@@ -1,0 +1,195 @@
+/* ==========================================================================
+   TEMAS VISUALES DEL PLANIFICADOR DIGITAL NOTES WEB
+   ========================================================================== */
+
+/* 1. TEMA CLÁSICO: CUERO CARAMELO & MARFIL (Predeterminado) */
+body.theme-caramel {
+  --bg-desk: #2b2622;
+  --binder-leather: #5a3825;
+  --binder-border: #3d2315;
+  --binder-stitch: rgba(255, 230, 200, 0.25);
+  --paper-ivory: #faf7f2;
+  --paper-edge: #eee7db;
+  --accent-primary: #9c523b;
+  --accent-primary-hover: #82412d;
+  --accent-secondary: #3f6253;
+  --accent-gold: #c29547;
+}
+
+/* 2. TEMA ROSA CUARZO & ORO ROSA (Blush Pastel Aesthetic) */
+body.theme-rose {
+  --bg-desk: #34272c;
+  --binder-leather: #734854;
+  --binder-border: #4d2d38;
+  --binder-stitch: rgba(255, 215, 225, 0.3);
+  --paper-ivory: #fcf8f9;
+  --paper-edge: #f0e1e6;
+  --accent-primary: #a8586c;
+  --accent-primary-hover: #8f4457;
+  --accent-secondary: #58796f;
+  --accent-gold: #d4a373;
+}
+
+body.theme-rose .planner-tab[data-tab="dashboard"]   { background: #e8c8d0; color: #47262f; }
+body.theme-rose .planner-tab[data-tab="calendar"]    { background: #cdd9d4; color: #213d33; }
+body.theme-rose .planner-tab[data-tab="tasks"]       { background: #e8d7bb; color: #45341a; }
+body.theme-rose .planner-tab[data-tab="projects"]    { background: #d7cde3; color: #352647; }
+body.theme-rose .planner-tab[data-tab="vabox"]       { background: #e0bcc4; color: #422029; }
+body.theme-rose .planner-tab[data-tab="finance"]     { background: #d0ded3; color: #233e29; }
+
+/* 3. TEMA MEDIANOCHE EJECUTIVO (Dark Slate Mode) */
+body.theme-midnight {
+  --bg-desk: #0d1117;
+  --binder-leather: #1b232f;
+  --binder-border: #0e141c;
+  --binder-stitch: rgba(140, 180, 220, 0.25);
+  --paper-ivory: #161c24;
+  --paper-edge: #11151c;
+  --paper-shadow: 0 15px 35px rgba(0, 0, 0, 0.7);
+  
+  --text-main: #e6edf3;
+  --text-muted: #8b949e;
+  --text-light: #6e7681;
+
+  --accent-primary: #388bfd;
+  --accent-primary-hover: #1f6feb;
+  --accent-secondary: #2ea043;
+  --accent-gold: #d29922;
+
+  --border-subtle: #30363d;
+}
+
+body.theme-midnight .planner-paper-sheet::before {
+  background-image: radial-gradient(#30363d 1px, transparent 1px);
+  opacity: 0.35;
+}
+
+body.theme-midnight .planner-paper-card,
+body.theme-midnight .dash-stat-box,
+body.theme-midnight .task-card-notes,
+body.theme-midnight .kanban-column,
+body.theme-midnight .kanban-task-card,
+body.theme-midnight .cal-cell,
+body.theme-midnight .calendar-month-grid,
+body.theme-midnight .day-schedule-card,
+body.theme-midnight .side-planner-card,
+body.theme-midnight .project-selector-card,
+body.theme-midnight .project-dossier-paper,
+body.theme-midnight .va-live-tracker-bar,
+body.theme-midnight .va-client-card,
+body.theme-midnight .client-file-sheet,
+body.theme-midnight .contact-business-card,
+body.theme-midnight .team-member-card,
+body.theme-midnight .finance-kpi-card,
+body.theme-midnight .finance-main-sheet,
+body.theme-midnight .finance-box-card,
+body.theme-midnight .note-thumb-card,
+body.theme-midnight .lined-paper-editor,
+body.theme-midnight .habit-tracker-card,
+body.theme-midnight .routines-card,
+body.theme-midnight .goals-card,
+body.theme-midnight .shopping-card,
+body.theme-midnight .automations-list-card,
+body.theme-midnight .automations-log-card,
+body.theme-midnight .rep-kpi-card,
+body.theme-midnight .chart-card,
+body.theme-midnight .reports-table-card,
+body.theme-midnight .settings-card,
+body.theme-midnight .command-palette-box,
+body.theme-midnight .modal-header-clean,
+body.theme-midnight .modal-body-clean,
+body.theme-midnight .calendar-nav-bar {
+  background: #1c232d !important;
+  color: #e6edf3 !important;
+  border-color: #30363d !important;
+}
+
+body.theme-midnight .planner-page-title,
+body.theme-midnight .stat-number,
+body.theme-midnight .task-title,
+body.theme-midnight .dossier-title,
+body.theme-midnight .rep-val,
+body.theme-midnight .kpi-amount,
+body.theme-midnight .paper-title-input {
+  color: #f0f6fc !important;
+}
+
+body.theme-midnight .priority-banner-item,
+body.theme-midnight .dossier-kpi-grid,
+body.theme-midnight .deliverable-item,
+body.theme-midnight .file-instructions-card,
+body.theme-midnight .contact-interaction-box,
+body.theme-midnight .automation-rule-box,
+body.theme-midnight .rule-flow-diagram,
+body.theme-midnight .shopping-check-row,
+body.theme-midnight .backup-btn-big,
+body.theme-midnight .theme-option-box {
+  background: #13171f !important;
+  border-color: #2b323c !important;
+  color: #e6edf3 !important;
+}
+
+body.theme-midnight .post-it-note {
+  background: #27281f !important;
+  border-color: #4a4a2b !important;
+  color: #e6e6b8 !important;
+}
+
+body.theme-midnight .post-it-title { color: #f2e379 !important; }
+body.theme-midnight .post-it-textarea { color: #e6e6b8 !important; }
+
+body.theme-midnight .form-control-clean,
+body.theme-midnight .form-select-sm,
+body.theme-midnight .form-input-sm,
+body.theme-midnight .search-input-wrapper input {
+  background: #11151c !important;
+  border-color: #30363d !important;
+  color: #f0f6fc !important;
+}
+
+body.theme-midnight .planner-tab {
+  background: #212836 !important;
+  color: #8b949e !important;
+  border-color: #30363d !important;
+}
+
+body.theme-midnight .planner-tab.active {
+  background: #161c24 !important;
+  color: #58a6ff !important;
+  border-left-color: #58a6ff !important;
+}
+
+body.theme-midnight .notes-table th,
+body.theme-midnight .calendar-days-header {
+  background: #11161d !important;
+  color: #8b949e !important;
+}
+
+body.theme-midnight .paper-ruled-body {
+  background: repeating-linear-gradient(transparent, transparent 27px, #2a323d 28px) !important;
+}
+
+body.theme-midnight .paper-textarea {
+  color: #e6edf3 !important;
+}
+
+/* 4. TEMA VERDE SALVIA NÓRDICO (Sage & Oak) */
+body.theme-sage {
+  --bg-desk: #232b25;
+  --binder-leather: #384d3e;
+  --binder-border: #243329;
+  --binder-stitch: rgba(215, 235, 220, 0.25);
+  --paper-ivory: #f7faf7;
+  --paper-edge: #e2ede4;
+  --accent-primary: #3d6a4c;
+  --accent-primary-hover: #2f543c;
+  --accent-secondary: #5c7f66;
+  --accent-gold: #c29547;
+}
+
+body.theme-sage .planner-tab[data-tab="dashboard"]   { background: #cbd8cf; color: #203625; }
+body.theme-sage .planner-tab[data-tab="calendar"]    { background: #bdd2c3; color: #182e1c; }
+body.theme-sage .planner-tab[data-tab="tasks"]       { background: #e3d9c1; color: #3b321a; }
+body.theme-sage .planner-tab[data-tab="projects"]    { background: #c6cfd8; color: #1e2a36; }
+body.theme-sage .planner-tab[data-tab="vabox"]       { background: #d8c2bd; color: #3b221d; }
+body.theme-sage .planner-tab[data-tab="finance"]     { background: #bfd4bf; color: #1c331c; }
