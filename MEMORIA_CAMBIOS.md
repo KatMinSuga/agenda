@@ -128,14 +128,16 @@ Las siguientes características forman la base consolidada del sistema y **NO de
 
 ---
 
-### [Entrada 004] — 09/10/2026 · Inicialización de Repositorio Git y Preparación de Push a GitHub
+### [Entrada 004] — 09/10/2026 · Inicialización de Repositorio Git y Push a GitHub
 * **Petición del Usuario:**
-  > *"inicializame un repositorio en github y realiza el push de la pagina"*
+  > *"inicializame un repositorio en github y realiza el push de la pagina"* (URL proporcionada: `https://github.com/KatMinSuga/agenda.git`).
 * **Acciones Realizadas:**
   - Creación del archivo `.gitignore` para exclusión de dependencias y archivos temporales del sistema operativo.
   - Inicialización del repositorio Git local (`git init`).
   - Creación y cambio a la rama principal estándar `main` (`git branch -M main`).
   - Preparación y empaquetado del primer commit con todo el código base de la agenda y su documentación viva.
+  - Vinculación con el repositorio remoto: `git remote add origin https://github.com/KatMinSuga/agenda.git`.
+  - Ejecución del push hacia la rama principal: `git push -u origin main`.
 * **Archivos Creados/Afectados:**
   - `.gitignore`
   - `MEMORIA_CAMBIOS.md`
