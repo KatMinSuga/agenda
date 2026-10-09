@@ -39,15 +39,15 @@ class VAHubModule {
     const totalBilledHours = (totalBillableMins / 60).toFixed(1);
 
     container.innerHTML = `
-      <div class="va-hub-wrapper" style="box-sizing:border-box; max-width:100%; overflow-x:hidden;">
+      <div id="va-hub-module-root" class="va-hub-wrapper">
         <!-- Cabecera del Módulo -->
-        <div class="module-header">
-          <div>
+        <div class="module-header va-module-header">
+          <div class="va-header-title-block">
             <div class="planner-page-eyebrow"><i data-lucide="briefcase"></i> Módulo 04 · Asistente Virtual & Clientes</div>
             <h2 class="planner-page-title">Proyectos, Tareas & Time Tracker</h2>
             <p class="planner-page-desc">Control riguroso de horas dedicadas por proyecto y tarea, cronómetro facturable en vivo para futuras juntas y liquidaciones.</p>
           </div>
-          <div class="header-actions">
+          <div class="header-actions va-header-actions">
             <div class="view-toggle-group">
               <button class="view-toggle-btn ${this.activeSection === 'projects_tasks' ? 'active' : ''}" id="btn-va-sec-projects">
                 <i data-lucide="folder-kanban"></i> Proyectos & Tareas (${projects.length})
@@ -62,52 +62,67 @@ class VAHubModule {
           </div>
         </div>
 
-        <!-- Cronómetro de Alta Precisión (Stopwatch Bar Contenido) -->
+        <!-- Cronómetro de Alta Precisión (Estructura de 2 niveles Notes Anti-desborde) -->
         <div class="va-live-tracker-bar">
-          <div class="tracker-left">
-            <div class="tracker-badge-live ${this.timerRunning ? 'active' : ''}">
-              <span class="pulse-dot"></span>
-              <span>${this.timerRunning ? 'REGISTRANDO TIEMPO' : 'CRONÓMETRO LISTO'}</span>
+          <!-- Nivel 1: Reloj digital, estado en vivo, switch facturable y controles -->
+          <div class="tracker-top-row">
+            <div class="tracker-clock-block">
+              <div class="tracker-badge-live ${this.timerRunning ? 'active' : ''}">
+                <span class="pulse-dot"></span>
+                <span>${this.timerRunning ? 'REGISTRANDO TIEMPO' : 'CRONÓMETRO LISTO'}</span>
+              </div>
+              <div class="tracker-display" id="va-timer-digits">
+                ${this.formatTime(this.timerSeconds)}
+              </div>
             </div>
-            <div class="tracker-display" id="va-timer-digits">
-              ${this.formatTime(this.timerSeconds)}
+
+            <div class="tracker-controls-block">
+              <label class="billable-toggle-label" title="Marcar si este tiempo es facturable al cliente">
+                <input type="checkbox" id="va-timer-billable" ${this.currentTimerBillable ? 'checked' : ''}>
+                <span class="billable-pill-text"><i data-lucide="coins"></i> Facturable</span>
+              </label>
+
+              <button class="timer-btn ${this.timerRunning ? 'pause' : 'start'}" id="btn-toggle-timer">
+                <i data-lucide="${this.timerRunning ? 'pause' : 'play'}"></i>
+                <span>${this.timerRunning ? 'Pausar' : 'Iniciar'}</span>
+              </button>
+
+              <button class="timer-btn save" id="btn-save-time-entry" title="Registrar horas en bitácora del proyecto">
+                <i data-lucide="check"></i> <span>Registrar</span>
+              </button>
+
+              <button class="timer-btn reset" id="btn-reset-timer" title="Reiniciar contador a cero">
+                <i data-lucide="rotate-ccw"></i>
+              </button>
             </div>
           </div>
 
-          <div class="tracker-inputs">
-            <input type="text" id="va-timer-desc" class="form-input-sm" placeholder="¿En qué tarea o proyecto trabajas?" value="${this.currentTimerDesc}">
-            
-            <select id="va-timer-project-select" class="form-select-sm" title="Proyecto al que se cargará el tiempo">
-              ${projects.map(p => {
-                const c = clients.find(cl => cl.id === p.clientId);
-                return `<option value="${p.id}" ${p.id === this.currentTimerProjectId ? 'selected' : ''}>${p.title} (${c ? c.company : 'Hogwarts Ops'})</option>`;
-              }).join('')}
-            </select>
+          <!-- Nivel 2: Asignación de actividad, proyecto y tarea (distribución armónica) -->
+          <div class="tracker-bottom-row">
+            <div class="tracker-input-group desc-group">
+              <label class="tracker-mini-label"><i data-lucide="pen-tool"></i> Actividad o Tarea</label>
+              <input type="text" id="va-timer-desc" class="form-input-sm" placeholder="¿En qué tarea o proyecto trabajas?" value="${this.currentTimerDesc}">
+            </div>
 
-            <select id="va-timer-task-select" class="form-select-sm" title="Subtarea específica (opcional)">
-              <option value="">(Tiempo General de Proyecto)</option>
-              ${tasks.filter(t => t.projectId === this.currentTimerProjectId).map(t => `
-                <option value="${t.id}" ${t.id === this.currentTimerTaskId ? 'selected' : ''}>📋 ${t.title.substring(0, 35)}...</option>
-              `).join('')}
-            </select>
+            <div class="tracker-input-group proj-group">
+              <label class="tracker-mini-label"><i data-lucide="folder"></i> Proyecto Destino</label>
+              <select id="va-timer-project-select" class="form-select-sm" title="Proyecto al que se cargará el tiempo">
+                ${projects.map(p => {
+                  const c = clients.find(cl => cl.id === p.clientId);
+                  return `<option value="${p.id}" ${p.id === this.currentTimerProjectId ? 'selected' : ''}>${p.title} (${c ? c.company : 'Hogwarts Ops'})</option>`;
+                }).join('')}
+              </select>
+            </div>
 
-            <label class="billable-toggle-label" title="Marcar si este tiempo es facturable al cliente">
-              <input type="checkbox" id="va-timer-billable" ${this.currentTimerBillable ? 'checked' : ''}>
-              <span>Facturable</span>
-            </label>
-          </div>
-
-          <div class="tracker-actions">
-            <button class="timer-btn ${this.timerRunning ? 'pause' : 'start'}" id="btn-toggle-timer">
-              <i data-lucide="${this.timerRunning ? 'pause' : 'play'}"></i>
-              <span>${this.timerRunning ? 'Pausar' : 'Iniciar'}</span>
-            </button>
-            <button class="timer-btn save" id="btn-save-time-entry" title="Registrar horas en bitácora del proyecto">
-              <i data-lucide="check"></i> Registrar
-            </button>
-            <button class="timer-btn reset" id="btn-reset-timer" title="Reiniciar contador a cero">
-              <i data-lucide="rotate-ccw"></i>
-            </button>
+            <div class="tracker-input-group task-group">
+              <label class="tracker-mini-label"><i data-lucide="check-square"></i> Subtarea (Opcional)</label>
+              <select id="va-timer-task-select" class="form-select-sm" title="Subtarea específica (opcional)">
+                <option value="">(Tiempo General de Proyecto)</option>
+                ${tasks.filter(t => t.projectId === this.currentTimerProjectId).map(t => `
+                  <option value="${t.id}" ${t.id === this.currentTimerTaskId ? 'selected' : ''}>📋 ${t.title.length > 32 ? t.title.substring(0, 32) + '...' : t.title}</option>
+                `).join('')}
+              </select>
+            </div>
           </div>
         </div>
 
@@ -378,9 +393,11 @@ class VAHubModule {
   }
 
   attachEvents(container) {
+    const root = container.querySelector('#va-hub-module-root') || container;
+
     // 1. Alternar sección (Proyectos vs Clientes)
-    const btnSecProjects = container.querySelector('#btn-va-sec-projects');
-    const btnSecClients = container.querySelector('#btn-va-sec-clients');
+    const btnSecProjects = root.querySelector('#btn-va-sec-projects');
+    const btnSecClients = root.querySelector('#btn-va-sec-clients');
 
     if (btnSecProjects) {
       btnSecProjects.addEventListener('click', () => {
@@ -399,7 +416,7 @@ class VAHubModule {
     }
 
     // 2. Cronómetro Start / Pause
-    const toggleBtn = container.querySelector('#btn-toggle-timer');
+    const toggleBtn = root.querySelector('#btn-toggle-timer');
     if (toggleBtn) {
       toggleBtn.addEventListener('click', () => {
         if (this.timerRunning) {
@@ -419,7 +436,7 @@ class VAHubModule {
     }
 
     // 3. Reset cronómetro
-    const resetBtn = container.querySelector('#btn-reset-timer');
+    const resetBtn = root.querySelector('#btn-reset-timer');
     if (resetBtn) {
       resetBtn.addEventListener('click', () => {
         clearInterval(this.timerInterval);
@@ -430,7 +447,7 @@ class VAHubModule {
     }
 
     // 4. Registrar tiempo en bitácora
-    const saveBtn = container.querySelector('#btn-save-time-entry');
+    const saveBtn = root.querySelector('#btn-save-time-entry');
     if (saveBtn) {
       saveBtn.addEventListener('click', () => {
         if (this.timerSeconds < 10) {
@@ -438,12 +455,12 @@ class VAHubModule {
           return;
         }
 
-        const desc = (container.querySelector('#va-timer-desc') || {}).value || this.currentTimerDesc;
-        const projSelect = container.querySelector('#va-timer-project-select');
+        const desc = (root.querySelector('#va-timer-desc') || {}).value || this.currentTimerDesc;
+        const projSelect = root.querySelector('#va-timer-project-select');
         const projectId = projSelect ? projSelect.value : this.currentTimerProjectId;
-        const taskSelect = container.querySelector('#va-timer-task-select');
+        const taskSelect = root.querySelector('#va-timer-task-select');
         const taskId = taskSelect ? taskSelect.value : this.currentTimerTaskId;
-        const isBillable = container.querySelector('#va-timer-billable')?.checked ?? true;
+        const isBillable = root.querySelector('#va-timer-billable')?.checked ?? true;
 
         const projects = window.plannerStore.get('projects') || [];
         const currentP = projects.find(p => p.id === projectId);
@@ -473,7 +490,7 @@ class VAHubModule {
     }
 
     // 5. Cambio dinámico en selector de proyecto del cronómetro
-    const projSelect = container.querySelector('#va-timer-project-select');
+    const projSelect = root.querySelector('#va-timer-project-select');
     if (projSelect) {
       projSelect.addEventListener('change', (e) => {
         this.currentTimerProjectId = e.target.value;
@@ -483,7 +500,7 @@ class VAHubModule {
     }
 
     // 6. Botón directo "Cronometrar Proyecto" desde tarjeta
-    container.querySelectorAll('.btn-start-proj-timer').forEach(btn => {
+    root.querySelectorAll('.btn-start-proj-timer').forEach(btn => {
       btn.addEventListener('click', (e) => {
         const pId = e.currentTarget.dataset.projectId;
         const pTitle = e.currentTarget.dataset.projectTitle;
@@ -507,7 +524,7 @@ class VAHubModule {
     });
 
     // 7. Botón directo "Cronometrar Tarea específica"
-    container.querySelectorAll('[data-action="track-task"]').forEach(btn => {
+    root.querySelectorAll('[data-action="track-task"]').forEach(btn => {
       btn.addEventListener('click', (e) => {
         const pId = e.currentTarget.dataset.projectId;
         const tId = e.currentTarget.dataset.taskId;
@@ -532,14 +549,14 @@ class VAHubModule {
     });
 
     // 8. Botón "+ Nueva Tarea / Solicitud" rápido
-    const btnQuickTask = container.querySelector('#btn-quick-new-task-va');
+    const btnQuickTask = root.querySelector('#btn-quick-new-task-va');
     if (btnQuickTask) {
       btnQuickTask.addEventListener('click', () => {
         this.openVATaskModal(this.currentTimerProjectId);
       });
     }
 
-    container.querySelectorAll('.btn-add-task-to-proj').forEach(btn => {
+    root.querySelectorAll('.btn-add-task-to-proj').forEach(btn => {
       btn.addEventListener('click', (e) => {
         const pId = e.currentTarget.dataset.projectId;
         this.openVATaskModal(pId);
@@ -547,7 +564,7 @@ class VAHubModule {
     });
 
     // 9. Botón "Resumen de Cobro / Junta de Revisión"
-    container.querySelectorAll('.btn-review-summary').forEach(btn => {
+    root.querySelectorAll('.btn-review-summary').forEach(btn => {
       btn.addEventListener('click', (e) => {
         const pId = e.currentTarget.dataset.projectId;
         this.showProjectReviewSummary(pId);
@@ -555,7 +572,7 @@ class VAHubModule {
     });
 
     // 10. Selección de cliente en lista
-    container.querySelectorAll('.va-client-card').forEach(card => {
+    root.querySelectorAll('.va-client-card').forEach(card => {
       card.addEventListener('click', (e) => {
         this.selectedClientId = e.currentTarget.dataset.clientId;
         this.render(container);
@@ -564,19 +581,13 @@ class VAHubModule {
     });
 
     // 11. Añadir solicitud de cliente
-    const btnAddReq = container.querySelector('#btn-add-client-request');
+    const btnAddReq = root.querySelector('#btn-add-client-request');
     if (btnAddReq) {
       btnAddReq.addEventListener('click', (e) => {
         const clientId = e.currentTarget.dataset.clientId;
-        const reqTitle = prompt("Descripción de la nueva solicitud del cliente:");
-        if (reqTitle && reqTitle.trim()) {
-          window.plannerStore.addClientRequest(clientId, {
-            title: reqTitle.trim(),
-            status: 'pendiente'
-          });
-          window.plannerAudio.playCheck();
-          this.render(container);
-        }
+        const projects = window.plannerStore.get('projects') || [];
+        const clientProject = projects.find(p => p.clientId === clientId) || projects[0];
+        this.openVATaskModal(clientProject ? clientProject.id : null);
       });
     }
   }

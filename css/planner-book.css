@@ -409,12 +409,16 @@ body {
   border-radius: 2px;
 }
 
-/* Contenedor del contenido de la página activa */
+/* Contenedor del contenido de la página activa (Con contención estricta anti-desborde) */
 .planner-content-area {
   position: relative;
   z-index: 1;
   padding: 32px 38px 48px 42px;
   min-height: 800px;
+  min-width: 0;
+  max-width: 100%;
+  box-sizing: border-box;
+  overflow-x: hidden;
   overflow-y: auto;
   transition: opacity 0.12s ease, transform 0.12s ease;
 }

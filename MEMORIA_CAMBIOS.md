@@ -375,6 +375,34 @@ Las siguientes características forman la base consolidada del sistema y **NO de
   - `js/store.js`
   - `MEMORIA_CAMBIOS.md`
 
+### [Entrada 011] — 09/10/2026 · Ajuste de Contención y Rediseño Anti-Desborde del Módulo 04 · Asistente Virtual & Clientes
+* **Petición del Usuario:**
+  > *"ajusta el Módulo 04 · Asistente Virtual & Clientes, se sale de la pantalla y el diseño de agenda, acomodalo para que no cause conflicto en el diseño"*
+* **Diagnóstico de Causas Raíz:**
+  1. **Barra de Cronómetro Unidimensional Rígida:** En `.va-live-tracker-bar`, todos los elementos (indicador de pulso en vivo, dígitos del reloj, campo de texto de actividad, dos selectores `<select>` con nombres extensos de proyectos como *"Defensa del Castillo y Encantamientos Protectores (Sortilegios Weasley)"*, switch de Facturable y tres botones) estaban forzados en una única fila horizontal (`flex-direction: row; no wrap`). El ancho natural superaba los 1,580px, desbordando los 1,150px de la hoja del cuaderno y saliéndose de la pantalla.
+  2. **Ausencia de Contención en el Área Activa del Cuaderno:** `.planner-content-area` en `css/planner-book.css` no tenía `min-width: 0; max-width: 100%; box-sizing: border-box; overflow-x: hidden;`, permitiendo que hijos con contenido amplio forzaran la expansión horizontal de toda la hoja.
+  3. **Cabecera y Paneles de Proyecto:** `.module-header` y los paneles de proyectos carecían de reglas de envoltura flexible (`flex-wrap: wrap`) y elipsis en selectores largos.
+* **Acciones Realizadas:**
+  1. **Rediseño de la Tarjeta del Cronómetro en 2 Niveles Notes (`js/vabox.js`, `css/modules.css`):**
+     - **Nivel 1 (Superior):** Aloja el reloj digital tipográfico monospaciado con indicador animado de pulso (`REGISTRANDO TIEMPO` / `CRONÓMETRO LISTO`), junto con el interruptor interactivo `Facturable` y los tres botones de acción rápida (*Iniciar/Pausar*, *Registrar*, *Reiniciar*).
+     - **Nivel 2 (Inferior):** Fila armónica y fluida con 3 columnas de entrada elásticas y acotadas:
+       - *Actividad o Tarea:* campo de texto con ancho flexible (`flex: 2 1 240px; min-width: 0;`).
+       - *Proyecto Destino:* selector desplegable con `text-overflow: ellipsis; white-space: nowrap; overflow: hidden;` (`flex: 1.5 1 200px; min-width: 0;`).
+       - *Subtarea:* selector con truncado inteligente (`flex: 1.5 1 200px; min-width: 0;`).
+     - Al desacoplar la barra en 2 niveles e incorporar límites estrictos, el ancho mínimo necesario se redujo de 1,580px a ~300px, adaptándose con total fluidez en pantallas pequeñas, medianas y grandes.
+  2. **Encapsulamiento y Escuchas Limpias (`js/vabox.js`):**
+     - Encapsulación del módulo en `<div id="va-hub-module-root" class="va-hub-wrapper">`.
+     - Scoping estricto de todos los event listeners (`root.querySelector...`), garantizando aislamiento y previniendo acumulación de escuchas al alternar vistas.
+     - Sustitución de `prompt()` nativo en solicitudes de cliente por apertura integrada de `#va-task-request-modal`.
+  3. **Contención Estricta en Cuaderno y Módulos (`css/planner-book.css`, `css/modules.css`):**
+     - Se añadió `min-width: 0; max-width: 100%; box-sizing: border-box; overflow-x: hidden;` a `.planner-content-area`.
+     - Reglas de flexbox elásticas y seguras para `.va-module-header`, `.va-header-title-block`, `.va-stats-bar-grid`, `.va-project-panel`, `.va-project-header-row`, `.va-proj-main-info`, `.va-proj-metrics-box`, `.va-task-item-card` y el expediente `.va-grid-container` / `.dossier-double-column`.
+* **Archivos Modificados:**
+  - `css/planner-book.css`
+  - `css/modules.css`
+  - `js/vabox.js`
+  - `MEMORIA_CAMBIOS.md`
+
 ---
 
 <!-- Las siguientes entradas se añadirán aquí secuencialmente con cada nueva solicitud del usuario -->

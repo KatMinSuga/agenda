@@ -1781,38 +1781,90 @@
 }
 
 /* --------------------------------------------------------------------------
-   5. MÓDULO VA HUB & CONTROL DE CLIENTES
+   5. MÓDULO VA HUB & CONTROL DE CLIENTES (DISEÑO CONTENIDO Y ANTI-DESBORDE)
    -------------------------------------------------------------------------- */
-.va-live-tracker-bar {
-  background: #fff;
-  border: 2px solid var(--accent-secondary);
-  border-radius: var(--radius-md);
-  padding: 14px 20px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 20px;
-  margin-bottom: 24px;
-  box-shadow: 0 4px 16px rgba(63, 98, 83, 0.12);
+.va-hub-wrapper {
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+  overflow-x: hidden;
 }
 
-.tracker-left {
+.va-hub-wrapper * {
+  box-sizing: border-box;
+}
+
+.va-module-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  margin-bottom: 22px;
+  padding-bottom: 16px;
+  border-bottom: 2px solid var(--border-subtle);
+  gap: 16px;
+  flex-wrap: wrap;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.va-header-title-block {
+  flex: 1 1 320px;
+  min-width: 0;
+}
+
+.va-header-actions {
   display: flex;
   align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+/* Tarjeta Cronómetro Notes de 2 Niveles (Spacious, Zero Overflow) */
+.va-live-tracker-bar {
+  background: #ffffff;
+  border: 1.5px solid var(--accent-secondary);
+  border-radius: var(--radius-md);
+  padding: 16px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  margin-bottom: 24px;
+  box-shadow: 0 3px 12px rgba(63, 98, 83, 0.08);
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+/* Fila Superior: Reloj Digital y Controles */
+.tracker-top-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   gap: 16px;
+  flex-wrap: wrap;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.tracker-clock-block {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex-wrap: wrap;
 }
 
 .tracker-badge-live {
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  font-size: 0.72rem;
+  font-size: 0.7rem;
   font-weight: 800;
   letter-spacing: 0.8px;
   background: #eee9e0;
-  padding: 4px 8px;
-  border-radius: 4px;
+  padding: 4px 10px;
+  border-radius: 20px;
   color: var(--text-muted);
+  user-select: none;
 }
 
 .tracker-badge-live.active {
@@ -1825,76 +1877,170 @@
   height: 8px;
   border-radius: 50%;
   background: #aaa;
+  display: inline-block;
+  flex-shrink: 0;
 }
 
 .tracker-badge-live.active .pulse-dot {
   background: #2e9d4a;
   box-shadow: 0 0 6px #2e9d4a;
+  animation: pulseGlow 1.4s infinite ease-in-out;
+}
+
+@keyframes pulseGlow {
+  0% { transform: scale(0.95); opacity: 0.8; }
+  50% { transform: scale(1.2); opacity: 1; }
+  100% { transform: scale(0.95); opacity: 0.8; }
 }
 
 .tracker-display {
-  font-family: monospace;
+  font-family: "Courier New", Courier, monospace;
   font-size: 1.85rem;
   font-weight: 800;
-  letter-spacing: 1px;
+  letter-spacing: 2px;
+  color: var(--accent-dark);
+  background: #fbf9f6;
+  border: 1px solid var(--border-subtle);
+  padding: 2px 14px;
+  border-radius: 6px;
+  line-height: 1.3;
 }
 
-.tracker-inputs {
-  flex: 1;
+.tracker-controls-block {
   display: flex;
   align-items: center;
-  gap: 12px;
-}
-
-.form-input-sm {
-  flex: 1;
-  padding: 8px 12px;
-  border-radius: var(--radius-sm);
-  border: 1px solid var(--border-subtle);
-  font-family: inherit;
-  font-size: 0.84rem;
+  gap: 8px;
+  flex-wrap: wrap;
 }
 
 .billable-toggle-label {
-  display: flex;
+  display: inline-flex;
   align-items: center;
   gap: 6px;
-  font-size: 0.82rem;
+  font-size: 0.8rem;
   font-weight: 600;
   cursor: pointer;
+  background: #f8f5ee;
+  border: 1px solid var(--border-subtle);
+  padding: 6px 12px;
+  border-radius: var(--radius-sm);
+  color: var(--text-main);
+  user-select: none;
+  transition: all 0.15s ease;
 }
 
-.tracker-actions { display: flex; gap: 8px; }
+.billable-toggle-label:hover {
+  background: #f0eade;
+}
+
+.billable-pill-text {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.billable-toggle-label input[type="checkbox"] {
+  cursor: pointer;
+  accent-color: var(--accent-secondary);
+}
 
 .timer-btn {
-  padding: 8px 14px;
+  padding: 7px 14px;
   border-radius: var(--radius-sm);
-  font-size: 0.84rem;
+  font-size: 0.82rem;
   font-weight: 600;
   border: none;
   cursor: pointer;
   display: inline-flex;
   align-items: center;
   gap: 6px;
+  transition: all 0.15s ease;
+  white-space: nowrap;
 }
 
 .timer-btn.start { background: var(--accent-secondary); color: #fff; }
+.timer-btn.start:hover { background: #325043; }
 .timer-btn.pause { background: #b0512c; color: #fff; }
-.timer-btn.save  { background: #ede3d6; color: var(--text-main); }
-.timer-btn.reset { background: #f0eae1; color: var(--text-muted); }
+.timer-btn.pause:hover { background: #964221; }
+.timer-btn.save  { background: #ede3d6; color: var(--text-main); border: 1px solid #dacfbe; }
+.timer-btn.save:hover  { background: #e0d4c3; }
+.timer-btn.reset { background: #f0eae1; color: var(--text-muted); border: 1px solid #dfd6c9; padding: 7px 10px; }
+.timer-btn.reset:hover { background: #e2d8cd; color: var(--text-main); }
 
-/* Contenedor anti-desborde para VA Hub */
-.va-hub-wrapper {
-  max-width: 100%;
+/* Fila Inferior: Asignación de Actividad, Proyecto y Tarea */
+.tracker-bottom-row {
+  display: flex;
+  gap: 12px;
+  align-items: flex-end;
+  border-top: 1px dashed var(--border-subtle);
+  padding-top: 12px;
+  width: 100%;
   box-sizing: border-box;
-  overflow-x: hidden;
+  flex-wrap: wrap;
 }
 
+.tracker-input-group {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+  box-sizing: border-box;
+}
+
+.tracker-input-group.desc-group {
+  flex: 2 1 240px;
+}
+
+.tracker-input-group.proj-group {
+  flex: 1.5 1 200px;
+}
+
+.tracker-input-group.task-group {
+  flex: 1.5 1 200px;
+}
+
+.tracker-mini-label {
+  font-size: 0.68rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--text-muted);
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.tracker-bottom-row .form-input-sm,
+.tracker-bottom-row .form-select-sm {
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+  padding: 8px 10px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border-subtle);
+  background: #fff;
+  font-size: 0.82rem;
+  color: var(--text-main);
+  outline: none;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.tracker-bottom-row .form-input-sm:focus,
+.tracker-bottom-row .form-select-sm:focus {
+  border-color: var(--accent-secondary);
+}
+
+/* Cockpit de Resumen */
 .va-stats-bar-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
   gap: 14px;
   margin-bottom: 20px;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
 }
 
 .va-stat-card {
@@ -1903,6 +2049,9 @@
   border-radius: var(--radius-sm);
   padding: 14px 16px;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.03);
+  box-sizing: border-box;
+  min-width: 0;
+  overflow: hidden;
 }
 
 .va-stat-card .label {
@@ -1925,13 +2074,21 @@
 .va-stat-card .sub {
   font-size: 0.72rem;
   color: var(--text-light);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: block;
 }
 
+/* Árbol de Proyectos con Tareas */
 .va-projects-tree-stack {
   display: flex;
   flex-direction: column;
   gap: 18px;
   margin-bottom: 24px;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
 }
 
 .va-project-panel {
@@ -1942,8 +2099,9 @@
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
   transition: all 0.2s ease;
   box-sizing: border-box;
+  width: 100%;
   max-width: 100%;
-  overflow-x: hidden;
+  overflow: hidden;
 }
 
 .va-project-panel.active-timer-project {
@@ -1959,11 +2117,14 @@
   gap: 16px;
   margin-bottom: 14px;
   flex-wrap: wrap;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .va-proj-main-info {
-  flex: 1;
-  min-width: 250px;
+  flex: 1 1 280px;
+  min-width: 0;
+  box-sizing: border-box;
 }
 
 .va-proj-badge-line {
@@ -2013,12 +2174,14 @@
   font-weight: 700;
   color: var(--text-main);
   margin-bottom: 4px;
+  word-break: break-word;
 }
 
 .va-proj-desc {
   font-size: 0.82rem;
   color: var(--text-muted);
   line-height: 1.4;
+  word-break: break-word;
 }
 
 .va-proj-metrics-box {
@@ -2028,6 +2191,10 @@
   border: 1px solid var(--border-subtle);
   border-radius: var(--radius-sm);
   padding: 8px 12px;
+  flex-shrink: 0;
+  flex-wrap: wrap;
+  box-sizing: border-box;
+  max-width: 100%;
 }
 
 .va-metric-item {
@@ -2063,12 +2230,15 @@
   margin-bottom: 12px;
   flex-wrap: wrap;
   gap: 8px;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .va-proj-actions-strip .actions-left {
   display: flex;
   gap: 8px;
   flex-wrap: wrap;
+  min-width: 0;
 }
 
 .tasks-counter-badge {
@@ -2081,6 +2251,8 @@
   display: flex;
   flex-direction: column;
   gap: 8px;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .empty-proj-tasks-notice {
@@ -2090,6 +2262,7 @@
   font-size: 0.82rem;
   color: var(--text-muted);
   text-align: center;
+  box-sizing: border-box;
 }
 
 .va-task-item-card {
@@ -2103,6 +2276,9 @@
   transition: all 0.2s ease;
   flex-wrap: wrap;
   gap: 10px;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
 }
 
 .va-task-item-card.is-being-tracked {
@@ -2114,27 +2290,22 @@
   display: flex;
   align-items: center;
   gap: 12px;
-  flex: 1;
-  min-width: 200px;
+  flex: 1 1 240px;
+  min-width: 0;
+  box-sizing: border-box;
 }
 
-.task-status-pill {
-  font-size: 0.65rem;
-  font-weight: 800;
-  padding: 2px 6px;
-  border-radius: 4px;
-  letter-spacing: 0.3px;
+.va-task-item-card .task-card-left > div {
+  min-width: 0;
+  flex: 1 1 auto;
 }
-
-.task-status-pill.pendiente   { background: #f0eade; color: #6d6255; }
-.task-status-pill.en_proceso  { background: #faeedb; color: #885210; }
-.task-status-pill.completada  { background: #d9ebd4; color: #205c26; }
 
 .task-name {
   font-size: 0.88rem;
   font-weight: 600;
   color: var(--text-main);
   display: block;
+  word-break: break-word;
 }
 
 .task-details-meta {
@@ -2159,6 +2330,8 @@
   gap: 5px;
   color: var(--text-main);
   transition: all 0.15s ease;
+  flex-shrink: 0;
+  white-space: nowrap;
 }
 
 .timer-task-btn:hover {
@@ -2173,20 +2346,19 @@
   border-color: #b0512c;
 }
 
+/* Vista 2: Expediente de Clientes & Bóvedas */
 .va-grid-container {
   display: grid;
-  grid-template-columns: minmax(260px, 320px) minmax(0, 1fr);
+  grid-template-columns: minmax(240px, 310px) minmax(0, 1fr);
   gap: 20px;
   max-width: 100%;
+  width: 100%;
   box-sizing: border-box;
 }
 
-@media (max-width: 900px) {
+@media (max-width: 980px) {
   .va-grid-container {
     grid-template-columns: 1fr;
-  }
-  .va-project-header-row {
-    flex-direction: column;
   }
 }
 
@@ -2194,6 +2366,8 @@
   display: flex;
   flex-direction: column;
   gap: 12px;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .va-client-card {
@@ -2203,6 +2377,8 @@
   padding: 14px;
   cursor: pointer;
   transition: all 0.2s ease;
+  box-sizing: border-box;
+  width: 100%;
 }
 
 .va-client-card.is-active {
@@ -2264,7 +2440,11 @@
   background: #fff;
   border: 1px solid var(--border-subtle);
   border-radius: var(--radius-md);
-  padding: 24px;
+  padding: 22px;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+  overflow: hidden;
 }
 
 .file-header {
@@ -2272,6 +2452,23 @@
   justify-content: space-between;
   align-items: flex-start;
   margin-bottom: 20px;
+  flex-wrap: wrap;
+  gap: 14px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.file-contact-details {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  margin-top: 4px;
+}
+
+.vault-access-box {
+  flex-shrink: 0;
 }
 
 .vault-link-btn {
@@ -2293,12 +2490,16 @@
   padding: 12px 16px;
   border-radius: 4px;
   margin-bottom: 20px;
+  box-sizing: border-box;
+  width: 100%;
 }
 
 .dossier-double-column {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
   gap: 18px;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 /* --------------------------------------------------------------------------
