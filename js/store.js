@@ -783,17 +783,22 @@ class Store {
       if (sub) {
         sub.completed = !sub.completed;
         
-        // Cambio automático de estatus según objetivos/subtareas
+        // Las subtareas son independientes del checkbox de la tarea principal.
+        // Si todas las subtareas se completan, el estatus pasa automáticamente a completada.
+        // Si no todas están completas y la tarea NO había sido marcada manualmente como completada,
+        // se ajusta entre 'en_proceso' (1 o más hechas) y 'pendiente' (0 hechas).
         const total = task.subtasks.length;
         const completedCount = task.subtasks.filter(s => s.completed).length;
 
         if (total > 0) {
           if (completedCount === total) {
             task.status = 'completada';
-          } else if (completedCount >= 1) {
-            task.status = 'en_proceso';
-          } else {
-            task.status = 'pendiente';
+          } else if (task.status !== 'completada') {
+            if (completedCount >= 1) {
+              task.status = 'en_proceso';
+            } else {
+              task.status = 'pendiente';
+            }
           }
         }
 
@@ -909,6 +914,71 @@ class Store {
     this.data.team.push(collab);
     this.saveData();
     return collab;
+  }
+
+  // Operaciones de Directorio de Contactos
+  addContact(contact) {
+    if (!contact.id) contact.id = 'con-' + Date.now();
+    if (!this.data.contacts) this.data.contacts = [];
+    this.data.contacts.unshift(contact);
+    this.saveData();
+    return contact;
+  }
+
+  updateContact(id, updates) {
+    if (!this.data.contacts) this.data.contacts = [];
+    const idx = this.data.contacts.findIndex(c => c.id === id);
+    if (idx !== -1) {
+      this.data.contacts[idx] = { ...this.data.contacts[idx], ...updates };
+      this.saveData();
+      return this.data.contacts[idx];
+    }
+    return null;
+  }
+
+  deleteContact(id) {
+    if (!this.data.contacts) this.data.contacts = [];
+    this.data.contacts = this.data.contacts.filter(c => c.id !== id);
+    this.saveData();
+  }
+
+  assignContactToTeam({ contactId, department, role, shift, attendance, avatarColor }) {
+    if (!this.data.team) this.data.team = [];
+    const contact = (this.data.contacts || []).find(c => c.id === contactId);
+    if (!contact) return null;
+
+    const existingIdx = this.data.team.findIndex(m => m.contactId === contactId || m.name.toLowerCase() === contact.name.toLowerCase());
+    
+    if (existingIdx !== -1) {
+      this.data.team[existingIdx] = {
+        ...this.data.team[existingIdx],
+        department: department || this.data.team[existingIdx].department,
+        role: role || contact.role || this.data.team[existingIdx].role,
+        shift: shift || this.data.team[existingIdx].shift,
+        attendance: attendance || this.data.team[existingIdx].attendance,
+        avatarColor: avatarColor || this.data.team[existingIdx].avatarColor,
+        contactId: contact.id
+      };
+      this.saveData();
+      return this.data.team[existingIdx];
+    } else {
+      const newMember = {
+        id: 'mem-' + Date.now(),
+        contactId: contact.id,
+        name: contact.name,
+        role: role || contact.role || 'Colaborador Especialista',
+        department: department || 'Dirección Estratégica & Prefectura',
+        email: contact.email || '',
+        phone: contact.phone || '',
+        shift: shift || 'Jornada Completa (08:00 - 16:00)',
+        attendance: attendance || 'Presente',
+        avatarColor: avatarColor || '#9C523B',
+        tasksAssigned: 0
+      };
+      this.data.team.push(newMember);
+      this.saveData();
+      return newMember;
+    }
   }
 
   // Operaciones de Finanzas

@@ -959,6 +959,211 @@
     </div>
   </div>
 
+  <!-- 13. Modal Nuevo Contacto (con opción de asignar a Equipo) -->
+  <div class="planner-modal-backdrop" id="contact-editor-modal">
+    <div class="planner-modal-dialog">
+      <div class="modal-header-clean">
+        <h3 style="font-family:var(--font-serif); font-size:1.2rem;"><i data-lucide="user-plus"></i> Registrar Nuevo Contacto</h3>
+        <button class="modal-close-btn">&times;</button>
+      </div>
+      <form id="form-modal-contact">
+        <div class="modal-body-clean">
+          <div class="form-row-2">
+            <div class="form-group-clean">
+              <label>Nombre Completo *</label>
+              <input type="text" id="modal-contact-name" class="form-control-clean" required placeholder="ej: Severus Snape">
+            </div>
+            <div class="form-group-clean">
+              <label>Tipo de Contacto *</label>
+              <select id="modal-contact-type" class="form-control-clean">
+                <option value="aliado" selected>🤝 Aliado Estratégico</option>
+                <option value="profesor">🎓 Claustro Hogwarts</option>
+                <option value="cliente">💼 Cliente / Patrocinador</option>
+                <option value="proveedor">📦 Proveedor Oficial</option>
+                <option value="institucional">🏛️ Ministerio / Institucional</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-row-2">
+            <div class="form-group-clean">
+              <label>Empresa u Organización</label>
+              <input type="text" id="modal-contact-company" class="form-control-clean" placeholder="ej: Colegio Hogwarts / Gringotts">
+            </div>
+            <div class="form-group-clean">
+              <label>Cargo o Especialidad</label>
+              <input type="text" id="modal-contact-role" class="form-control-clean" placeholder="ej: Maestro de Pociones & Alquimia">
+            </div>
+          </div>
+
+          <div class="form-row-2">
+            <div class="form-group-clean">
+              <label>Correo Electrónico *</label>
+              <input type="email" id="modal-contact-email" class="form-control-clean" required placeholder="snape@hogwarts.ac.uk">
+            </div>
+            <div class="form-group-clean">
+              <label>Teléfono / Lechucería</label>
+              <input type="text" id="modal-contact-phone" class="form-control-clean" placeholder="+44 20 7946 0199">
+            </div>
+          </div>
+
+          <div class="form-row-2">
+            <div class="form-group-clean">
+              <label>Última Interacción</label>
+              <input type="text" id="modal-contact-last-interaction" class="form-control-clean" placeholder="ej: Hoy (Reunión inicial)">
+            </div>
+            <div class="form-group-clean">
+              <label>Próximo Seguimiento</label>
+              <input type="text" id="modal-contact-next-followup" class="form-control-clean" placeholder="ej: En 7 días">
+            </div>
+          </div>
+
+          <div class="form-group-clean">
+            <label>Notas / Observaciones</label>
+            <textarea id="modal-contact-notes" class="form-control-clean" rows="2" placeholder="Detalles de interés, historial mágico o compromisos..."></textarea>
+          </div>
+
+          <!-- SECCIÓN: VINCULAR TAMBIÉN COMO COLABORADOR DE EQUIPO -->
+          <div class="team-link-box" style="background:#fcfaf7; border:1px solid #ebd9c8; border-radius:8px; padding:12px; margin-top:8px;">
+            <div style="display:flex; align-items:center; gap:8px; margin-bottom:8px;">
+              <input type="checkbox" id="modal-contact-link-team" style="width:16px; height:16px; accent-color:var(--accent-primary); cursor:pointer;">
+              <label for="modal-contact-link-team" style="font-weight:700; color:var(--text-main); cursor:pointer; margin:0; display:flex; align-items:center; gap:6px;">
+                <i data-lucide="shield"></i> ¿Incorporar simultáneamente como Colaborador de un Equipo?
+              </label>
+            </div>
+            <p style="font-size:0.75rem; color:var(--text-muted); margin:0 0 10px 24px;">Si marcas esta casilla, además de guardarse en el Directorio, se dará de alta como miembro activo en el grupo o equipo seleccionado.</p>
+
+            <div id="modal-contact-team-fields" style="display:none; padding-top:8px; border-top:1px dashed #e4d5c5;">
+              <div class="form-row-2">
+                <div class="form-group-clean">
+                  <label>Asignar a Grupo o Equipo *</label>
+                  <select id="modal-contact-team-dept" class="form-control-clean">
+                    <option value="Dirección Estratégica & Prefectura">Dirección Estratégica & Prefectura</option>
+                    <option value="Defensa Contra las Artes Oscuras">Defensa Contra las Artes Oscuras</option>
+                    <option value="Operaciones & Enlace Sortilegios Weasley">Operaciones & Enlace Sortilegios Weasley</option>
+                    <option value="Investigación & Criaturas Mágicas">Investigación & Criaturas Mágicas</option>
+                    <option value="Mazmorras & Alquimia">Mazmorras & Alquimia</option>
+                    <option value="Herbología & Botánica Mágica">Herbología & Botánica Mágica</option>
+                    <option value="Torre del Reloj & Giratiempo">Torre del Reloj & Giratiempo</option>
+                    <option value="Logística & Quidditch">Logística & Quidditch</option>
+                    <option value="Claustro Profesores">Claustro Profesores</option>
+                  </select>
+                </div>
+                <div class="form-group-clean">
+                  <label>Turno / Horario en el Equipo</label>
+                  <input type="text" id="modal-contact-team-shift" class="form-control-clean" value="Jornada Completa (08:00 - 16:00)">
+                </div>
+              </div>
+              <div class="form-row-2">
+                <div class="form-group-clean">
+                  <label>Estado Inicial de Asistencia</label>
+                  <select id="modal-contact-team-attendance" class="form-control-clean">
+                    <option value="Presente" selected>Presente en Despacho/Aula</option>
+                    <option value="En Terreno">En Terreno / Misión</option>
+                    <option value="Remoto">Remoto / Red Flu</option>
+                    <option value="Guardia">De Guardia Nocturna</option>
+                  </select>
+                </div>
+                <div class="form-group-clean">
+                  <label>Color Distintivo</label>
+                  <select id="modal-contact-team-color" class="form-control-clean">
+                    <option value="#9C523B">Terracota (#9C523B - Gryffindor)</option>
+                    <option value="#3F6253">Verde Bosque (#3F6253 - Slytherin)</option>
+                    <option value="#B27D32">Oro Viejo (#B27D32 - Hufflepuff)</option>
+                    <option value="#5B4B70">Azul / Lavanda (#5B4B70 - Ravenclaw)</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="modal-footer-clean">
+            <button type="button" class="action-btn secondary modal-close-btn">Cancelar</button>
+            <button type="submit" class="action-btn primary">Guardar Contacto</button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- 14. Modal Asignar Contacto Registrado a Grupo / Equipo -->
+  <div class="planner-modal-backdrop" id="assign-contact-team-modal">
+    <div class="planner-modal-dialog">
+      <div class="modal-header-clean">
+        <h3 style="font-family:var(--font-serif); font-size:1.2rem;"><i data-lucide="user-check"></i> Asignar Contacto Registrado a Equipo</h3>
+        <button class="modal-close-btn">&times;</button>
+      </div>
+      <form id="form-modal-assign-contact-team">
+        <div class="modal-body-clean">
+          <div class="form-group-clean">
+            <label>Selecciona un Contacto Registrado del Directorio *</label>
+            <select id="modal-assign-contact-select" class="form-control-clean" required>
+              <!-- Llenado dinámicamente con los contactos -->
+            </select>
+          </div>
+
+          <div id="modal-assign-contact-preview" style="background:#f9f6f0; border:1px solid #ebd9c8; border-radius:6px; padding:10px 14px; margin-bottom:12px; font-size:0.82rem;">
+            <div style="font-weight:700; color:var(--text-main);" id="modal-assign-preview-name">Contacto</div>
+            <div style="color:var(--text-muted);" id="modal-assign-preview-details">Empresa · Cargo · Email</div>
+          </div>
+
+          <div class="form-row-2">
+            <div class="form-group-clean">
+              <label>Grupo o Equipo de Destino *</label>
+              <select id="modal-assign-dept" class="form-control-clean" required>
+                <option value="Dirección Estratégica & Prefectura">Dirección Estratégica & Prefectura</option>
+                <option value="Defensa Contra las Artes Oscuras">Defensa Contra las Artes Oscuras</option>
+                <option value="Operaciones & Enlace Sortilegios Weasley">Operaciones & Enlace Sortilegios Weasley</option>
+                <option value="Investigación & Criaturas Mágicas">Investigación & Criaturas Mágicas</option>
+                <option value="Mazmorras & Alquimia">Mazmorras & Alquimia</option>
+                <option value="Herbología & Botánica Mágica">Herbología & Botánica Mágica</option>
+                <option value="Torre del Reloj & Giratiempo">Torre del Reloj & Giratiempo</option>
+                <option value="Logística & Quidditch">Logística & Quidditch</option>
+                <option value="Claustro Profesores">Claustro Profesores</option>
+                <option value="S.P.E.W. / P.E.D.D.O. Operaciones">S.P.E.W. / P.E.D.D.O. Operaciones</option>
+              </select>
+            </div>
+            <div class="form-group-clean">
+              <label>Cargo / Rol en el Equipo</label>
+              <input type="text" id="modal-assign-role" class="form-control-clean" placeholder="ej: Colaborador Especialista">
+            </div>
+          </div>
+
+          <div class="form-row-2">
+            <div class="form-group-clean">
+              <label>Turno / Horario</label>
+              <input type="text" id="modal-assign-shift" class="form-control-clean" value="Jornada Completa (08:00 - 16:00)">
+            </div>
+            <div class="form-group-clean">
+              <label>Estado de Asistencia</label>
+              <select id="modal-assign-attendance" class="form-control-clean">
+                <option value="Presente" selected>Presente en Despacho/Aula</option>
+                <option value="En Terreno">En Terreno / Misión</option>
+                <option value="Remoto">Remoto / Red Flu</option>
+                <option value="Guardia">De Guardia Nocturna</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-group-clean">
+            <label>Color de Avatar</label>
+            <select id="modal-assign-color" class="form-control-clean">
+              <option value="#9C523B">Terracota (#9C523B - Gryffindor)</option>
+              <option value="#3F6253">Verde Bosque (#3F6253 - Slytherin)</option>
+              <option value="#B27D32">Oro Viejo (#B27D32 - Hufflepuff)</option>
+              <option value="#5B4B70">Azul / Lavanda (#5B4B70 - Ravenclaw)</option>
+            </select>
+          </div>
+
+          <div class="modal-footer-clean">
+            <button type="button" class="action-btn secondary modal-close-btn">Cancelar</button>
+            <button type="submit" class="action-btn primary">Asignar al Grupo / Equipo</button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+
   <!-- Scripts en orden de dependencias -->
   <script src="js/store.js"></script>
   <script src="js/audio.js"></script>

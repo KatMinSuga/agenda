@@ -453,23 +453,25 @@
 }
 
 .task-card-notes.is-completed {
-  opacity: 0.65;
-  background: #fbf9f6;
+  opacity: 0.85;
+  background: #f8fbf8 !important;
+  border-color: #cde4d3 !important;
+  border-left: 5px solid #2F855A !important;
 }
 
 .task-card-notes.is-completed .task-title {
   text-decoration: line-through;
-  color: var(--text-muted);
+  color: #556c5e;
 }
 
 .task-check-circle {
-  width: 26px;
-  height: 26px;
+  width: 28px;
+  height: 28px;
   border-radius: 50%;
-  border: 2px solid #ccc1b3;
+  border: 2px solid #bbaea0;
   background: #fff;
   cursor: pointer;
-  display: flex;
+  display: inline-flex;
   align-items: center;
   justify-content: center;
   color: transparent;
@@ -477,10 +479,17 @@
   transition: all 0.15s ease;
 }
 
+.task-check-circle:hover {
+  border-color: #2F855A;
+  background: #f4fbf6;
+  color: #2F855A;
+}
+
 .task-check-circle.checked {
-  background: var(--accent-secondary);
-  border-color: var(--accent-secondary);
-  color: #fff;
+  background: #2F855A !important;
+  border-color: #2F855A !important;
+  color: #fff !important;
+  box-shadow: 0 2px 6px rgba(47, 133, 90, 0.35);
 }
 
 .task-card-body { flex: 1; }
@@ -541,7 +550,7 @@
 
 .status-pendiente  { background: #faeedb; color: #8f5a13; }
 .status-en_proceso { background: #e3effd; color: #1b5bb5; }
-.status-completada { background: #e2f5e8; color: #226e38; }
+.status-completada { background: #dff2e4 !important; color: #1e6934 !important; border: 1px solid #bce1c7; font-weight: 800; }
 
 .task-description {
   font-size: 0.85rem;
@@ -2250,6 +2259,51 @@
   width: 12px;
   height: 12px;
 }
+
+/* Tira de Asignación a Grupo / Equipo en tarjetas de Contacto */
+.contact-team-footer-strip {
+  margin-top: 14px;
+  padding-top: 10px;
+  border-top: 1px dashed var(--border-subtle);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.contact-in-team-badge {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  background: #f4faf6;
+  border: 1px solid #c9e4d4;
+  border-radius: 6px;
+  padding: 4px 8px;
+}
+
+.contact-in-team-badge .badge-text {
+  font-size: 0.74rem;
+  color: #216d3a;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.contact-in-team-badge .badge-text i {
+  width: 13px;
+  height: 13px;
+}
+
+.btn-add-contact-to-team {
+  width: 100%;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 0.76rem;
+}
+
+.pill-aliado        { background: #e8f4fd; color: #1765ad; }
+.pill-profesor      { background: #faeedb; color: #8a5712; }
+.pill-institucional { background: #f0eaf8; color: #583b82; }
 
 /* --------------------------------------------------------------------------
    7. MÓDULO DE FINANZAS

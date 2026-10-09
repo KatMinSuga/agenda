@@ -1,7 +1,7 @@
 /**
  * Módulo 05 · Directorio de Contactos & Gestión de Colaboradores / Equipos
  * Menú y diseño para agregar colaboradores desde "Nuevo Contacto",
- * asignación directa a grupos/equipos y control de turnos y responsabilidades.
+ * asignación directa de contactos registrados a grupos/equipos y control de turnos.
  */
 
 class ContactsTeamModule {
@@ -20,7 +20,7 @@ class ContactsTeamModule {
       if (this.contactFilter !== 'all' && c.type !== this.contactFilter) return false;
       if (this.searchQuery.trim()) {
         const q = this.searchQuery.toLowerCase();
-        return c.name.toLowerCase().includes(q) || (c.company || '').toLowerCase().includes(q);
+        return c.name.toLowerCase().includes(q) || (c.company || '').toLowerCase().includes(q) || (c.role || '').toLowerCase().includes(q);
       }
       return true;
     });
@@ -34,15 +34,15 @@ class ContactsTeamModule {
       return true;
     });
 
-    // Grupos/Departamentos únicos
+    // Departamentos/Grupos únicos
     const departments = Array.from(new Set(team.map(m => m.department).filter(Boolean)));
 
     container.innerHTML = `
       <div class="module-header">
         <div>
           <div class="planner-page-eyebrow"><i data-lucide="users"></i> Módulo 05 · Personas & Colaboradores</div>
-          <h2 class="planner-page-title">Directorio de Contactos & Equipo</h2>
-          <p class="planner-page-desc">Gestión integral de colaboradores asignados a grupos de trabajo y libreta de contactos clave con seguimiento.</p>
+          <h2 class="planner-page-title">Directorio de Contactos & Equipos</h2>
+          <p class="planner-page-desc">Registra contactos con opción de asignarlos directamente a un equipo y gestiona la asignación de contactos existentes a grupos de trabajo.</p>
         </div>
         <div class="header-actions">
           <div class="view-toggle-group">
@@ -54,88 +54,122 @@ class ContactsTeamModule {
             </button>
           </div>
           
-          <!-- Botón / Menú para Nuevo Contacto o Colaborador -->
-          <div class="dropdown-action-wrap">
-            <button class="action-btn primary" id="btn-open-add-person-menu">
-              <i data-lucide="user-plus"></i> ${this.activeSection === 'contacts' ? '+ Nuevo Contacto' : '+ Añadir a Equipo'}
-            </button>
+          <div class="header-buttons-group" style="display:flex; gap:8px;">
+            ${this.activeSection === 'contacts' ? `
+              <button class="action-btn secondary" id="btn-header-assign-contact">
+                <i data-lucide="shield-plus"></i> Asignar a Equipo
+              </button>
+              <button class="action-btn primary" id="btn-header-add-contact">
+                <i data-lucide="user-plus"></i> + Nuevo Contacto
+              </button>
+            ` : `
+              <button class="action-btn secondary" id="btn-header-assign-existing-collab">
+                <i data-lucide="user-check"></i> + Asignar Contacto Registrado
+              </button>
+              <button class="action-btn primary" id="btn-header-add-collab-direct">
+                <i data-lucide="plus"></i> + Nuevo Colaborador
+              </button>
+            `}
           </div>
         </div>
       </div>
 
       ${this.activeSection === 'contacts' 
-        ? this.renderContactsView(filteredContacts) 
-        : this.renderTeamView(filteredTeam, departments)}
+        ? this.renderContactsView(filteredContacts, team) 
+        : this.renderTeamView(filteredTeam, departments, contacts)}
     `;
 
     this.attachEvents(container);
     if (window.lucide) window.lucide.createIcons();
   }
 
-  renderContactsView(contacts) {
+  renderContactsView(contacts, team) {
     return `
       <div class="contacts-toolbar">
         <div class="search-input-wrapper">
           <i data-lucide="search"></i>
-          <input type="text" id="contact-search-input" placeholder="Buscar por nombre, empresa o cargo..." value="${this.searchQuery}">
+          <input type="text" id="contact-search-input" placeholder="Buscar por nombre, empresa, especialidad..." value="${this.searchQuery}">
         </div>
         <div class="filter-dropdowns">
           <select id="filter-contact-type" class="form-select-sm">
             <option value="all" ${this.contactFilter === 'all' ? 'selected' : ''}>Todos los Tipos</option>
+            <option value="aliado" ${this.contactFilter === 'aliado' ? 'selected' : ''}>Aliados Estratégicos</option>
+            <option value="profesor" ${this.contactFilter === 'profesor' ? 'selected' : ''}>Claustro Hogwarts</option>
             <option value="cliente" ${this.contactFilter === 'cliente' ? 'selected' : ''}>Clientes</option>
             <option value="proveedor" ${this.contactFilter === 'proveedor' ? 'selected' : ''}>Proveedores</option>
-            <option value="aliado" ${this.contactFilter === 'aliado' ? 'selected' : ''}>Aliados</option>
-            <option value="profesor" ${this.contactFilter === 'profesor' ? 'selected' : ''}>Claustro Hogwarts</option>
+            <option value="institucional" ${this.contactFilter === 'institucional' ? 'selected' : ''}>Institucional</option>
           </select>
         </div>
       </div>
 
       <div class="contacts-cards-grid">
-        ${contacts.map(c => `
-          <div class="contact-business-card type-${c.type}">
-            <div class="card-role-strip">
-              <span class="type-pill pill-${c.type}">${(c.type || 'contacto').toUpperCase()}</span>
-              <span class="company-tag">${c.company}</span>
-            </div>
+        ${contacts.map(c => {
+          const inTeam = team.find(m => m.contactId === c.id || m.name.toLowerCase() === c.name.toLowerCase());
 
-            <div class="contact-main">
-              <div class="contact-avatar-round">${c.name.charAt(0)}</div>
-              <div>
-                <h4 class="contact-person-name">${c.name}</h4>
-                <div class="contact-job-title">${c.role}</div>
+          return `
+            <div class="contact-business-card type-${c.type || 'aliado'}">
+              <div class="card-role-strip">
+                <span class="type-pill pill-${c.type || 'aliado'}">${(c.type || 'contacto').toUpperCase()}</span>
+                <span class="company-tag">${c.company || 'Independiente'}</span>
+              </div>
+
+              <div class="contact-main">
+                <div class="contact-avatar-round">${c.name.charAt(0)}</div>
+                <div>
+                  <h4 class="contact-person-name">${c.name}</h4>
+                  <div class="contact-job-title">${c.role || 'Especialista'}</div>
+                </div>
+              </div>
+
+              <div class="contact-details-list">
+                <div class="detail-row">
+                  <i data-lucide="mail"></i>
+                  <a href="mailto:${c.email}">${c.email || 'Sin correo'}</a>
+                </div>
+                ${c.phone ? `
+                  <div class="detail-row">
+                    <i data-lucide="phone"></i>
+                    <span>${c.phone}</span>
+                  </div>
+                ` : ''}
+              </div>
+
+              <div class="contact-interaction-box">
+                <div class="box-label">Última interacción:</div>
+                <div class="box-text">${c.lastInteraction || 'Sin registro reciente'}</div>
+                <div class="box-label follow-up">Próximo seguimiento:</div>
+                <div class="box-text highlight">${c.nextFollowUp || 'No programado'}</div>
+              </div>
+
+              ${c.notes ? `
+                <div class="contact-notes-mini">
+                  <i data-lucide="sticky-note"></i> <em>"${c.notes}"</em>
+                </div>
+              ` : ''}
+
+              <!-- TIRA DE ASIGNACIÓN A GRUPO / EQUIPO -->
+              <div class="contact-team-footer-strip">
+                ${inTeam ? `
+                  <div class="contact-in-team-badge">
+                    <span class="badge-text"><i data-lucide="shield-check"></i> En Equipo: <strong>${inTeam.department}</strong></span>
+                    <button class="btn-text-xs btn-reassign-contact-team" data-contact-id="${c.id}" data-current-dept="${inTeam.department}" title="Cambiar a otro grupo o equipo">
+                      <i data-lucide="git-branch"></i> Cambiar
+                    </button>
+                  </div>
+                ` : `
+                  <button class="action-btn-xs secondary btn-add-contact-to-team" data-contact-id="${c.id}" title="Agregar este contacto a un grupo o equipo">
+                    <i data-lucide="user-plus"></i> + Añadir a Grupo / Equipo
+                  </button>
+                `}
               </div>
             </div>
-
-            <div class="contact-details-list">
-              <div class="detail-row">
-                <i data-lucide="mail"></i>
-                <a href="mailto:${c.email}">${c.email}</a>
-              </div>
-              <div class="detail-row">
-                <i data-lucide="phone"></i>
-                <a href="tel:${c.phone}">${c.phone}</a>
-              </div>
-            </div>
-
-            <div class="contact-interaction-box">
-              <div class="box-label">Última interacción:</div>
-              <div class="box-text">${c.lastInteraction}</div>
-              <div class="box-label follow-up">Próximo seguimiento:</div>
-              <div class="box-text highlight">${c.nextFollowUp}</div>
-            </div>
-
-            ${c.notes ? `
-              <div class="contact-notes-mini">
-                <i data-lucide="sticky-note"></i> <em>"${c.notes}"</em>
-              </div>
-            ` : ''}
-          </div>
-        `).join('')}
+          `;
+        }).join('')}
       </div>
     `;
   }
 
-  renderTeamView(team, departments) {
+  renderTeamView(team, departments, contacts) {
     return `
       <!-- Toolbar de Equipos con Selector de Grupos -->
       <div class="contacts-toolbar">
@@ -150,6 +184,9 @@ class ContactsTeamModule {
               <option value="${d}" ${this.departmentFilter === d ? 'selected' : ''}>👥 ${d}</option>
             `).join('')}
           </select>
+          <button class="action-btn-xs secondary" id="btn-toolbar-assign-existing" title="Incorporar un contacto existente del directorio al equipo">
+            <i data-lucide="user-check"></i> + Asignar Contacto Registrado
+          </button>
           <button class="action-btn-xs primary" id="btn-modal-add-collab-direct">
             <i data-lucide="plus"></i> Nuevo Colaborador
           </button>
@@ -157,49 +194,54 @@ class ContactsTeamModule {
       </div>
 
       <div class="team-management-grid">
-        ${team.map(m => `
-          <div class="team-member-card" data-member-id="${m.id}">
-            <div class="member-header-row">
-              <span class="avatar-large" style="background: ${m.avatarColor || '#9C523B'}">
-                ${m.name.charAt(0)}
-              </span>
-              <div class="member-info">
-                <h4>${m.name}</h4>
-                <div class="member-group-badge">
-                  <i data-lucide="shield"></i> <span>${m.department}</span>
+        ${team.map(m => {
+          // Buscar si está vinculado a un contacto del directorio
+          const linkedContact = contacts.find(c => c.id === m.contactId || c.name.toLowerCase() === m.name.toLowerCase());
+
+          return `
+            <div class="team-member-card" data-member-id="${m.id}">
+              <div class="member-header-row">
+                <span class="avatar-large" style="background: ${m.avatarColor || '#9C523B'}">
+                  ${m.name.charAt(0)}
+                </span>
+                <div class="member-info">
+                  <h4>${m.name}</h4>
+                  <div class="member-group-badge">
+                    <i data-lucide="shield"></i> <span>${m.department}</span>
+                  </div>
+                  <span class="member-role">${m.role}</span>
                 </div>
-                <span class="member-role">${m.role}</span>
+                <span class="attendance-tag status-${(m.attendance || 'presente').toLowerCase().replace(/\s+/g, '-')}">
+                  ${m.attendance || 'Presente'}
+                </span>
               </div>
-              <span class="attendance-tag status-${(m.attendance || 'presente').toLowerCase().replace(/\s+/g, '-')}">
-                ${m.attendance || 'Presente'}
-              </span>
-            </div>
 
-            <div class="member-stats-row">
-              <div class="stat-cell">
-                <span class="label">Turno / Horario</span>
-                <span class="val">${m.shift}</span>
+              <div class="member-stats-row">
+                <div class="stat-cell">
+                  <span class="label">Turno / Horario</span>
+                  <span class="val">${m.shift}</span>
+                </div>
+                <div class="stat-cell">
+                  <span class="label">Tareas Asignadas</span>
+                  <span class="val font-bold">${m.tasksAssigned || 0} activas</span>
+                </div>
+                <div class="stat-cell">
+                  <span class="label">Email Directo</span>
+                  <span class="val">${m.email || (linkedContact ? linkedContact.email : 'Sin email')}</span>
+                </div>
               </div>
-              <div class="stat-cell">
-                <span class="label">Tareas Asignadas</span>
-                <span class="val font-bold">${m.tasksAssigned} activas</span>
-              </div>
-              <div class="stat-cell">
-                <span class="label">Email Directo</span>
-                <span class="val">${m.email}</span>
-              </div>
-            </div>
 
-            <div class="member-actions-strip">
-              <button class="btn-text-sm btn-reassign-dept" data-member-id="${m.id}" data-current-dept="${m.department}">
-                <i data-lucide="git-branch"></i> Cambiar Grupo/Equipo
-              </button>
-              <button class="btn-text-sm" onclick="alert('Abriendo canal interno con ${m.name} (${m.department})')">
-                <i data-lucide="message-square"></i> Mensaje Interno
-              </button>
+              <div class="member-actions-strip">
+                <button class="btn-text-sm btn-reassign-dept" data-member-id="${m.id}" data-current-dept="${m.department}">
+                  <i data-lucide="git-branch"></i> Cambiar Grupo/Equipo
+                </button>
+                <button class="btn-text-sm" onclick="alert('Abriendo canal interno con ${m.name} (${m.department})')">
+                  <i data-lucide="message-square"></i> Mensaje Interno
+                </button>
+              </div>
             </div>
-          </div>
-        `).join('')}
+          `;
+        }).join('')}
       </div>
     `;
   }
@@ -231,7 +273,7 @@ class ContactsTeamModule {
       });
     }
 
-    // Filtro por tipo de contacto
+    // Filtros
     const filterType = container.querySelector('#filter-contact-type');
     if (filterType) {
       filterType.addEventListener('change', (e) => {
@@ -240,7 +282,6 @@ class ContactsTeamModule {
       });
     }
 
-    // Filtro por grupo/departamento
     const filterDept = container.querySelector('#filter-team-dept');
     if (filterDept) {
       filterDept.addEventListener('change', (e) => {
@@ -249,57 +290,58 @@ class ContactsTeamModule {
       });
     }
 
-    // Botón principal de añadir personas
-    const btnAddPerson = container.querySelector('#btn-open-add-person-menu');
-    if (btnAddPerson) {
-      btnAddPerson.addEventListener('click', () => {
-        if (this.activeSection === 'team') {
-          this.openCollaboratorModal();
-        } else {
-          // Menú para escoger qué tipo de persona registrar
-          const choice = prompt("¿Qué deseas registrar?\n1 - Añadir Colaborador a Grupo/Equipo\n2 - Registrar Contacto Externo (Directorio)", "1");
-          if (choice === "1") {
-            this.openCollaboratorModal();
-          } else if (choice === "2") {
-            const name = prompt("Nombre completo del contacto:");
-            if (name && name.trim()) {
-              const company = prompt("Empresa u Organización:", "Ministerio de Magia");
-              const email = prompt("Correo electrónico:", "contacto@hogwarts.ac.uk");
-              const phone = prompt("Teléfono / Lechucería:", "+44 20 7946 0000");
-              const type = prompt("Tipo (cliente, proveedor, aliado, profesor):", "aliado");
-              const role = prompt("Cargo o Puesto:", "Especialista");
-
-              const contacts = window.plannerStore.get('contacts') || [];
-              contacts.unshift({
-                id: 'con-' + Date.now(),
-                name: name.trim(),
-                company: company || "Independiente",
-                email: email || "",
-                phone: phone || "",
-                role: role || "Contacto",
-                type: type || "aliado",
-                lastInteraction: "Hoy (Registro inicial)",
-                nextFollowUp: "Próxima semana",
-                notes: "Contacto registrado en el directorio de la agenda."
-              });
-              window.plannerStore.saveData();
-              window.plannerAudio.playCheck();
-              this.render(container);
-            }
-          }
-        }
+    // Botón "+ Nuevo Contacto" (Abre modal limpio de nuevo contacto)
+    const btnHeaderAddContact = container.querySelector('#btn-header-add-contact');
+    if (btnHeaderAddContact) {
+      btnHeaderAddContact.addEventListener('click', () => {
+        this.openContactModal();
       });
     }
 
-    // Botón directo para añadir colaborador
-    const btnDirectCollab = container.querySelector('#btn-modal-add-collab-direct');
-    if (btnDirectCollab) {
-      btnDirectCollab.addEventListener('click', () => {
+    // Botón "Asignar a Equipo" desde cabecera de contactos
+    const btnHeaderAssign = container.querySelector('#btn-header-assign-contact');
+    if (btnHeaderAssign) {
+      btnHeaderAssign.addEventListener('click', () => {
+        this.openAssignContactModal();
+      });
+    }
+
+    // Botones "+ Asignar Contacto Registrado" en sección de Equipo
+    const btnHeaderAssignExisting = container.querySelector('#btn-header-assign-existing-collab');
+    const btnToolbarAssignExisting = container.querySelector('#btn-toolbar-assign-existing');
+    [btnHeaderAssignExisting, btnToolbarAssignExisting].forEach(btn => {
+      if (btn) {
+        btn.addEventListener('click', () => {
+          this.openAssignContactModal();
+        });
+      }
+    });
+
+    // Botón "+ Nuevo Colaborador" directo
+    const btnAddCollabDirect = container.querySelector('#btn-header-add-collab-direct') || container.querySelector('#btn-modal-add-collab-direct');
+    if (btnAddCollabDirect) {
+      btnAddCollabDirect.addEventListener('click', () => {
         this.openCollaboratorModal();
       });
     }
 
-    // Reasignar grupo/departamento
+    // Botón "+ Añadir a Grupo / Equipo" en tarjeta de contacto individual
+    container.querySelectorAll('.btn-add-contact-to-team').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        const contactId = e.currentTarget.dataset.contactId;
+        this.openAssignContactModal(contactId);
+      });
+    });
+
+    // Botón "Cambiar" en tarjeta de contacto que ya está en equipo
+    container.querySelectorAll('.btn-reassign-contact-team').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        const contactId = e.currentTarget.dataset.contactId;
+        this.openAssignContactModal(contactId);
+      });
+    });
+
+    // Reasignar grupo de colaborador desde la tarjeta de equipo
     container.querySelectorAll('.btn-reassign-dept').forEach(btn => {
       btn.addEventListener('click', (e) => {
         const memId = e.currentTarget.dataset.memberId;
@@ -319,12 +361,74 @@ class ContactsTeamModule {
     });
   }
 
+  // Modal Nuevo Contacto (con opción de asignar a equipo)
+  openContactModal() {
+    const modal = document.getElementById('contact-editor-modal');
+    if (modal) {
+      modal.classList.add('open');
+      const form = document.getElementById('form-modal-contact');
+      if (form) form.reset();
+
+      const teamLinkCheck = document.getElementById('modal-contact-link-team');
+      const teamFields = document.getElementById('modal-contact-team-fields');
+      if (teamLinkCheck && teamFields) {
+        teamFields.style.display = 'none';
+        teamLinkCheck.checked = false;
+        teamLinkCheck.onchange = () => {
+          teamFields.style.display = teamLinkCheck.checked ? 'block' : 'none';
+        };
+      }
+
+      const nameInput = document.getElementById('modal-contact-name');
+      if (nameInput) setTimeout(() => nameInput.focus(), 80);
+      if (window.lucide) window.lucide.createIcons();
+    }
+  }
+
+  // Modal Asignar Contacto Registrado a Equipo
+  openAssignContactModal(preselectedContactId = null) {
+    const modal = document.getElementById('assign-contact-team-modal');
+    const select = document.getElementById('modal-assign-contact-select');
+    const contacts = window.plannerStore.get('contacts') || [];
+
+    if (!modal || !select) return;
+
+    // Llenar selector de contactos
+    select.innerHTML = contacts.map(c => `
+      <option value="${c.id}" ${preselectedContactId === c.id ? 'selected' : ''}>
+        ${c.name} (${c.company || 'Independiente'} · ${c.role || 'Contacto'})
+      </option>
+    `).join('');
+
+    const updatePreview = () => {
+      const selectedId = select.value;
+      const found = contacts.find(c => c.id === selectedId);
+      const nameEl = document.getElementById('modal-assign-preview-name');
+      const detailsEl = document.getElementById('modal-assign-preview-details');
+      const roleInput = document.getElementById('modal-assign-role');
+
+      if (found) {
+        if (nameEl) nameEl.textContent = found.name;
+        if (detailsEl) detailsEl.textContent = `${found.company || 'Hogwarts'} · ${found.role || 'Especialista'} · ${found.email || 'Sin correo'}`;
+        if (roleInput && !roleInput.value) roleInput.value = found.role || 'Colaborador Especialista';
+      }
+    };
+
+    select.onchange = updatePreview;
+    updatePreview();
+
+    modal.classList.add('open');
+    if (window.lucide) window.lucide.createIcons();
+  }
+
+  // Modal Colaborador Directo
   openCollaboratorModal() {
     const modal = document.getElementById('collaborator-editor-modal');
     if (modal) {
       modal.classList.add('open');
       const nameInput = document.getElementById('modal-collab-name');
       if (nameInput) setTimeout(() => nameInput.focus(), 80);
+      if (window.lucide) window.lucide.createIcons();
     }
   }
 }

@@ -812,6 +812,88 @@ class PlannerApp {
       });
     }
 
+    // 11. Guardar Nuevo Contacto (con asignación opcional a equipo)
+    const formContact = document.getElementById('form-modal-contact');
+    if (formContact) {
+      formContact.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const name = document.getElementById('modal-contact-name').value.trim();
+        const type = document.getElementById('modal-contact-type').value;
+        const company = document.getElementById('modal-contact-company').value.trim() || 'Hogwarts';
+        const role = document.getElementById('modal-contact-role').value.trim() || 'Especialista';
+        const email = document.getElementById('modal-contact-email').value.trim();
+        const phone = document.getElementById('modal-contact-phone').value.trim() || '';
+        const lastInteraction = document.getElementById('modal-contact-last-interaction').value.trim() || 'Hoy (Registro inicial)';
+        const nextFollowUp = document.getElementById('modal-contact-next-followup').value.trim() || 'Próxima semana';
+        const notes = document.getElementById('modal-contact-notes').value.trim() || '';
+
+        const newContact = window.plannerStore.addContact({
+          name,
+          type,
+          company,
+          role,
+          email,
+          phone,
+          lastInteraction,
+          nextFollowUp,
+          notes
+        });
+
+        // Verificar si se marcó incorporar también al equipo
+        const linkTeam = document.getElementById('modal-contact-link-team');
+        if (linkTeam && linkTeam.checked) {
+          const dept = document.getElementById('modal-contact-team-dept').value;
+          const shift = document.getElementById('modal-contact-team-shift').value.trim() || 'Jornada Completa (08:00 - 16:00)';
+          const attendance = document.getElementById('modal-contact-team-attendance').value;
+          const color = document.getElementById('modal-contact-team-color').value;
+
+          window.plannerStore.assignContactToTeam({
+            contactId: newContact.id,
+            department: dept,
+            role: role,
+            shift: shift,
+            attendance: attendance,
+            avatarColor: color
+          });
+        }
+
+        window.plannerAudio.playCheck();
+        this.closeAllModals();
+        if (this.currentTab === 'contacts') {
+          this.navigateToTab('contacts', false);
+        }
+      });
+    }
+
+    // 12. Guardar Asignación de Contacto Registrado a Equipo
+    const formAssignContactTeam = document.getElementById('form-modal-assign-contact-team');
+    if (formAssignContactTeam) {
+      formAssignContactTeam.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const contactId = document.getElementById('modal-assign-contact-select').value;
+        const dept = document.getElementById('modal-assign-dept').value;
+        const role = document.getElementById('modal-assign-role').value.trim();
+        const shift = document.getElementById('modal-assign-shift').value.trim() || 'Jornada Completa (08:00 - 16:00)';
+        const attendance = document.getElementById('modal-assign-attendance').value;
+        const color = document.getElementById('modal-assign-color').value;
+
+        window.plannerStore.assignContactToTeam({
+          contactId,
+          department: dept,
+          role,
+          shift,
+          attendance,
+          avatarColor: color
+        });
+
+        window.plannerAudio.playCheck();
+        this.closeAllModals();
+        if (this.currentTab === 'contacts') {
+          this.navigateToTab('contacts', false);
+        }
+      });
+    }
+
     // Opciones del Quick Entry Modal
     document.querySelectorAll('[data-quick-action]').forEach(btn => {
       btn.addEventListener('click', (e) => {

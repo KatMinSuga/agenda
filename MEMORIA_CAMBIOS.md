@@ -287,8 +287,36 @@ Las siguientes características forman la base consolidada del sistema y **NO de
   - `js/vabox.js`
   - `MEMORIA_CAMBIOS.md`
 
+### [Entrada 008] — 09/10/2026 · Independencia de Checkboxes en Tareas (Vista Lista y Estatus "TERMINADO") y Asignación de Contactos a Equipos
+* **Petición del Usuario:**
+  > *"Módulo 01 · Tareas & Entregables, revisa la vista que ofrece el apartado de "Lista" y revisa la funcionalidad correcta de los checkbox, deben ser independientes las subtareas del checkbox principal y debe aparecer como terminado una vez que se marca el checkbox de la tarea principal; Módulo 05 · Personas & Colaboradores, presta atención a lo que pedi agregar en la parte de nuevo contacto y mejora la manera de agregar estos contactos ya registrados a algún grupo o equipo"*
+* **Acciones Realizadas:**
+  1. **Módulo 01 · Tareas & Entregables (`js/tasks.js`, `js/store.js`, `css/modules.css`):**
+     - **Independencia Estricta de Checkboxes:** Se eliminó la sincronización forzada que modificaba todas las subtareas al pulsar el checkbox principal. Ahora las subtareas conservan su propio estado individual de forma 100% independiente.
+     - **Estatus "TERMINADO" Inmediato:** Al marcar el checkbox principal, la tarea pasa de inmediato al estado `"completada"`, mostrando la insignia `TERMINADO` en verde, aplicando el estilo `.is-completed` (borde izquierdo `#2F855A`, fondo tenue y título tachado) y marcando el círculo en verde con ícono de verificación sin alterar las subtareas.
+     - **Desmarcado Inteligente:** Al desmarcar la tarea principal completada, si tiene una o más subtareas hechas, regresa automáticamente a `EN PROCESO`, y si no tiene ninguna hecha, regresa a `PENDIENTE`.
+     - **Subtareas Desacopladas (`toggleSubtask`):** Si una tarea principal ya fue marcada manualmente como completada, interactuar con sus subtareas no revoca el estatus de completada de la tarea.
+     - **Mejora en Eventos y Estilos:** El cambio de subtareas se gestiona en el evento `change` para evitar doble pulsación, con botones de 28px y diseño pautado Notes.
+  2. **Módulo 05 · Personas & Colaboradores (`index.html`, `js/contacts-team.js`, `js/store.js`, `js/app.js`, `css/modules.css`):**
+     - **Modal Institucional "Nuevo Contacto" (`#contact-editor-modal`):** Se erradicaron los diálogos nativos `prompt()` del navegador y se diseñó un modal profesional con campos para Nombre, Empresa, Especialidad/Cargo, Correo, Teléfono/Lechucería, Tipo de Contacto (Aliado, Claustro, Cliente, Proveedor, Institucional), Última Interacción, Próximo Seguimiento y Notas.
+     - **Integración Directa en "Nuevo Contacto" con Equipo:** Se añadió la sección destacada *"¿Incorporar simultáneamente como Colaborador de un Equipo?"* con selector de Grupo/Equipo, Turno/Horario, Estado de Asistencia y Color de Avatar para darlo de alta en ambas secciones al mismo tiempo si el usuario lo desea.
+     - **Asignación Rápida de Contactos Ya Registrados (`#assign-contact-team-modal`):**
+       - En cada tarjeta del **Directorio de Contactos** se muestra el estado: si ya está en un equipo (`En Equipo: [Grupo]` con botón `[Cambiar]`) o un botón directo `[+ Añadir a Grupo / Equipo]`.
+       - En la vista **Equipo & Grupos** se agregó el botón `+ Asignar Contacto Registrado al Equipo` en la barra de herramientas.
+       - El modal `#assign-contact-team-modal` despliega la lista de contactos del directorio con vista previa de su empresa/cargo y permite asignarlos a cualquier grupo o equipo de inmediato.
+     - **Métodos Store:** Se añadieron `addContact`, `updateContact`, `deleteContact` y `assignContactToTeam` en `window.plannerStore`.
+* **Archivos Modificados:**
+  - `css/modules.css`
+  - `index.html`
+  - `js/app.js`
+  - `js/contacts-team.js`
+  - `js/store.js`
+  - `js/tasks.js`
+  - `MEMORIA_CAMBIOS.md`
+
 ---
 
 <!-- Las siguientes entradas se añadirán aquí secuencialmente con cada nueva solicitud del usuario -->
+
 
 

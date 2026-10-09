@@ -139,7 +139,12 @@ class TasksModule {
           return `
             <div class="task-card-notes ${task.status === 'completada' ? 'is-completed' : ''} priority-${task.priority}" data-task-id="${task.id}">
               <div class="task-card-left">
-                <button class="task-check-circle ${task.status === 'completada' ? 'checked' : ''}" data-action="toggle-complete" data-task-id="${task.id}" title="Marcar completada">
+                <button class="task-check-circle ${task.status === 'completada' ? 'checked' : ''}" 
+                        data-action="toggle-complete" 
+                        data-task-id="${task.id}" 
+                        title="${task.status === 'completada' ? 'Marcar como pendiente' : 'Marcar como terminado'}"
+                        role="checkbox"
+                        aria-checked="${task.status === 'completada'}">
                   <i data-lucide="${task.status === 'completada' ? 'check' : 'circle'}"></i>
                 </button>
               </div>
@@ -152,7 +157,7 @@ class TasksModule {
                   </div>
                   <div class="task-badges">
                     <span class="priority-tag tag-${task.priority}">${task.priority.toUpperCase()}</span>
-                    <span class="status-tag status-${task.status}">${task.status.replace('_', ' ')}</span>
+                    <span class="status-tag status-${task.status}">${task.status === 'completada' ? 'TERMINADO' : (task.status === 'en_proceso' ? 'EN PROCESO' : 'PENDIENTE')}</span>
                   </div>
                 </div>
 
@@ -368,8 +373,19 @@ class TasksModule {
       });
     }
 
-    // Escucha de cambios rápidos (Asignar responsable o vincular proyecto)
+    // Escucha de cambios rápidos (Asignar responsable, vincular proyecto o checkbox de subtarea)
     container.addEventListener('change', (e) => {
+      // Toggle subtarea (independiente)
+      const subtaskBox = e.target.closest('[data-action="toggle-subtask"]');
+      if (subtaskBox) {
+        const taskId = subtaskBox.dataset.taskId;
+        const subtaskId = subtaskBox.dataset.subtaskId;
+        window.plannerStore.toggleSubtask(taskId, subtaskId);
+        window.plannerAudio.playCheck();
+        this.render(container);
+        return;
+      }
+
       const assigneeSelect = e.target.closest('[data-action="quick-change-assignee"]');
       if (assigneeSelect) {
         const taskId = assigneeSelect.dataset.taskId;
@@ -393,33 +409,25 @@ class TasksModule {
 
     // Delegación de clics en tareas
     container.addEventListener('click', (e) => {
-      // Toggle completar tarea principal (sincroniza subtareas)
+      // Toggle completar tarea principal (INDEPENDIENTE de las subtareas: NO altera subtareas individuales)
       const toggleCompleteBtn = e.target.closest('[data-action="toggle-complete"]');
       if (toggleCompleteBtn) {
         const taskId = toggleCompleteBtn.dataset.taskId;
         const task = window.plannerStore.get('tasks').find(t => t.id === taskId);
         if (task) {
           const isDone = task.status === 'completada';
-          const newStatus = isDone ? 'pendiente' : 'completada';
-          const updates = { status: newStatus };
-          if (task.subtasks && task.subtasks.length > 0) {
-            updates.subtasks = task.subtasks.map(s => ({ ...s, completed: !isDone }));
+          // Si ya estaba completada, al desmarcarla regresa a 'en_proceso' si tiene alguna subtarea marcada, o 'pendiente' si no.
+          // Si no estaba completada, pasa a 'completada' (aparece como TERMINADO).
+          let newStatus = 'completada';
+          if (isDone) {
+            const hasCheckedSubtasks = (task.subtasks || []).some(s => s.completed);
+            newStatus = hasCheckedSubtasks ? 'en_proceso' : 'pendiente';
           }
-          window.plannerStore.updateTask(taskId, updates);
+          // Las subtareas se mantienen INTACTAS e INDEPENDIENTES
+          window.plannerStore.updateTask(taskId, { status: newStatus });
           window.plannerAudio.playCheck();
           this.render(container);
         }
-        return;
-      }
-
-      // Toggle subtarea (cambia automáticamente estatus a en_proceso, completada o pendiente)
-      const subtaskBox = e.target.closest('[data-action="toggle-subtask"]');
-      if (subtaskBox) {
-        const taskId = subtaskBox.dataset.taskId;
-        const subtaskId = subtaskBox.dataset.subtaskId;
-        window.plannerStore.toggleSubtask(taskId, subtaskId);
-        window.plannerAudio.playCheck();
-        this.render(container);
         return;
       }
 
