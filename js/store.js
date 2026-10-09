@@ -694,8 +694,15 @@ const INITIAL_DATA = {
 
 class Store {
   constructor() {
-    this.data = this.loadData();
     this.listeners = [];
+    this.data = this.loadData();
+
+    // Pedir al navegador que no borre el almacenamiento local por falta de espacio (móviles)
+    try {
+      if (navigator.storage && navigator.storage.persist) {
+        navigator.storage.persist().catch(() => {});
+      }
+    } catch (e) { /* navegador sin soporte */ }
   }
 
   loadData() {
@@ -703,8 +710,15 @@ class Store {
       const stored = localStorage.getItem(STORAGE_KEY);
       if (stored) {
         const parsed = JSON.parse(stored);
-        // Verificar que contenga los datos temáticos actualizados
-        if (parsed && parsed.profile && parsed.profile.name === "Hermione Granger") {
+        // Aceptar cualquier base guardada válida (sin depender del nombre del perfil:
+        // antes, cambiar el nombre en Ajustes borraba todos los datos al recargar)
+        if (parsed && typeof parsed === 'object' && parsed.profile && Array.isArray(parsed.tasks)) {
+          // Completar secciones nuevas que no existían cuando se guardaron los datos
+          Object.keys(INITIAL_DATA).forEach(key => {
+            if (parsed[key] === undefined) {
+              parsed[key] = JSON.parse(JSON.stringify(INITIAL_DATA[key]));
+            }
+          });
           if (!parsed.finance) parsed.finance = {};
           if (!parsed.finance.subscriptionHistory) {
             parsed.finance.subscriptionHistory = INITIAL_DATA.finance.subscriptionHistory || [];
@@ -715,7 +729,14 @@ class Store {
     } catch (e) {
       console.warn("Error leyendo localStorage, cargando datos iniciales de Hogwarts", e);
     }
-    this.saveData(INITIAL_DATA);
+    // Si había datos guardados que no se pudieron leer, conservar una copia antes de reiniciar
+    try {
+      const unreadable = localStorage.getItem(STORAGE_KEY);
+      if (unreadable) {
+        localStorage.setItem(STORAGE_KEY + '_respaldo_' + Date.now(), unreadable);
+      }
+    } catch (e) { /* almacenamiento no disponible */ }
+    this.saveData(JSON.parse(JSON.stringify(INITIAL_DATA)));
     return JSON.parse(JSON.stringify(INITIAL_DATA));
   }
 

@@ -2502,6 +2502,393 @@
   box-sizing: border-box;
 }
 
+/* Expediente del cliente (VA Hub › Clientes & Bóvedas): estilos que faltaban (Entrada 014) */
+.file-tag {
+  font-size: 0.7rem;
+  font-weight: 800;
+  letter-spacing: 0.8px;
+  color: var(--accent-primary);
+  text-transform: uppercase;
+}
+
+.file-client-title {
+  font-family: var(--font-serif);
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: var(--text-main);
+  line-height: 1.25;
+  margin: 2px 0 6px;
+}
+
+.file-contact-details span,
+.vault-label,
+.req-date {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.file-contact-details svg,
+.vault-label svg,
+.req-date svg,
+.subcard-header h4 svg,
+.instruction-header h4 svg,
+.vault-link-btn svg,
+.action-btn-xs svg {
+  width: 14px;
+  height: 14px;
+  flex-shrink: 0;
+}
+
+.vault-label {
+  font-size: 0.74rem;
+  font-weight: 700;
+  color: var(--text-muted);
+  text-transform: uppercase;
+}
+
+.instruction-header,
+.subcard-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.instruction-header h4,
+.subcard-header h4 {
+  font-family: var(--font-serif);
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--text-main);
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.serv-badge {
+  background: #faeedb;
+  color: #7d4d12;
+  font-size: 0.7rem;
+  font-weight: 700;
+  padding: 3px 8px;
+  border-radius: 4px;
+}
+
+.instruction-text {
+  font-size: 0.84rem;
+  color: var(--text-muted);
+  line-height: 1.5;
+}
+
+.dossier-subcard {
+  background: #fbf9f6;
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  padding: 14px;
+  min-width: 0;
+}
+
+.action-btn-xs {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 5px 10px;
+  border-radius: var(--radius-sm);
+  border: 1px solid #dcd3c5;
+  background: #ede6dc;
+  color: var(--text-main);
+  font-family: var(--font-sans);
+  font-size: 0.76rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.action-btn-xs:hover {
+  background: #e2d9cd;
+}
+
+.action-btn-xs.primary {
+  background: var(--accent-primary);
+  border-color: var(--accent-primary);
+  color: #fff;
+}
+
+.action-btn-xs.primary:hover {
+  background: var(--accent-primary-hover);
+}
+
+.action-btn-xs.danger-subtle {
+  background: #fff;
+  border-color: #f0c9c9;
+  color: var(--pri-urgente);
+}
+
+.action-btn-xs.danger-subtle:hover {
+  background: var(--pri-urgente-bg);
+}
+
+.requests-list,
+.time-log-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.request-item,
+.time-log-item {
+  background: #fff;
+  border: 1px solid var(--border-subtle);
+  border-left: 3px solid var(--accent-gold);
+  border-radius: 6px;
+  padding: 9px 11px;
+  font-size: 0.82rem;
+}
+
+.request-item.status-completado,
+.request-item.status-completada {
+  border-left-color: var(--pri-baja);
+  opacity: 0.8;
+}
+
+.request-item.status-en_proceso {
+  border-left-color: #1b5bb5;
+}
+
+.req-title-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 8px;
+}
+
+.req-title {
+  font-weight: 600;
+  color: var(--text-main);
+  min-width: 0;
+}
+
+.req-status-tag {
+  flex-shrink: 0;
+  font-size: 0.66rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  padding: 2px 6px;
+  border-radius: 4px;
+  background: #faeedb;
+  color: #8f5a13;
+}
+
+.request-item.status-en_proceso .req-status-tag {
+  background: #e3effd;
+  color: #1b5bb5;
+}
+
+.request-item.status-completado .req-status-tag,
+.request-item.status-completada .req-status-tag {
+  background: #dff2e4;
+  color: #1e6934;
+}
+
+.req-date {
+  font-size: 0.72rem;
+  color: var(--text-light);
+  margin-top: 4px;
+}
+
+.time-log-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+  border-left-color: var(--accent-secondary);
+}
+
+.log-info {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.log-info strong {
+  color: var(--text-main);
+  font-weight: 600;
+}
+
+.log-info span {
+  font-size: 0.72rem;
+  color: var(--text-light);
+}
+
+.log-duration {
+  flex-shrink: 0;
+  font-weight: 800;
+  font-size: 0.8rem;
+  color: var(--accent-secondary);
+}
+
+.empty-hint {
+  font-size: 0.8rem;
+  color: var(--text-light);
+  font-style: italic;
+}
+
+/* --------------------------------------------------------------------------
+   CONTROLES COMPARTIDOS QUE SE MOSTRABAN CON EL ESTILO BÁSICO DEL NAVEGADOR
+   (Entrada 014): pastillas de filtro, botones de texto, buscador de notas,
+   campos pequeños y botón de rutinas.
+   -------------------------------------------------------------------------- */
+.trx-filter-buttons,
+.notes-type-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin: 8px 0;
+}
+
+.trx-pill,
+.n-tab {
+  background: #fbf9f6;
+  border: 1px solid var(--border-subtle);
+  color: var(--text-muted);
+  padding: 4px 12px;
+  border-radius: 14px;
+  font-family: var(--font-sans);
+  font-size: 0.76rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.trx-pill:hover,
+.n-tab:hover {
+  border-color: var(--accent-primary);
+  color: var(--text-main);
+}
+
+.trx-pill.active,
+.n-tab.active {
+  background: var(--accent-primary);
+  border-color: var(--accent-primary);
+  color: #fff;
+}
+
+.notes-search-box {
+  position: relative;
+}
+
+.notes-search-box svg {
+  position: absolute;
+  left: 11px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 15px;
+  height: 15px;
+  color: var(--text-light);
+  pointer-events: none;
+}
+
+.notes-search-box input,
+.form-input-sm {
+  width: 100%;
+  padding: 8px 12px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border-subtle);
+  background: #fff;
+  font-family: inherit;
+  font-size: 0.84rem;
+  color: var(--text-main);
+  outline: none;
+}
+
+.notes-search-box input {
+  padding-left: 34px;
+}
+
+.notes-search-box input:focus,
+.form-input-sm:focus {
+  border-color: var(--accent-primary);
+}
+
+.btn-text-sm,
+.btn-text-danger,
+.btn-icon-sm,
+.btn-routine-toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: var(--radius-sm);
+  font-family: var(--font-sans);
+  font-size: 0.76rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.btn-text-sm {
+  color: var(--accent-primary);
+  padding: 4px 8px;
+}
+
+.btn-text-sm:hover {
+  background: #f5ede4;
+}
+
+.btn-text-danger {
+  color: var(--pri-urgente);
+  padding: 5px 10px;
+  border-color: #f0c9c9;
+  background: #fff;
+}
+
+.btn-text-danger:hover {
+  background: var(--pri-urgente-bg);
+}
+
+.btn-icon-sm {
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  color: var(--text-muted);
+  border-color: var(--border-subtle);
+  background: #fff;
+  flex-shrink: 0;
+}
+
+.btn-icon-sm:hover {
+  color: var(--pri-urgente);
+  border-color: #f0c9c9;
+}
+
+.btn-routine-toggle {
+  padding: 4px 10px;
+  border-color: var(--border-subtle);
+  background: #fff;
+  color: var(--text-muted);
+  white-space: nowrap;
+}
+
+.btn-routine-toggle.completed {
+  background: #dff2e4;
+  border-color: #bce1c7;
+  color: #1e6934;
+}
+
+.btn-text-sm svg,
+.btn-text-danger svg,
+.btn-icon-sm svg,
+.btn-routine-toggle svg {
+  width: 14px;
+  height: 14px;
+  flex-shrink: 0;
+}
+
 /* --------------------------------------------------------------------------
    6. MÓDULO DE CONTACTOS & EQUIPO
    -------------------------------------------------------------------------- */

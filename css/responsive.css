@@ -34,7 +34,6 @@ canvas {
 .report-table-wrap {
   max-width: 100%;
   overflow-x: auto;
-  -webkit-overflow-scrolling: touch;
 }
 
 /* Selectores con opciones largas: nunca más anchos que su contenedor */
@@ -99,6 +98,18 @@ canvas {
    TABLETA (≤ 1024px): pestañas divisorias en una banda de cuero inferior
    -------------------------------------------------------------------------- */
 @media (max-width: 1024px) {
+  /* Impedir que la página entera se desplace o "baile" lateralmente en móviles */
+  html,
+  body {
+    overflow-x: hidden;
+    overflow-x: clip;
+  }
+
+  /* Cambio de página solo con desvanecido (sin desplazar la hoja) */
+  .planner-content-area.page-flipping {
+    transform: none;
+  }
+
   body {
     padding: 12px 10px calc(84px + env(safe-area-inset-bottom, 0px));
   }
@@ -160,8 +171,6 @@ canvas {
     padding: 8px 10px calc(6px + env(safe-area-inset-bottom, 0px));
     overflow-x: auto;
     overflow-y: hidden;
-    -webkit-overflow-scrolling: touch;
-    scroll-snap-type: x proximity;
     scrollbar-width: none;
     background: var(--binder-leather);
     border-top: 3px solid var(--binder-border);
@@ -183,7 +192,6 @@ canvas {
     border-radius: 10px 10px 4px 4px;
     border: 1px solid rgba(0, 0, 0, 0.15);
     box-shadow: 0 -2px 6px rgba(0, 0, 0, 0.2);
-    scroll-snap-align: center;
   }
 
   .planner-tab:hover {
@@ -352,7 +360,6 @@ canvas {
   /* Vista semanal: desplazamiento horizontal dentro de su tarjeta */
   .week-view-container {
     overflow-x: auto;
-    -webkit-overflow-scrolling: touch;
   }
 
   .week-header-row,
@@ -365,7 +372,6 @@ canvas {
     display: flex;
     overflow-x: auto;
     scroll-snap-type: x mandatory;
-    -webkit-overflow-scrolling: touch;
     padding-bottom: 8px;
   }
 
@@ -377,6 +383,46 @@ canvas {
   .paper-card-header {
     flex-wrap: wrap;
     gap: 8px;
+  }
+
+  /* Agenda › vista Día: los eventos no empujan la hoja hacia la derecha */
+  .card-header-sub {
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .hourly-content {
+    min-width: 0;
+  }
+
+  .ev-title-bar {
+    flex-wrap: wrap;
+    gap: 4px 10px;
+  }
+
+  .ev-title-text {
+    white-space: normal;
+  }
+
+  .ev-details-line {
+    flex-wrap: wrap;
+  }
+
+  /* VA Hub › Clientes & Bóvedas: acceso a bóveda dentro del expediente */
+  .file-header > * {
+    min-width: 0;
+  }
+
+  .vault-access-box {
+    flex: 1 1 100%;
+    flex-shrink: 1;
+    min-width: 0;
+    max-width: 100%;
+  }
+
+  .vault-link-btn {
+    max-width: 100%;
+    white-space: normal;
   }
 
   /* Tareas: barra de resumen envolvente */
@@ -592,6 +638,16 @@ canvas {
     flex: 1 1 100% !important;
   }
 
+  /* Agenda › vista Día: columna de horas más angosta */
+  .hourly-label {
+    width: 42px;
+  }
+
+  .hourly-event-box {
+    padding: 8px;
+    gap: 8px;
+  }
+
   /* Rejillas KPI */
   .dashboard-kpi-row,
   .va-stats-bar-grid {
@@ -686,7 +742,6 @@ canvas {
     flex: 1 1 auto;
     min-height: 0;
     overflow-y: auto;
-    -webkit-overflow-scrolling: touch;
     overscroll-behavior: contain;
     padding-bottom: calc(16px + env(safe-area-inset-bottom, 0px));
   }

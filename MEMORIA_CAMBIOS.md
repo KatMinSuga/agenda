@@ -450,6 +450,37 @@ Las siguientes características forman la base consolidada del sistema y **NO de
 
 ---
 
+### [Entrada 014] — 09/10/2026 · Pérdida de Datos, Parpadeo en Móvil, Caché y Vistas que Seguían Rotas en Teléfono
+* **Petición del Usuario:**
+  > *"la aplicacion no esta resposiva aun, tiene un flickering raro y se pierden los datos en movil, porque no abres el navegador y lo ves por ti mismo para que lo dejes funcionando"*
+* **Diagnóstico (reproducido en el navegador a 360, 375, 768, 1024 y 1440 px):**
+  1. **Pérdida de datos (reproducida):** `Store.loadData()` descartaba toda la base guardada si `profile.name` no era exactamente "Hermione Granger". Ajustes guarda el nombre al escribir, así que cambiar el nombre borraba tareas, proyectos, notas, etc. en la siguiente carga. En móvil se nota más porque el navegador recarga la pestaña al volver de otra app. Además, al arrancar, `notify()` fallaba porque `listeners` aún no existía.
+  2. **Parpadeo al cambiar de pestaña:** con la página desplazada hacia abajo, la hoja nueva aparecía a media página y luego se desplazaba suavemente ~1800 px hasta arriba. A eso se sumaban el *scroll-snap* de la banda de pestañas peleando con su desplazamiento automático y `-webkit-overflow-scrolling: touch` (obsoleto, provoca parpadeos con elementos fijos en iOS).
+  3. **Archivos viejos en el teléfono:** el servidor estático no envía cabeceras de caché y el navegador reutilizaba CSS/JS antiguos sin volver a pedirlos (verificado: `themes.css`, `audio.js` y `dashboard.js` servidos desde caché). Lucide se cargaba con `@latest` (redirección cacheada solo 60 s) y Chart.js sin versión, ambos bloqueando el `<head>`.
+  4. **Vistas que seguían desbordándose** (la revisión anterior solo midió la vista inicial de cada módulo): Agenda › Día (títulos de eventos sin recorte empujaban la hoja) y VA Hub › Clientes & Bóvedas (recuadro de bóveda de 393 px en una tarjeta de 247 px). El contenido quedaba recortado a la derecha.
+  5. **Controles sin estilos desde la creación del proyecto** (se veían con el aspecto gris básico del navegador en todas las pantallas): expediente del cliente en VA Hub, `.action-btn-xs` (usado en 8 módulos), pastillas de filtro de Finanzas y Notas, buscador de Notas, `.btn-text-sm`, `.btn-text-danger`, `.btn-icon-sm`, `.btn-routine-toggle` y `.form-input-sm`.
+* **Acciones Realizadas:**
+  1. **`js/store.js`:** `loadData()` acepta cualquier base válida (`profile` + `tasks[]`) sin mirar el nombre, y completa con `INITIAL_DATA` solo las secciones que falten. Si los datos guardados no se pueden leer, guarda una copia en `notes_planner_db_hp_v2_respaldo_<fecha>` antes de reiniciar. `listeners` se crea antes de cargar. Se pide al navegador almacenamiento persistente (`navigator.storage.persist()`) para que no lo borre por falta de espacio. Verificado: con el nombre cambiado a "Carolina Méndez" y una tarea nueva, ambos sobreviven a la recarga.
+  2. **`js/app.js`:** en ≤ 1024 px la página sube al inicio de golpe mientras la hoja está oculta y luego aparece (verificado: al reaparecer, `scrollY` ya es 0). En escritorio se mantiene el desplazamiento suave original.
+  3. **`css/responsive.css`:** sin *scroll-snap* en la banda de pestañas; sin `-webkit-overflow-scrolling`; `overflow-x: hidden/clip` en `html` y `body` (≤ 1024 px) para que la página no "baile" de lado; cambio de página solo con desvanecido en móvil; correcciones de Agenda › Día y VA Hub › Clientes & Bóvedas.
+  4. **`index.html`:** Lucide fijado en `1.54.0` y Chart.js en `4.5.1` (las mismas versiones que ya se descargaban), ambos con `defer`; todos los CSS/JS locales llevan `?v=20261009f` para forzar la descarga de los archivos nuevos.
+  5. **`css/modules.css`:** estilos para el expediente del cliente (VA Hub) y para los controles compartidos que nunca tuvieron CSS, con la misma paleta, tipografía y radios del resto del cuaderno. Escritorio verificado a 1440 px.
+* **Verificación final:** a 360 px, las 12 pestañas y todas sus sub-vistas sin ningún elemento fuera de la pantalla y sin controles con estilo básico del navegador; los 15 modales dentro de la pantalla y desplazables; sin errores en consola.
+* **Notas para futuros cambios:**
+  - Al modificar cualquier CSS/JS, subir la versión `?v=` en todas las etiquetas de `index.html`.
+  - Los datos viven en el `localStorage` de cada navegador y dispositivo: lo que se capture en la PC no aparece en el teléfono. Para pasarlos, usar Ajustes › Exportar/Importar respaldo JSON.
+  - Los datos que ya se hubieran perdido antes de esta corrección no se pueden recuperar.
+* **Archivos Modificados:**
+  - `js/store.js`
+  - `js/app.js`
+  - `css/responsive.css`
+  - `css/modules.css`
+  - `index.html`
+  - `CLAUDE.md`
+  - `MEMORIA_CAMBIOS.md`
+
+---
+
 <!-- Las siguientes entradas se añadirán aquí secuencialmente con cada nueva solicitud del usuario -->
 
 

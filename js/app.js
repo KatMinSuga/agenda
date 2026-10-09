@@ -136,9 +136,17 @@ class PlannerApp {
         default:
           window.dashboardModule.render(pageContainer);
       }
-      pageContainer.classList.remove('page-flipping');
       if (window.lucide) window.lucide.createIcons();
-      window.scrollTo({ top: 0, behavior: 'smooth' });
+      // En tabletas y teléfonos subir al inicio de golpe mientras la hoja está oculta:
+      // el desplazamiento suave sobre el contenido nuevo se percibía como parpadeo
+      const isCompactScreen = window.matchMedia && window.matchMedia('(max-width: 1024px)').matches;
+      if (isCompactScreen) {
+        window.scrollTo(0, 0);
+      }
+      pageContainer.classList.remove('page-flipping');
+      if (!isCompactScreen) {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
     }, 90);
   }
 
