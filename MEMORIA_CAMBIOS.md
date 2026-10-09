@@ -481,6 +481,29 @@ Las siguientes características forman la base consolidada del sistema y **NO de
 
 ---
 
+### [Entrada 015] — 09/10/2026 · Pantalla Negra y Parpadeo al Desplazarse en Teléfono
+* **Petición del Usuario:**
+  > *"al desplazar hacia abajo, flickerea la pantalla, queda en negro lo de abajo y al subir tambien queda en negro"*
+* **Diagnóstico:** el teléfono no alcanzaba a dibujar la página mientras se desplazaba y mostraba el fondo oscuro del escritorio (`--bg-desk`) en las zonas aún sin pintar. Causas medidas en el navegador a 375 px:
+  1. Los 15 fondos de modal (`.planner-modal-backdrop`) estaban siempre presentes como capas fijas a pantalla completa con `backdrop-filter: blur(4px)`, aunque cerrados (solo `opacity: 0`). El desenfoque se recalculaba en cada cuadro del desplazamiento. Se sumaban los 4 botones superiores con `blur(8px)`: 19 capas con desenfoque en total.
+  2. `#planner-active-page` (`overflow-y: auto`) y `.planner-paper-sheet` (`overflow: hidden` con esquinas redondeadas) eran contenedores de recorte/scroll de ~2.400 px de alto, que el navegador móvil trata como capas gigantes aparte.
+  3. Sombras difuminadas de 60 px y 35 px sobre la cubierta y el papel de ~2.400 px de alto.
+  4. La regla `overflow-x: hidden` en `html` y `body` a la vez (Entrada 014) puede convertir el `body` en contenedor de scroll en navegadores sin soporte de `clip` (Safari < 16).
+* **Acciones Realizadas (`css/responsive.css`, solo ≤ 1024 px; escritorio sin cambios, verificado a 1440 px):**
+  - Modales cerrados con `visibility: hidden` y sin `backdrop-filter`. La animación de apertura/cierre se conserva (transición de `visibility` diferida). Verificado: abren y cierran normalmente.
+  - Botones superiores sin desenfoque (mantienen su fondo semitransparente).
+  - `.planner-paper-sheet` con `overflow: clip` y `.planner-content-area` con `overflow-y: visible; overflow-x: clip`. Siguen recortando en horizontal, pero ya no son contenedores de scroll. Verificado: 0 capas altas con recorte y 0 desenfoques activos.
+  - Sombras de la cubierta y del papel más ligeras.
+  - `overflow-x: hidden/clip` solo en `body` (se quitó de `html`).
+  - `index.html`: versión de archivos `?v=20261009g`.
+* **Verificación:** a 375 px, las 12 pestañas y sus sub-vistas siguen sin desbordes. El desplazamiento largo hacia abajo y arriba se dibuja completo en el navegador de prueba. La prueba definitiva es en el teléfono, porque el navegador de escritorio tiene mucha más capacidad gráfica.
+* **Archivos Modificados:**
+  - `css/responsive.css`
+  - `index.html`
+  - `MEMORIA_CAMBIOS.md`
+
+---
+
 <!-- Las siguientes entradas se añadirán aquí secuencialmente con cada nueva solicitud del usuario -->
 
 

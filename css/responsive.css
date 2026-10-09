@@ -98,11 +98,60 @@ canvas {
    TABLETA (≤ 1024px): pestañas divisorias en una banda de cuero inferior
    -------------------------------------------------------------------------- */
 @media (max-width: 1024px) {
-  /* Impedir que la página entera se desplace o "baile" lateralmente en móviles */
-  html,
+  /* Impedir que la página entera se desplace o "baile" lateralmente en móviles.
+     Solo en body (en html + body con "hidden" el body se volvía contenedor de scroll
+     en navegadores sin soporte de "clip", como Safari < 16) */
   body {
     overflow-x: hidden;
     overflow-x: clip;
+  }
+
+  /* --- RENDIMIENTO DEL DESPLAZAMIENTO (Entrada 015) ---
+     En teléfonos, las zonas de abajo/arriba se veían negras al desplazarse porque el
+     navegador no alcanzaba a dibujar: capas con desenfoque y hojas gigantes como
+     contenedores de scroll. Se mantiene el mismo aspecto con menos costo de pintado. */
+
+  /* Modales cerrados: fuera del dibujado (antes 15 capas fijas a pantalla completa
+     con desenfoque se recalculaban en cada cuadro del desplazamiento) */
+  .planner-modal-backdrop {
+    transition: opacity 0.2s ease, visibility 0s linear 0.2s;
+  }
+
+  .planner-modal-backdrop:not(.open) {
+    visibility: hidden;
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+  }
+
+  .planner-modal-backdrop.open {
+    transition: opacity 0.2s ease, visibility 0s linear 0s;
+  }
+
+  /* Botones superiores sin desenfoque (el fondo semitransparente se conserva) */
+  .top-nav-btn {
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+  }
+
+  /* La hoja ya no es un contenedor de scroll de miles de píxeles: recorta en
+     horizontal con "clip" (no crea capa de desplazamiento) */
+  .planner-paper-sheet {
+    overflow: hidden;
+    overflow: clip;
+  }
+
+  .planner-content-area {
+    overflow: visible;
+    overflow-x: clip;
+  }
+
+  /* Sombras más ligeras en elementos muy altos */
+  .planner-leather-cover {
+    box-shadow: 0 10px 24px rgba(0, 0, 0, 0.45), inset 0 2px 6px rgba(255, 255, 255, 0.12);
+  }
+
+  .planner-paper-sheet {
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.35);
   }
 
   /* Cambio de página solo con desvanecido (sin desplazar la hoja) */
