@@ -110,7 +110,7 @@ class ProjectsModule {
         <div class="dossier-kpi-grid">
           <div class="dossier-kpi-card">
             <span class="kpi-label"><i data-lucide="user"></i> Responsable</span>
-            <span class="kpi-value">${manager ? manager.name : 'Carolina M.'}</span>
+            <span class="kpi-value">${manager ? manager.name : 'Hermione G.'}</span>
           </div>
           <div class="dossier-kpi-card">
             <span class="kpi-label"><i data-lucide="clock"></i> Fecha Límite</span>
@@ -118,7 +118,7 @@ class ProjectsModule {
           </div>
           <div class="dossier-kpi-card">
             <span class="kpi-label"><i data-lucide="wallet"></i> Presupuesto Ejercido</span>
-            <span class="kpi-value">$${proj.spent} / $${proj.budget}</span>
+            <span class="kpi-value">${proj.spent} G / ${proj.budget} G</span>
             <div class="mini-budget-track"><div class="fill" style="width: ${budgetPct}%"></div></div>
           </div>
         </div>

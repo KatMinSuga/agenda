@@ -1,106 +1,107 @@
 /**
  * Planificador Digital Notes Web - Store Central & Persistencia
- * Almacenamiento reactivo en LocalStorage con backup JSON y datos muestra profesionales.
+ * Temática Oficial: Hogwarts & Harry Potter Universe (Hermione Granger Lead Ops)
+ * Motor Predictivo de Tiempos y Costos con Control Total de Reglas y Horarios.
  */
 
-const STORAGE_KEY = 'notes_planner_db_v1';
+const STORAGE_KEY = 'notes_planner_db_hp_v2';
 
 const INITIAL_DATA = {
   profile: {
-    name: "Carolina Méndez",
-    role: "Directora Ejecutiva & Asistente Virtual Estratégica",
-    business: "Méndez Executive Ops",
-    email: "carolina@mendezops.com",
-    avatar: "CM",
-    dailyFocusScore: 92
+    name: "Hermione Granger",
+    role: "Prefecta Principal & Directora de Operaciones Mágicas",
+    business: "Hogwarts Ops & S.P.E.W. (P.E.D.D.O.)",
+    email: "hermione.granger@hogwarts.ac.uk",
+    avatar: "assets/avatar-cat.svg", // Gatito Crookshanks con gafas y bufanda Gryffindor
+    dailyFocusScore: 98
   },
   settings: {
     theme: "caramel", // caramel, rose, midnight, sage
     soundEnabled: true,
     zenMode: false,
     activeTab: "dashboard",
-    currency: "USD ($)",
+    currency: "Galeones (🪙 G)",
     pomodoroWorkTime: 25,
     pomodoroBreakTime: 5
   },
   tasks: [
     {
       id: "tsk-1",
-      title: "Revisar y auditar informe financiero Q3 para Cliente Alpha",
-      description: "Comparar proyecciones con gastos reales y preparar diapositivas de resumen ejecutivo.",
+      title: "Auditar inventario de ingredientes para Poción Multijugos con Severus Snape",
+      description: "Verificar pesaje de cuerno de bicornio en polvo, piel de serpiente arbórea africana y crisopos tras 21 días de cocción en las mazmorras.",
       startDate: "2026-10-08",
       dueDate: "2026-10-08",
       startTime: "09:00",
       endTime: "11:00",
       priority: "urgente", // baja, media, alta, urgente
       status: "en_proceso", // pendiente, en_proceso, completada, cancelada
-      category: "Finanzas & VA",
-      tags: ["Auditoría", "Cliente Alpha", "Q3"],
+      category: "Pociones & Alquimia",
+      tags: ["Snape", "Mazmorras", "Multijugos"],
       projectId: "prj-1",
-      clientId: "cli-1",
+      clientId: "cli-2",
       assigneeId: "mem-1",
       recurrent: null,
       subtasks: [
-        { id: "sub-1", title: "Descargar libro mayor de Stripe y QuickBooks", completed: true },
-        { id: "sub-2", title: "Conciliar discrepancia de $450 en software", completed: true },
-        { id: "sub-3", title: "Generar gráfico de margen neto en Excel", completed: false },
-        { id: "sub-4", title: "Redactar 3 puntos clave de optimización", completed: false }
+        { id: "sub-1", title: "Recolectar crisopos tras 21 días de maceración", completed: true },
+        { id: "sub-2", title: "Pesar 16 onzas de sanguijuelas y polvo de bicornio", completed: true },
+        { id: "sub-3", title: "Picar hojas de descurainia sophia en luna llena", completed: false },
+        { id: "sub-4", title: "Conseguir muestra de esencia para prueba piloto", completed: false }
       ]
     },
     {
       id: "tsk-2",
-      title: "Reunión de alineación semanal con equipo de desarrollo",
-      description: "Revisar estado de sprints, cuellos de botella y fechas de entrega para el lanzamiento.",
+      title: "Calibración del Giratiempo para asignaturas simultáneas (Aritmancia & Runas Antiguas)",
+      description: "Ajustar desfase de rotación a 3 vueltas hacia atrás y verificar salvoconducto firmado por la Subdirectora McGonagall.",
       startDate: "2026-10-08",
       dueDate: "2026-10-08",
       startTime: "11:30",
       endTime: "12:30",
       priority: "alta",
       status: "pendiente",
-      category: "Operaciones",
-      tags: ["Reunión", "Scrum", "Lanzamiento"],
+      category: "Académico & Giratiempo",
+      tags: ["Giratiempo", "McGonagall", "Turnos"],
       projectId: "prj-2",
       clientId: null,
       assigneeId: "mem-2",
       recurrent: "semanal",
       subtasks: [
-        { id: "sub-21", title: "Abrir tablero Jira y verificar pull requests", completed: false },
-        { id: "sub-22", title: "Definir responsables de QA para el viernes", completed: false }
+        { id: "sub-21", title: "Validar reloj de arena de oro con Profesora Vector", completed: false },
+        { id: "sub-22", title: "Coordinar aula de reserva para evitar paradojas temporales", completed: false }
       ]
     },
     {
       id: "tsk-3",
-      title: "Diseñar propuesta comercial de automatización con Make/Zapier",
-      description: "Propuesta para Dr. Salgado: flujo de captación de leads y recordatorio por WhatsApp.",
+      title: "Revisión de presupuesto y stock para Sortilegios Weasley (Carameleros Salta-Clases)",
+      description: "Revisar costos de producción de turrón de hemorragia y bombones desmayo; conciliar 1,250 Galeones transferidos desde Bóveda 93 en Gringotts.",
       startDate: "2026-10-08",
       dueDate: "2026-10-09",
       startTime: "15:00",
       endTime: "17:00",
       priority: "alta",
       status: "pendiente",
-      category: "Ventas & Clientes",
-      tags: ["Propuesta", "Automatización"],
+      category: "Comercio Mágico",
+      tags: ["Fred & George", "Callejón Diagon", "Gringotts"],
       projectId: "prj-3",
-      clientId: "cli-2",
+      clientId: "cli-1",
       assigneeId: "mem-1",
       recurrent: null,
       subtasks: [
-        { id: "sub-31", title: "Diagramar arquitectura del flujo", completed: true },
-        { id: "sub-32", title: "Calcular cotización horas de setup y mantenimiento", completed: false }
+        { id: "sub-31", title: "Auditar balance de ventas en Callejón Diagon 93", completed: true },
+        { id: "sub-32", title: "Proyectar margen de ganancia para nueva tienda en Hogsmeade", completed: false }
       ]
     },
     {
       id: "tsk-4",
-      title: "Renovar licencias de Notion & Google Workspace",
-      description: "Pago corporativo anual para aprovechar 20% de descuento.",
+      title: "Renovar suscripción anual a 'El Trasgo de las Finanzas' y 'El Profeta'",
+      description: "Pago corporativo con débito directo desde Bóveda Gringotts con 15% de descuento para prefectos.",
       startDate: "2026-10-08",
       dueDate: "2026-10-10",
       startTime: "14:00",
       endTime: "14:30",
       priority: "media",
       status: "pendiente",
-      category: "Administración",
-      tags: ["Suscripción", "Tarjetas"],
+      category: "Suscripciones Mágicas",
+      tags: ["Gringotts", "Lechuzas"],
       projectId: null,
       clientId: null,
       assigneeId: "mem-1",
@@ -109,84 +110,84 @@ const INITIAL_DATA = {
     },
     {
       id: "tsk-5",
-      title: "Enviar reporte semanal de entregables a Estudio Horizon",
-      description: "Consolidar horas de asistencia virtual trabajadas en ClickUp y enviar acta.",
+      title: "Enviar informe de derechos laborales de elfos domésticos (P.E.D.D.O.) al Ministerio",
+      description: "Consolidar testimonios de cocinas del Gran Comedor y lacrar con sello oficial de Gryffindor para envío urgente por lechuza real.",
       startDate: "2026-10-07",
       dueDate: "2026-10-08",
       startTime: "17:00",
       endTime: "18:00",
       priority: "alta",
       status: "completada",
-      category: "Asistente Virtual",
-      tags: ["Facturación", "Horizon"],
+      category: "Causas & P.E.D.D.O.",
+      tags: ["S.P.E.W.", "Dobby", "Ministerio"],
       projectId: "prj-1",
       clientId: "cli-3",
       assigneeId: "mem-1",
       recurrent: "semanal",
       subtasks: [
-        { id: "sub-51", title: "Extraer bitácora de horas de Harvest", completed: true },
-        { id: "sub-52", title: "Adjuntar PDF con recibo y enlaces de Drive", completed: true }
+        { id: "sub-51", title: "Tejer 12 gorros de lana para dejar en la sala común", completed: true },
+        { id: "sub-52", title: "Adjuntar carta de respaldo firmada por Albus Dumbledore", completed: true }
       ]
     }
   ],
   events: [
     {
       id: "evt-1",
-      title: "Auditoría Financiera Q3 - Cliente Alpha",
+      title: "Sesión de Aritmancia Predictiva con Profesora Vector",
       date: "2026-10-08",
       startTime: "09:00",
       endTime: "11:00",
       type: "compromiso",
-      location: "Google Meet",
-      attendees: "Andrés B. (CFO), Carolina M.",
+      location: "Torre Séptima (Aula 7B)",
+      attendees: "Profesora Septima Vector, Hermione Granger",
       color: "#9C523B",
       reminder: "15 min antes"
     },
     {
       id: "evt-2",
-      title: "Daily Standup & Sprints Equipo Tech",
+      title: "Ronda Nocturna de Prefectos en Pasillos de Hogwarts",
       date: "2026-10-08",
       startTime: "11:30",
       endTime: "12:30",
       type: "reunion",
-      location: "Zoom Sala 2",
-      attendees: "Equipo de desarrollo (5 pers.)",
+      location: "Gran Comedor y Pasillo del Tercer Piso",
+      attendees: "Hermione Granger, Ron Weasley (Prefectos Gryffindor)",
       color: "#3F6253",
       reminder: "10 min antes"
     },
     {
       id: "evt-3",
-      title: "Almuerzo & Pausa Desconexión",
+      title: "Almuerzo y Cerveza de Mantequilla en Las Tres Escobas",
       date: "2026-10-08",
       startTime: "13:30",
       endTime: "14:30",
       type: "personal",
-      location: "Terraza",
-      attendees: "Personal",
+      location: "Las Tres Escobas, Aldea de Hogsmeade",
+      attendees: "Harry Potter, Ron Weasley, Hermione Granger",
       color: "#7E6B5A",
       reminder: "Sin alerta"
     },
     {
       id: "evt-4",
-      title: "Demostración de CRM para Clínica Salgado",
+      title: "Reunión de balance de Sortilegios Weasley con Fred & George",
       date: "2026-10-09",
       startTime: "10:00",
       endTime: "11:15",
       type: "cita",
-      location: "Videollamada Teams",
-      attendees: "Dr. Marco Salgado",
+      location: "Espejo Comunicador / Callejón Diagon 93",
+      attendees: "Fred Weasley, George Weasley, Hermione G.",
       color: "#B27D32",
       reminder: "30 min antes"
     },
     {
       id: "evt-5",
-      title: "Sesión de Planificación Estratégica Semanal",
+      title: "Asamblea General de la Orden en el Despacho Principal",
       date: "2026-10-12",
       startTime: "08:30",
       endTime: "10:00",
       type: "compromiso",
-      location: "Oficina Privada",
-      attendees: "Equipo Directivo",
+      location: "Despacho del Director (Gárgola de Piedra)",
+      attendees: "Albus Dumbledore, Minerva McGonagall, Severus Snape",
       color: "#5B4B70",
       reminder: "1 hora antes"
     }
@@ -194,136 +195,136 @@ const INITIAL_DATA = {
   projects: [
     {
       id: "prj-1",
-      title: "Reestructuración Operativa & VA para Grupo Alpha",
-      description: "Implementación de sistema de gestión documental, automatización de facturación y soporte ejecutivo.",
-      clientId: "cli-1",
+      title: "Defensa del Castillo & Red de Encantamientos Protectores",
+      description: "Implementación del escudo Protego Horribilis, animación de estatuas de piedra y protocolo de evacuación de alumnos menores.",
+      clientId: "cli-2",
       managerId: "mem-1",
       startDate: "2026-09-15",
       deadline: "2026-11-15",
-      budget: 4500,
-      spent: 2850,
+      budget: 5000,
+      spent: 3200,
       status: "activo",
       progress: 68,
       deliverables: [
-        { id: "del-1", title: "Manual de Procedimientos Estándar (SOPs)", completed: true, dueDate: "2026-09-30" },
-        { id: "del-2", title: "Integración de pasarela y conciliación bancaria", completed: true, dueDate: "2026-10-15" },
-        { id: "del-3", title: "Capacitación a secretaría y recepcionistas", completed: false, dueDate: "2026-10-28" },
-        { id: "del-4", title: "Entrega de tablero de mando ejecutivo final", completed: false, dueDate: "2026-11-10" }
+        { id: "del-1", title: "Manual de Hechizos Protectores de Frontera", completed: true, dueDate: "2026-09-30" },
+        { id: "del-2", title: "Instalación de barrera Protego Maxima en el puente", completed: true, dueDate: "2026-10-15" },
+        { id: "del-3", title: "Entrenamiento de centinelas de piedra (Piertotum Locomotor)", completed: false, dueDate: "2026-10-28" },
+        { id: "del-4", title: "Distribución de Frascos de Felix Felicis a prefectos", completed: false, dueDate: "2026-11-10" }
       ]
     },
     {
       id: "prj-2",
-      title: "Lanzamiento Portal de Membresías Horizon",
-      description: "Desarrollo y lanzamiento de la plataforma de e-learning y comunidad privada.",
-      clientId: "cli-3",
-      managerId: "mem-2",
+      title: "Optimización del Cronograma y Aulas con Giratiempo",
+      description: "Planificación de 12 asignaturas simultáneas para alumnos avanzados sin colisiones de física espacio-temporal.",
+      clientId: "cli-2",
+      managerId: "mem-1",
       startDate: "2026-08-01",
       deadline: "2026-10-31",
-      budget: 6800,
-      spent: 5900,
+      budget: 2800,
+      spent: 1400,
       status: "activo",
-      progress: 85,
+      progress: 75,
       deliverables: [
-        { id: "del-21", title: "Diseño UX/UI responsive de la academia", completed: true, dueDate: "2026-08-20" },
-        { id: "del-22", title: "Grabación de 12 módulos de video introductorios", completed: true, dueDate: "2026-09-18" },
-        { id: "del-23", title: "Fase Beta con 50 usuarios VIP y retroalimentación", completed: true, dueDate: "2026-10-05" },
-        { id: "del-24", title: "Campaña de apertura pública e emails de bienvenida", completed: false, dueDate: "2026-10-25" }
+        { id: "del-21", title: "Matriz horaria de Aritmancia, Runas y Cuidado de Criaturas", completed: true, dueDate: "2026-08-20" },
+        { id: "del-22", title: "Permisos especiales sellados por el Departamento de Misterios", completed: true, dueDate: "2026-09-18" },
+        { id: "del-23", title: "Pruebas de desfase temporal de 3 horas en la Torre del Reloj", completed: true, dueDate: "2026-10-05" },
+        { id: "del-24", title: "Auditoría de integridad física del reloj de arena de oro", completed: false, dueDate: "2026-10-25" }
       ]
     },
     {
       id: "prj-3",
-      title: "Automatización Clínica & CRM Dr. Salgado",
-      description: "Captación de pacientes online, confirmación vía WhatsApp y sincronización con Google Calendar.",
-      clientId: "cli-2",
-      managerId: "mem-1",
+      title: "Expansión Comercial de Sortilegios Weasley a Hogsmeade",
+      description: "Apertura de la segunda sucursal de Fred & George: Carameleros Salta-Clases, Pociones de Amor y Orejas Extensibles.",
+      clientId: "cli-1",
+      managerId: "mem-3",
       startDate: "2026-10-01",
       deadline: "2026-11-05",
-      budget: 2400,
-      spent: 600,
+      budget: 7500,
+      spent: 6400,
       status: "activo",
-      progress: 25,
+      progress: 85,
       deliverables: [
-        { id: "del-31", title: "Configuración de webhook y base de datos Airtable", completed: true, dueDate: "2026-10-10" },
-        { id: "del-32", title: "Diseño de plantillas de mensaje y política de privacidad", completed: false, dueDate: "2026-10-20" },
-        { id: "del-33", title: "Pruebas de estrés y entrega final", completed: false, dueDate: "2026-11-02" }
+        { id: "del-31", title: "Alquiler del local adyacente a la tienda de chascos Zonko", completed: true, dueDate: "2026-10-10" },
+        { id: "del-32", title: "Patentes mágicas para fuegos artificiales 'Wildfire Whiz-bangs'", completed: true, dueDate: "2026-10-20" },
+        { id: "del-33", title: "Lanzamiento y campaña masiva con 50 lechuzas doradas", completed: false, dueDate: "2026-11-02" }
       ]
     }
   ],
   clients: [
     {
       id: "cli-1",
-      name: "Andrés Beller",
-      company: "Alpha Capital Partners",
-      email: "andres@alphacapital.io",
-      phone: "+34 611 982 344",
-      ratePerHour: 45,
-      services: "Asistencia Ejecutiva, Conciliación Financiera y Gestión de Agenda",
+      name: "Fred & George Weasley",
+      company: "Sortilegios Weasley (Weasleys' Wizard Wheezes)",
+      email: "twins@wizardwheezes.co.uk",
+      phone: "+44 20 7946 0993",
+      ratePerHour: 55,
+      services: "Dirección de Operaciones, Logística de Inventario y Contabilidad en Gringotts",
       status: "activo",
       hoursContracted: 40,
-      hoursUsed: 28.5,
-      instructions: "Priorizar respuestas antes de las 10:00 AM. Copiar siempre al CFO en temas de facturación.",
-      credentialsVaultLink: "https://1password.com/vault/alphapartner",
+      hoursUsed: 36.5,
+      instructions: "No permitir que Ron pruebe los productos en fase beta. Todas las facturas deben liquidarse en Galeones de oro puro.",
+      credentialsVaultLink: "https://gringotts.wizard/vault/weasleys93",
       requests: [
-        { id: "req-1", title: "Auditoría de suscripciones repetidas", status: "en_proceso", date: "2026-10-07" },
-        { id: "req-2", title: "Reservar vuelos a Madrid para convención", status: "completado", date: "2026-10-02" }
+        { id: "req-1", title: "Auditoría de pérdidas por bombones desmayo defectuosos", status: "en_proceso", date: "2026-10-07" },
+        { id: "req-2", title: "Envío urgente de 200 Sombreros Escudo al Ministerio", status: "completado", date: "2026-10-02" }
       ]
     },
     {
       id: "cli-2",
-      name: "Dr. Marco Salgado",
-      company: "Clínica Dental Salgado",
-      email: "dr.salgado@salgadodental.com",
-      phone: "+34 688 201 192",
-      ratePerHour: 40,
-      services: "Automatización de Citas, Gestión de Pacientes y Soporte Web",
+      name: "Profesora Minerva McGonagall",
+      company: "Colegio Hogwarts de Magia y Hechicería",
+      email: "minerva.mcgonagall@hogwarts.ac.uk",
+      phone: "+44 131 496 0110",
+      ratePerHour: 50,
+      services: "Coordinación de Prefectos, Gestión del Giratiempo y Protocolos de Seguridad",
       status: "activo",
-      hoursContracted: 25,
-      hoursUsed: 12.0,
-      instructions: "Los recordatorios deben enviarse exactamente 24 horas antes con confirmación Sí/No.",
-      credentialsVaultLink: "https://bitwarden.com/vault/salgadodental",
+      hoursContracted: 30,
+      hoursUsed: 18.0,
+      instructions: "Las consultas urgentes se atienden mediante patronus mensajero o en el despacho del segundo piso después del té.",
+      credentialsVaultLink: "https://hogwarts.ac.uk/archive/prefect-records",
       requests: [
-        { id: "req-21", title: "Conectar pasarela de pago para señas de citas", status: "pendiente", date: "2026-10-06" }
+        { id: "req-21", title: "Revisar lista de alumnos castigados para el Bosque Prohibido", status: "pendiente", date: "2026-10-06" }
       ]
     },
     {
       id: "cli-3",
-      name: "Valeria Montero",
-      company: "Estudio Creativo Horizon",
-      email: "valeria@horizonstudio.design",
-      phone: "+34 654 332 900",
-      ratePerHour: 50,
-      services: "Dirección de Operaciones VA, Seguimiento de Lanzamientos",
+      name: "Xenophilius Lovegood",
+      company: "El Quisquilloso (The Quibbler Publishing)",
+      email: "xeno@thequibbler.mag",
+      phone: "+44 1865 920 440",
+      ratePerHour: 35,
+      services: "Edición de Ensayos Mágicos, Corrección de Pruebas y Difusión de P.E.D.D.O.",
       status: "activo",
-      hoursContracted: 50,
-      hoursUsed: 44.0,
-      instructions: "Reuniones de aprobación los viernes por la mañana. Uso estricto de Slack para emergencias.",
-      credentialsVaultLink: "https://1password.com/vault/horizon",
+      hoursContracted: 20,
+      hoursUsed: 14.5,
+      instructions: "Asegurarse de incluir en cada edición una nota sobre los Nargles y los Snorkacks de cuerno arrugado.",
+      credentialsVaultLink: "https://quibbler.mag/vault/lovegood-press",
       requests: [
-        { id: "req-31", title: "Preparar correos para afiliados del lanzamiento", status: "en_proceso", date: "2026-10-08" }
+        { id: "req-31", title: "Publicar artículo a doble página sobre la liberación de elfos", status: "en_proceso", date: "2026-10-08" }
       ]
     }
   ],
   timeEntries: [
     {
       id: "tim-1",
-      clientId: "cli-1",
+      clientId: "cli-2",
       projectId: "prj-1",
-      description: "Conciliación de cuentas Stripe y depuración de recibos Q3",
+      description: "Auditoría de ingredientes de pociones y reactivos en mazmorras con Severus Snape",
       durationMinutes: 120,
       billable: true,
-      rate: 45,
+      rate: 50,
       date: "2026-10-08",
       startTime: "09:00",
       endTime: "11:00"
     },
     {
       id: "tim-2",
-      clientId: "cli-3",
-      projectId: "prj-2",
-      description: "Revisión de accesos de prueba a la membresía VIP",
+      clientId: "cli-1",
+      projectId: "prj-3",
+      description: "Supervisión de prototipo de Turrón de Hemorragia en Callejón Diagon",
       durationMinutes: 45,
       billable: true,
-      rate: 50,
+      rate: 55,
       date: "2026-10-07",
       startTime: "16:00",
       endTime: "16:45"
@@ -332,7 +333,7 @@ const INITIAL_DATA = {
       id: "tim-3",
       clientId: null,
       projectId: null,
-      description: "Optimización de base de datos interna y actualización de plantillas de agenda",
+      description: "Catalogación de pergaminos antiguos en la Sección Prohibida de la Biblioteca",
       durationMinutes: 60,
       billable: false,
       rate: 0,
@@ -344,214 +345,324 @@ const INITIAL_DATA = {
   team: [
     {
       id: "mem-1",
-      name: "Carolina Méndez",
-      role: "Lead Executive VA & Project Director",
-      department: "Dirección & Estrategia",
-      email: "carolina@mendezops.com",
-      shift: "Jornada Completa",
+      name: "Hermione Granger",
+      role: "Lead Ops & Prefecta Principal Gryffindor",
+      department: "Dirección Estratégica & Prefectura",
+      email: "hermione.granger@hogwarts.ac.uk",
+      shift: "Jornada Completa & Nocturna",
       attendance: "Presente",
       tasksAssigned: 4,
       avatarColor: "#9C523B"
     },
     {
       id: "mem-2",
-      name: "Carlos Velasco",
-      role: "Especialista en Automatizaciones y CRM",
-      department: "Tecnología & Integraciones",
-      email: "carlos@mendezops.com",
-      shift: "Mañana (08:00 - 15:00)",
-      attendance: "Remoto Activo",
+      name: "Harry Potter",
+      role: "Especialista en Defensa & Enlace Táctico",
+      department: "Defensa Contra las Artes Oscuras",
+      email: "harry.potter@hogwarts.ac.uk",
+      shift: "Guardia Matutina (08:00 - 15:00)",
+      attendance: "En Terreno",
       tasksAssigned: 3,
       avatarColor: "#3F6253"
     },
     {
       id: "mem-3",
-      name: "Sofía Navarro",
-      role: "Diseñadora Gráfica & Community Lead",
-      department: "Contenidos & Creatividad",
-      email: "sofia@mendezops.com",
+      name: "Ron Weasley",
+      role: "Coordinador de Logística & Quidditch",
+      department: "Operaciones & Enlace Sortilegios Weasley",
+      email: "ron.weasley@hogwarts.ac.uk",
       shift: "Media Jornada (14:00 - 19:00)",
       attendance: "Presente",
       tasksAssigned: 2,
       avatarColor: "#B27D32"
+    },
+    {
+      id: "mem-4",
+      name: "Luna Lovegood",
+      role: "Investigadora de Enigmas & Pensamiento Lateral",
+      department: "Investigación & Criaturas Mágicas",
+      email: "luna.lovegood@hogwarts.ac.uk",
+      shift: "Horario Flexible",
+      attendance: "Presente",
+      tasksAssigned: 2,
+      avatarColor: "#5B4B70"
     }
   ],
   contacts: [
     {
       id: "con-1",
-      name: "Andrés Beller",
-      email: "andres@alphacapital.io",
-      phone: "+34 611 982 344",
-      company: "Alpha Capital Partners",
-      role: "Managing Director",
-      type: "cliente",
-      lastInteraction: "2026-10-08 (Auditoría Q3)",
-      nextFollowUp: "2026-10-15 (Presentación Final)",
-      notes: "Le gusta recibir resúmenes breves en viñetas de 3 puntos clave."
+      name: "Profesor Albus Dumbledore",
+      email: "dumbledore@hogwarts.ac.uk",
+      phone: "+44 131 496 0001",
+      company: "Colegio Hogwarts de Magia y Hechicería",
+      role: "Director Supremo de Hogwarts",
+      type: "aliado",
+      lastInteraction: "2026-10-08 (Consejo Extraordinario)",
+      nextFollowUp: "2026-10-15 (Revisión de Hechizos Protectores)",
+      notes: "Le gusta que las reuniones comiencen con sorbete de limón."
     },
     {
       id: "con-2",
-      name: "Dr. Marco Salgado",
-      email: "dr.salgado@salgadodental.com",
-      phone: "+34 688 201 192",
-      company: "Clínica Dental Salgado",
-      role: "Director Médico",
-      type: "cliente",
-      lastInteraction: "2026-10-05 (Revisión técnica)",
-      nextFollowUp: "2026-10-09 (Demostración de CRM)",
-      notes: "Atiende llamadas prioritarias solo entre 14:00 y 15:30."
+      name: "Profesor Severus Snape",
+      email: "severus.snape@hogwarts.ac.uk",
+      phone: "+44 131 496 0002",
+      company: "Colegio Hogwarts (Mazmorras)",
+      role: "Jefe de Slytherin & Maestro de Pociones",
+      type: "profesor",
+      lastInteraction: "2026-10-08 (Auditoría Multijugos)",
+      nextFollowUp: "2026-10-10 (Inspección de Calderos)",
+      notes: "Exige puntualidad matemática y cero desperdicio de bezoares."
     },
     {
       id: "con-3",
-      name: "Lucía Paredes",
-      email: "lucia@legalpro.es",
-      phone: "+34 622 119 090",
-      company: "Paredes & Asociados Legal",
-      role: "Abogada Corporativa / Asesoría",
+      name: "Fred & George Weasley",
+      email: "twins@wizardwheezes.co.uk",
+      phone: "+44 20 7946 0993",
+      company: "Sortilegios Weasley",
+      role: "Directores Creativos & Fundadores",
+      type: "cliente",
+      lastInteraction: "2026-10-07 (Revisión de Ventas)",
+      nextFollowUp: "2026-10-09 (Plan de Sucursal Hogsmeade)",
+      notes: "Socios estratégicos. Comunicar cualquier alerta de costo con humor pero firmeza."
+    },
+    {
+      id: "con-4",
+      name: "Madame Rosmerta",
+      email: "rosmerta@threebroomsticks.pub",
+      phone: "+44 131 496 0888",
+      company: "Las Tres Escobas (Hogsmeade)",
+      role: "Propietaria & Anfitriona",
       type: "proveedor",
-      lastInteraction: "2026-09-28 (Revisión de contratos NDA)",
-      nextFollowUp: "2026-10-30 (Renovación de póliza)",
-      notes: "Contacto para acuerdos confidenciales y contratos de servicios de VA."
+      lastInteraction: "2026-10-05 (Reserva de Mesa VIP)",
+      nextFollowUp: "2026-10-20 (Recepción de Prefectos)",
+      notes: "Excelente proveedora de cerveza de mantequilla e hidromiel especiada."
+    },
+    {
+      id: "con-5",
+      name: "Garrick Ollivander",
+      email: "ollivander@wandsmaker.co.uk",
+      phone: "+44 20 7946 0144",
+      company: "Ollivanders: Fabricantes de Varitas desde 382 a.C.",
+      role: "Maestro Varitólogo",
+      type: "proveedor",
+      lastInteraction: "2026-09-22 (Revisión de Núcleos de Fénix)",
+      nextFollowUp: "2026-11-01 (Mantenimiento de Varita)",
+      notes: "Consultor para análisis de flujos de magia y propiedades de madera de vid."
     }
   ],
   finance: {
-    monthlyBudget: 6000,
+    monthlyBudget: 8500, // Galeones
     transactions: [
-      { id: "trx-1", type: "ingreso", description: "Anticipo 50% Proyecto Reestructuración Alpha", amount: 2250, category: "Servicios VA", date: "2026-10-02", client: "Alpha Capital", status: "cobrado" },
-      { id: "trx-2", type: "ingreso", description: "Retainer Mensual VA Septiembre/Octubre - Horizon", amount: 2500, category: "Retainer", date: "2026-10-05", client: "Estudio Horizon", status: "cobrado" },
-      { id: "trx-3", type: "gasto", description: "Suscripción anual Make.com Enterprise", amount: 340, category: "Software & Herramientas", date: "2026-10-03", client: "Operaciones", status: "pagado" },
-      { id: "trx-4", type: "gasto", description: "Google Workspace & Storage 2TB", amount: 72, category: "Software", date: "2026-10-06", client: "Operaciones", status: "pagado" },
-      { id: "trx-5", type: "ingreso", description: "Factura setup automatización citas Dr. Salgado", amount: 1200, category: "Automatizaciones", date: "2026-10-08", client: "Clínica Salgado", status: "pendiente" },
-      { id: "trx-6", type: "gasto", description: "Honorarios Asistente Especialista Carlos V.", amount: 850, category: "Equipo & Nómina", date: "2026-10-05", client: "Equipo", status: "pagado" }
+      { id: "trx-1", type: "ingreso", description: "Anticipo 50% Expansión Sortilegios Weasley a Hogsmeade", amount: 3750, category: "Consultoría Estratégica", date: "2026-10-02", client: "Sortilegios Weasley", status: "cobrado" },
+      { id: "trx-2", type: "ingreso", description: "Retainer Mensual Gestión Operativa Hogwarts (McGonagall)", amount: 2500, category: "Servicios Prefectura", date: "2026-10-05", client: "Colegio Hogwarts", status: "cobrado" },
+      { id: "trx-3", type: "gasto", description: "Compra de Caldero de Oro N° 2 y 25 pergaminos de vitela", amount: 340, category: "Materiales & Pociones", date: "2026-10-03", client: "Operaciones", status: "pagado" },
+      { id: "trx-4", type: "gasto", description: "Suscripción anual Revista 'El Trasgo de las Finanzas'", amount: 72, category: "Suscripciones Mágicas", date: "2026-10-06", client: "Operaciones", status: "pagado" },
+      { id: "trx-5", type: "ingreso", description: "Honorarios Asesoría salvoconducto Giratiempo Ministerio", amount: 1200, category: "Gestión Ministerial", date: "2026-10-08", client: "Ministerio de Magia", status: "pendiente" },
+      { id: "trx-6", type: "gasto", description: "Honorarios de Logística e Inspección Ron Weasley", amount: 850, category: "Equipo Mágico", date: "2026-10-05", client: "Equipo", status: "pagado" }
     ],
     subscriptions: [
-      { id: "sub-1", name: "Make.com Pro", amount: 29, cycle: "mensual", nextRenewal: "2026-11-03", category: "Automatización", active: true },
-      { id: "sub-2", name: "1Password Business", amount: 19.99, cycle: "mensual", nextRenewal: "2026-10-22", category: "Seguridad", active: true },
-      { id: "sub-3", name: "Notion Plus & AI", amount: 20, cycle: "mensual", nextRenewal: "2026-10-18", category: "Productividad", active: true },
-      { id: "sub-4", name: "Zoom One Pro", amount: 15.99, cycle: "mensual", nextRenewal: "2026-10-25", category: "Comunicaciones", active: true }
+      { id: "sub-1", name: "Bóveda Blindada Gringotts Nivel 7", amount: 45, cycle: "mensual", nextRenewal: "2026-11-03", category: "Seguridad & Finanzas", active: true },
+      { id: "sub-2", name: "Servicio Express Lechuzas Mensajeras Rápidas", amount: 25, cycle: "mensual", nextRenewal: "2026-10-22", category: "Comunicaciones", active: true },
+      { id: "sub-3", name: "Acceso Hemeroteca Archivo Secreto Alejandría", amount: 35, cycle: "mensual", nextRenewal: "2026-10-18", category: "Investigación", active: true },
+      { id: "sub-4", name: "Red Flu Corporativa Privada (Hogwarts - Londres)", amount: 20, cycle: "mensual", nextRenewal: "2026-10-25", category: "Transporte Mágico", active: true }
     ],
     budgetCategories: [
-      { category: "Software & Herramientas", allocated: 500, spent: 412 },
-      { category: "Equipo & Nómina", allocated: 1500, spent: 850 },
-      { category: "Marketing & Marca", allocated: 600, spent: 120 },
-      { category: "Oficina & Varios", allocated: 300, spent: 85 }
+      { category: "Materiales & Pociones", allocated: 1200, spent: 980 },
+      { category: "Equipo Mágico & Nómina", allocated: 3500, spent: 2600 },
+      { category: "Pergaminos & Burocracia", allocated: 800, spent: 340 },
+      { category: "Logística, Lechuzas & Red Flu", allocated: 600, spent: 280 }
     ]
   },
   notes: [
     {
       id: "not-1",
-      title: "Minuta: Reunión de Diagnóstico con Dr. Salgado",
+      title: "Minuta: Reunión Estratégica del Ejército de Dumbledore en la Sala de los Menesteres",
       type: "minuta",
       category: "Reuniones",
       updatedAt: "2026-10-05",
       pinned: true,
-      tags: ["Dr. Salgado", "Acuerdos", "CRM"],
-      content: `### Objetivos Acordados:
-1. Eliminar el absentismo de citas médicas que actualmente ronda el 22%.
-2. Implementar recordatorio automatizado por WhatsApp con 24h y 2h de antelación.
-3. Se integrará Google Calendar de los 3 odontólogos para evitar solapamientos.
+      tags: ["Dumbledore", "Defensa", "Encantamientos"],
+      content: `### Acuerdos de la Sesión:
+1. Coordinar sesiones semanales de Encantamiento Patronus incorpóreo para todos los miembros.
+2. Harry liderará las prácticas de Desarme (Expelliarmus) y Aturdimiento (Stupefy).
+3. Hermione preparará Galeones falsos encantados con Hechizo Proteico para comunicar horarios discretamente.
 
-### Compromisos y Próximos Pasos:
-* [x] Carolina envía propuesta y contrato de confidencialidad (NDA).
-* [ ] Dr. Salgado facilita acceso a la cuenta Business de Meta antes del viernes.
-* [ ] Fecha estimada de entrega piloto: 20 de Octubre de 2026.`
+### Tareas Asignadas y Próximos Pasos:
+* [x] Hermione graba la fecha de la próxima reunión en los bordes de los galeones.
+* [ ] Ron inspecciona el pasadizo detrás del retrato de Arianna Dumbledore.
+* [ ] Siguiente práctica: Martes a las 20:00 al sonar la campana de la torre.`
     },
     {
       id: "not-2",
-      title: "Plantilla: Brief de Inicio de Cliente Nuevo (VA)",
+      title: "Plantilla: Formulación y Control de Pociones Complejas de Alta Precisión",
       type: "plantilla",
       category: "Plantillas",
       updatedAt: "2026-10-01",
       pinned: true,
-      tags: ["Onboarding", "Plantilla", "SOP"],
-      content: `### Ficha de Cliente Nuevo:
-* **Nombre de la Empresa:** [Completar]
-* **Contacto Principal:** [Nombre y Cargo]
-* **Canal oficial de comunicación:** [Slack / WhatsApp / Email]
-* **Horario de disponibilidad:** [ej: 09:00 a 18:00 CET]
+      tags: ["Pociones", "Snape", "Protocolo"],
+      content: `### Protocolo de Elaboración Alquímica:
+* **Nombre de la Poción:** [Completar]
+* **Clasificación de Dificultad:** [T.I.M.O. / É.X.T.A.S.I.S. / Maestre]
+* **Tiempo Total de Ebullición:** [Horas / Días / Fases Lunares]
+* **Color y Textura Esperada:** [ej: Nácar brillante con vapor en espirales]
 
-### Requisitos Técnicos y Accesos:
-* [ ] Bóveda compartida en 1Password creada.
-* [ ] Accesos verificados: Correo delegado, Calendario, Drive.
-* [ ] Definición de tareas recurrentes de la semana 1.`
+### Control de Insumos Críticos:
+* [ ] Verificación de pureza en balanza de latón.
+* [ ] Temperatura del caldero ajustada con fuego azul hermético.
+* [ ] Enfriamiento gradual y embotellado en frascos de cristal sellados.`
     },
     {
       id: "not-3",
-      title: "Ideas Rápidas de Optimización Semanal",
+      title: "Ideas Rápidas de Hermione: Giratiempo, Biblioteca y Crookshanks",
       type: "rapida",
       category: "Estrategia",
       updatedAt: "2026-10-08",
       pinned: false,
-      tags: ["Ideas", "Deep Work"],
-      content: `- Bloquear las mañanas de 8:00 a 11:00 para Deep Work (cero reuniones, cero notificaciones).
-- Centralizar todas las solicitudes de clientes en el formulario unificado de Notes.
-- Delegar a Carlos la revisión técnica previa a las demos con clientes.`
+      tags: ["Ideas", "Giratiempo", "Crookshanks"],
+      content: `- Reservar las primeras horas del amanecer (06:00 - 08:30) para estudio intensivo en la Torre de Gryffindor.
+- Verificar que Crookshanks tenga siempre su cuenco con agua fresca y aperitivos antes de salir a la ronda nocturna.
+- Pedir a Madam Pince el permiso especial para consultar 'Moste Potente Potions' en la Sección Prohibida.`
     }
   ],
   personal: {
     habits: [
-      { id: "hab-1", name: "Hidratación (2.5 Litros)", icon: "💧", streak: 14, days: { "2026-10-04": true, "2026-10-05": true, "2026-10-06": true, "2026-10-07": true, "2026-10-08": true } },
-      { id: "hab-2", name: "Deep Work (2 bloques de 90m)", icon: "🎯", streak: 8, days: { "2026-10-05": true, "2026-10-06": true, "2026-10-07": true, "2026-10-08": true } },
-      { id: "hab-3", name: "Lectura Profesional (20 min)", icon: "📖", streak: 5, days: { "2026-10-06": true, "2026-10-07": true, "2026-10-08": false } },
-      { id: "hab-4", name: "Ejercicio / Caminata 8k pasos", icon: "🏃‍♀️", streak: 11, days: { "2026-10-04": true, "2026-10-05": true, "2026-10-06": true, "2026-10-07": true, "2026-10-08": true } },
-      { id: "hab-5", name: "Cero Pantallas después de 22:00", icon: "🌙", streak: 4, days: { "2026-10-06": true, "2026-10-07": true, "2026-10-08": false } }
+      { id: "hab-1", name: "Lectura de 'Historia de la Magia' (30 min)", icon: "📖", streak: 19, days: { "2026-10-04": true, "2026-10-05": true, "2026-10-06": true, "2026-10-07": true, "2026-10-08": true } },
+      { id: "hab-2", name: "Práctica de Encantamiento Patronus (Nutria)", icon: "✨", streak: 12, days: { "2026-10-05": true, "2026-10-06": true, "2026-10-07": true, "2026-10-08": true } },
+      { id: "hab-3", name: "Paseo por el Lago Negro (evitar calamar)", icon: "🌊", streak: 8, days: { "2026-10-06": true, "2026-10-07": true, "2026-10-08": false } },
+      { id: "hab-4", name: "Cepillar y cuidar a Crookshanks", icon: "🐱", streak: 21, days: { "2026-10-04": true, "2026-10-05": true, "2026-10-06": true, "2026-10-07": true, "2026-10-08": true } },
+      { id: "hab-5", name: "Cero pergaminos después de las 22:30", icon: "🌙", streak: 6, days: { "2026-10-06": true, "2026-10-07": true, "2026-10-08": false } }
     ],
     routines: [
-      { id: "rou-1", title: "Rutina Matutina de Enfoque", period: "manana", time: "06:45", completed: true, items: ["Vaso de agua con limón", "10 min de movilidad o yoga", "Revisión de las 3 prioridades en la agenda", "Café sin teléfono móvil"] },
-      { id: "rou-2", title: "Cierre de Jornada Laboral", period: "tarde", time: "18:00", completed: false, items: ["Bandeja de entrada a cero (Inbox Zero)", "Revisar tareas pendientes y reasignar a mañana", "Apagar notificaciones de trabajo y laptop"] },
-      { id: "rou-3", title: "Ritual Nocturno de Descanso", period: "noche", time: "22:00", completed: false, items: ["Agradecimiento del día en la libreta", "Preparar ropa y agua del día siguiente", "Modo avión en el teléfono"] }
+      { id: "rou-1", title: "Ritual Matutino en la Torre de Gryffindor", period: "manana", time: "06:30", completed: true, items: ["Vaso de agua de manantial y té con Madam Pomfrey", "Revisión del horario de 12 clases simultáneas", "Calibración preventiva del Giratiempo", "Caricias matutinas a Crookshanks"] },
+      { id: "rou-2", title: "Estudio Silencioso en la Biblioteca", period: "tarde", time: "17:00", completed: false, items: ["Entrega de pergaminos caligrafiados a Profesora McGonagall", "Comprobar avances en la campaña P.E.D.D.O.", "Limpiar plumas de fénix y ordenar tinteros"] },
+      { id: "rou-3", title: "Toque de Queda & Ronda de Prefectos", period: "noche", time: "21:45", completed: false, items: ["Patrullaje del tercer piso y pasillo de la biblioteca con Ron", "Verificar que ningún alumno esté fuera de la sala común", "Revisar encantamiento de la Señora Gorda antes de dormir"] }
     ],
     goals: [
-      { id: "gol-1", title: "Certificación de Gestión de Operaciones & PM", category: "Carrera", progress: 75, targetDate: "Diciembre 2026" },
-      { id: "gol-2", title: "Fondo de Emergencia Negocio 6 meses", category: "Finanzas", progress: 90, targetDate: "Noviembre 2026" },
-      { id: "gol-3", title: "Completar Media Maratón de Valencia", category: "Salud", progress: 60, targetDate: "Octubre 2026" },
-      { id: "gol-4", title: "Viaje de desconexión 10 días a Japón", category: "Vida Personal", progress: 40, targetDate: "Marzo 2027" }
+      { id: "gol-1", title: "Obtener 12 T.I.M.O.s con calificación de Extraordinario", category: "Académico", progress: 92, targetDate: "Junio 2027" },
+      { id: "gol-2", title: "Aprobación de la Carta de Derechos para Elfos Domésticos (P.E.D.D.O.)", category: "Causas Sociales", progress: 65, targetDate: "Diciembre 2026" },
+      { id: "gol-3", title: "Dominar Hechizos Protectores Avanzados sin Varita", category: "Magia Avanzada", progress: 80, targetDate: "Noviembre 2026" },
+      { id: "gol-4", title: "Construir Archivo Secreto en la Sala de los Menesteres", category: "Investigación", progress: 45, targetDate: "Marzo 2027" }
     ],
     shoppingList: [
-      { id: "shp-1", item: "Soporte ergonómico para laptop de aluminio", category: "Oficina", bought: false },
-      { id: "shp-2", item: "Café de especialidad en grano (Etiopía)", category: "Hogar", bought: true },
-      { id: "shp-3", item: "Cuaderno punteado recambio Notes", category: "Papelería", bought: true },
-      { id: "shp-4", item: "Cable Thunderbolt 4 trenzado 2m", category: "Tecnología", bought: false }
+      { id: "shp-1", item: "Caldero de latón N° 2 para pociones avanzadas", category: "Mazmorras", bought: false },
+      { id: "shp-2", item: "Frasco de lágrimas de fénix purificadas", category: "Alquimia", bought: true },
+      { id: "shp-3", item: "Plumas de águila con punta de diamante", category: "Papelería Mágica", bought: true },
+      { id: "shp-4", item: "Snacks mágicos crujientes de atún para Crookshanks", category: "Mascota", bought: false }
     ]
   },
+  // REGLAS AVANZADAS CON CONTROL TOTAL DE HORARIOS, PREDICCIONES DE TIEMPO Y COSTOS
   automations: [
     {
       id: "aut-1",
-      name: "Alertar Tareas Urgentes del Día",
-      trigger: "Cuando falten menos de 3 horas para la fecha límite",
-      action: "Resaltar en rojo y emitir notificación sonora",
+      name: "Predicción de Retraso Crítico en Elaboración de Pociones",
+      category: "tiempos",
+      riskLevel: "critico",
+      scheduleType: "cada_hora",
+      scheduleLabel: "🔄 Cada Hora Continuamente",
+      timeLeadHours: 6,
+      timeRiskCondition: "subtasks_pending",
+      costThresholdPct: 85,
+      costScope: "both",
+      trigger: "Faltan < 6h para entrega y quedan ingredientes/subtareas pendientes",
+      action: "Marcar tarea en rojo, emitir alerta sonora y calcular horas de holgura",
+      notificationTone: "alerta",
       enabled: true,
-      lastRun: "Hoy a las 08:00"
+      lastRun: "Hoy a las 09:30"
     },
     {
       id: "aut-2",
-      name: "Generar Tarea de Revisión Semanal",
-      trigger: "Cada viernes a las 16:00",
-      action: "Crear tarea 'Auditoría de entregables y balance de horas'",
+      name: "Control Preventivo de Sobrecosto en Sortilegios Weasley",
+      category: "costos",
+      riskLevel: "critico",
+      scheduleType: "tiempo_real",
+      scheduleLabel: "⚡ Tiempo Real al Modificar",
+      timeLeadHours: 24,
+      timeRiskCondition: "deadline",
+      costThresholdPct: 85,
+      costScope: "both",
+      trigger: "Gasto de proyecto o consumo de horas del cliente supera el 85%",
+      action: "Calcular desvío proyectado en Galeones y registrar advertencia preventiva",
+      notificationTone: "chime",
       enabled: true,
-      lastRun: "Viernes pasado"
+      lastRun: "Hace 15m"
     },
     {
       id: "aut-3",
-      name: "Detección Automática de Solapamiento de Horarios",
-      trigger: "Al registrar o modificar un evento en la agenda",
-      action: "Verificar cruce de horas y mostrar aviso de conflicto",
+      name: "Detección de Conflicto Horario y Salto de Giratiempo",
+      category: "eventos",
+      riskLevel: "advertencia",
+      scheduleType: "tiempo_real",
+      scheduleLabel: "⚡ Tiempo Real al Agendar",
+      timeLeadHours: 2,
+      timeRiskCondition: "always",
+      costThresholdPct: 80,
+      costScope: "both",
+      trigger: "Solapamiento de dos compromisos simultáneos sin salvoconducto",
+      action: "Mostrar ventana de alerta de conflicto temporal y exigir confirmación",
+      notificationTone: "alerta",
       enabled: true,
-      lastRun: "Activo en vivo"
+      lastRun: "En vivo"
     },
     {
       id: "aut-4",
-      name: "Recordatorio de Hábitos Nocturnos",
-      trigger: "Diariamente a las 21:30",
-      action: "Enviar alerta push de desconexión digital",
+      name: "Alerta Predictiva de Agotamiento de Bóveda Gringotts",
+      category: "costos",
+      riskLevel: "advertencia",
+      scheduleType: "semanal_lunes",
+      scheduleLabel: "📅 Semanal (Lunes 09:00 AM)",
+      timeLeadHours: 48,
+      timeRiskCondition: "deadline",
+      costThresholdPct: 90,
+      costScope: "projects",
+      trigger: "Presupuesto mensual ejecutado excede el 90% antes de fin de mes",
+      action: "Congelar compras extraordinarias y emitir pergamino de auditoría",
+      notificationTone: "chime",
       enabled: true,
-      lastRun: "Ayer 21:30"
+      lastRun: "Lunes pasado"
+    },
+    {
+      id: "aut-5",
+      name: "Recordatorio Mágico de Ronda Nocturna de Prefectos",
+      category: "general",
+      riskLevel: "info",
+      scheduleType: "diario_18",
+      scheduleLabel: "🌇 Diario Vespertino (18:00 PM)",
+      timeLeadHours: 4,
+      timeRiskCondition: "always",
+      costThresholdPct: 70,
+      costScope: "both",
+      trigger: "Diariamente al caer la tarde en el Gran Comedor",
+      action: "Notificación de alistamiento de linterna, varita y mapa de Hogwarts",
+      notificationTone: "click",
+      enabled: true,
+      lastRun: "Ayer 18:00"
     }
   ],
   notifications: [
-    { id: "notif-1", title: "Auditoría Financiera Q3", message: "En curso ahora con Andrés Beller (09:00 - 11:00)", time: "Hace 15m", type: "alerta", read: false },
-    { id: "notif-2", title: "Cobro Acreditado", message: "Recibido pago de $2,500 de Estudio Horizon", time: "Hace 2h", type: "sistema", read: false },
-    { id: "notif-3", title: "Conflicto evitado", message: "La cita de las 11:30 no solapa con compromisos previos", time: "Ayer", type: "recordatorio", read: true }
+    {
+      id: "notif-1",
+      title: "Predicción de Retraso de Poción",
+      message: "La preparación de Poción Multijugos vence hoy a las 11:00 y tiene 2 subtareas pendientes (holgura restante: 1.5h).",
+      time: "Hace 10m",
+      type: "alerta",
+      read: false
+    },
+    {
+      id: "notif-2",
+      title: "Alerta Presupuestaria Sortilegios Weasley",
+      message: "Sortilegios Weasley ha consumido 6,400 G de 7,500 G (85.3%). Desvío proyectado: +320 Galeones.",
+      time: "Hace 45m",
+      type: "sistema",
+      read: false
+    },
+    {
+      id: "notif-3",
+      title: "Giratiempo Sincronizado",
+      message: "Clases simultáneas de Aritmancia y Runas Antiguas calibradas sin paradojas temporales.",
+      time: "Ayer",
+      type: "recordatorio",
+      read: true
+    }
   ]
 };
 
@@ -565,10 +676,14 @@ class Store {
     try {
       const stored = localStorage.getItem(STORAGE_KEY);
       if (stored) {
-        return JSON.parse(stored);
+        const parsed = JSON.parse(stored);
+        // Verificar que contenga los datos temáticos actualizados
+        if (parsed && parsed.profile && parsed.profile.name === "Hermione Granger") {
+          return parsed;
+        }
       }
     } catch (e) {
-      console.warn("Error leyendo localStorage, usando datos iniciales", e);
+      console.warn("Error leyendo localStorage, cargando datos iniciales de Hogwarts", e);
     }
     this.saveData(INITIAL_DATA);
     return JSON.parse(JSON.stringify(INITIAL_DATA));
@@ -665,12 +780,10 @@ class Store {
     this.saveData();
   }
 
-  // Verificación de conflicto de horario en eventos
   checkScheduleConflict(date, startTime, endTime, excludeEventId = null) {
     return this.data.events.filter(e => {
       if (e.id === excludeEventId) return false;
       if (e.date !== date) return false;
-      // Comprobar solape de tiempos
       const eStart = e.startTime;
       const eEnd = e.endTime;
       return (startTime < eEnd && endTime > eStart);
@@ -708,7 +821,6 @@ class Store {
   addTimeEntry(entry) {
     if (!entry.id) entry.id = 'tim-' + Date.now();
     this.data.timeEntries.unshift(entry);
-    // Si tiene cliente, sumamos horas
     if (entry.clientId) {
       const client = this.data.clients.find(c => c.id === entry.clientId);
       if (client) {
@@ -751,13 +863,12 @@ class Store {
     this.saveData();
   }
 
-  // Operaciones Personales (Hábitos, Rutinas, Compras)
+  // Operaciones Personales
   toggleHabit(habitId, dateStr) {
     const habit = this.data.personal.habits.find(h => h.id === habitId);
     if (habit) {
       if (!habit.days) habit.days = {};
       habit.days[dateStr] = !habit.days[dateStr];
-      // recalcular racha aproximada
       let streak = 0;
       const sortedKeys = Object.keys(habit.days).sort().reverse();
       for (const k of sortedKeys) {
@@ -791,6 +902,171 @@ class Store {
     this.saveData();
   }
 
+  // OPERACIONES Y MOTOR PREDICTIVO DE AUTOMATIZACIONES
+  addAutomationRule(rule) {
+    if (!rule.id) rule.id = 'aut-' + Date.now();
+    if (!rule.lastRun) rule.lastRun = 'Recién creada';
+    if (!this.data.automations) this.data.automations = [];
+    this.data.automations.unshift(rule);
+    this.saveData();
+    return rule;
+  }
+
+  updateAutomationRule(id, updates) {
+    const idx = (this.data.automations || []).findIndex(r => r.id === id);
+    if (idx !== -1) {
+      this.data.automations[idx] = { ...this.data.automations[idx], ...updates };
+      this.saveData();
+      return this.data.automations[idx];
+    }
+    return null;
+  }
+
+  deleteAutomationRule(id) {
+    this.data.automations = (this.data.automations || []).filter(r => r.id !== id);
+    this.saveData();
+  }
+
+  toggleAutomationRule(id) {
+    const rule = (this.data.automations || []).find(r => r.id === id);
+    if (rule) {
+      rule.enabled = !rule.enabled;
+      this.saveData();
+      return rule;
+    }
+    return null;
+  }
+
+  // MOTOR DE DIAGNÓSTICO Y PREDICCIÓN EN TIEMPO REAL (TIEMPOS & COSTOS)
+  runPredictionsDiagnostic() {
+    const tasks = this.data.tasks || [];
+    const projects = this.data.projects || [];
+    const clients = this.data.clients || [];
+    const automations = this.data.automations || [];
+
+    const timeRisks = [];
+    const costRisks = [];
+    const now = new Date();
+
+    // 1. Diagnóstico Predictivo de Tiempos & Holguras
+    tasks.forEach(task => {
+      if (task.status === 'completada' || task.status === 'cancelada') return;
+
+      const subtasks = task.subtasks || [];
+      const completedSub = subtasks.filter(s => s.completed).length;
+      const subtaskPct = subtasks.length > 0 ? Math.round((completedSub / subtasks.length) * 100) : 0;
+
+      // Calcular holgura horaria estimada
+      let hoursRemaining = 8; // fallback
+      if (task.dueDate) {
+        const dueDateTime = new Date(`${task.dueDate}T${task.endTime || '18:00'}`);
+        const diffMs = dueDateTime.getTime() - now.getTime();
+        hoursRemaining = Math.max(0, Math.round(diffMs / (1000 * 60 * 60) * 10) / 10);
+      }
+
+      // Evaluar contra reglas activas de tiempos
+      const activeTimeRules = automations.filter(r => r.enabled && (r.category === 'tiempos' || r.category === 'general'));
+      const minThreshold = activeTimeRules.length > 0 ? Math.min(...activeTimeRules.map(r => r.timeLeadHours || 6)) : 6;
+
+      let riskLevel = 'optimo';
+      let reason = 'Dentro del cronograma previsto';
+
+      if (hoursRemaining <= minThreshold) {
+        if (subtasks.length > 0 && subtaskPct < 70) {
+          riskLevel = 'critico';
+          reason = `Holgura crítica (${hoursRemaining}h restantes) con solo ${subtaskPct}% de subtareas completadas.`;
+        } else {
+          riskLevel = 'alerta';
+          reason = `Vencimiento próximo en menos de ${hoursRemaining}h.`;
+        }
+      }
+
+      timeRisks.push({
+        taskId: task.id,
+        title: task.title,
+        priority: task.priority,
+        dueDate: task.dueDate,
+        endTime: task.endTime,
+        hoursRemaining,
+        subtaskPct,
+        riskLevel,
+        reason
+      });
+    });
+
+    // 2. Diagnóstico Predictivo de Costos y Presupuestos (Galeones)
+    projects.forEach(project => {
+      const budget = project.budget || 1;
+      const spent = project.spent || 0;
+      const pct = Math.round((spent / budget) * 100);
+      const remainingGalleons = budget - spent;
+
+      // Estimar desviación futura basada en entregables pendientes
+      const deliverables = project.deliverables || [];
+      const pendingDeliverables = deliverables.filter(d => !d.completed).length;
+      const projectedOverrun = (pct >= 85 && pendingDeliverables > 0) ? Math.round(spent * 0.12) : 0;
+
+      let riskLevel = 'optimo';
+      if (pct >= 90) riskLevel = 'critico';
+      else if (pct >= 80) riskLevel = 'alerta';
+
+      costRisks.push({
+        type: 'proyecto',
+        id: project.id,
+        title: project.title,
+        budget,
+        spent,
+        pct,
+        remainingGalleons,
+        projectedOverrun,
+        riskLevel,
+        clientName: project.clientId ? (clients.find(c => c.id === project.clientId)?.company || 'Cliente') : 'Interno'
+      });
+    });
+
+    // Diagnóstico en paquetes de horas de clientes
+    clients.forEach(client => {
+      const contracted = client.hoursContracted || 1;
+      const used = client.hoursUsed || 0;
+      const pct = Math.round((used / contracted) * 100);
+      const remainingHours = Math.max(0, Math.round((contracted - used) * 10) / 10);
+
+      let riskLevel = 'optimo';
+      if (pct >= 90) riskLevel = 'critico';
+      else if (pct >= 80) riskLevel = 'alerta';
+
+      costRisks.push({
+        type: 'cliente_horas',
+        id: client.id,
+        title: `${client.company} (${client.name})`,
+        budget: contracted,
+        spent: used,
+        pct,
+        remainingGalleons: remainingHours,
+        projectedOverrun: pct > 85 ? Math.round((used - contracted + 5) * (client.ratePerHour || 45)) : 0,
+        riskLevel,
+        clientName: client.company
+      });
+    });
+
+    // Actualizar última ejecución en reglas activas
+    automations.forEach(r => {
+      if (r.enabled) {
+        r.lastRun = 'Hoy ' + new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+      }
+    });
+
+    this.saveData();
+
+    return {
+      timeRisks,
+      costRisks,
+      criticalTimeCount: timeRisks.filter(r => r.riskLevel === 'critico').length,
+      criticalCostCount: costRisks.filter(r => r.riskLevel === 'critico').length,
+      totalAuditedRules: automations.filter(r => r.enabled).length
+    };
+  }
+
   // Operaciones de Notificaciones
   markNotificationRead(id) {
     const n = this.data.notifications.find(item => item.id === id);
@@ -807,7 +1083,7 @@ class Store {
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
     a.href = url;
-    a.download = `Agenda_Notes_Backup_${new Date().toISOString().split('T')[0]}.json`;
+    a.download = `Agenda_Notes_Hogwarts_Backup_${new Date().toISOString().split('T')[0]}.json`;
     a.click();
     URL.revokeObjectURL(url);
   }
@@ -832,5 +1108,5 @@ class Store {
   }
 }
 
-// Exportamos instancia global accesible por todos los módulos
+// Instancia global accesible por toda la aplicación
 window.plannerStore = new Store();

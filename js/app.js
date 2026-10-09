@@ -35,9 +35,15 @@ class PlannerApp {
     const nameEl = document.getElementById('user-header-name');
     const roleEl = document.getElementById('user-header-role');
 
-    if (avatarEl) avatarEl.textContent = profile.avatar || 'CM';
-    if (nameEl) nameEl.textContent = profile.name || 'Carolina Méndez';
-    if (roleEl) roleEl.textContent = profile.role || 'Executive Ops & VA';
+    if (avatarEl) {
+      if (profile.avatar && (profile.avatar.includes('.svg') || profile.avatar.includes('.png') || profile.avatar.includes('/'))) {
+        avatarEl.innerHTML = `<img src="${profile.avatar}" alt="${profile.name || 'Hermione Granger'}" class="user-avatar-img">`;
+      } else {
+        avatarEl.textContent = profile.avatar || 'HG';
+      }
+    }
+    if (nameEl) nameEl.textContent = profile.name || 'Hermione Granger';
+    if (roleEl) roleEl.textContent = profile.role || 'Prefecta Principal & Ops';
   }
 
   setTheme(themeName) {
@@ -403,6 +409,59 @@ class PlannerApp {
     modal.classList.add('open');
   }
 
+  openAutomationRuleModal(ruleToEdit = null) {
+    this.closeAllModals();
+    const modal = document.getElementById('automation-rule-modal');
+    if (!modal) return;
+    modal.classList.add('open');
+
+    const idIn = document.getElementById('modal-rule-id');
+    const nameIn = document.getElementById('modal-rule-name');
+    const catIn = document.getElementById('modal-rule-category');
+    const riskIn = document.getElementById('modal-rule-risk');
+    const schedIn = document.getElementById('modal-rule-schedule');
+    const toneIn = document.getElementById('modal-rule-tone');
+    const timeHoursIn = document.getElementById('modal-rule-time-hours');
+    const timeCondIn = document.getElementById('modal-rule-time-condition');
+    const costPctIn = document.getElementById('modal-rule-cost-pct');
+    const costScopeIn = document.getElementById('modal-rule-cost-scope');
+    const trigIn = document.getElementById('modal-rule-trigger');
+    const actIn = document.getElementById('modal-rule-action');
+    const enabIn = document.getElementById('modal-rule-enabled');
+
+    if (ruleToEdit) {
+      if (idIn) idIn.value = ruleToEdit.id;
+      if (nameIn) nameIn.value = ruleToEdit.name || '';
+      if (catIn) catIn.value = ruleToEdit.category || 'tiempos';
+      if (riskIn) riskIn.value = ruleToEdit.riskLevel || 'critico';
+      if (schedIn) schedIn.value = ruleToEdit.scheduleType || 'tiempo_real';
+      if (toneIn) toneIn.value = ruleToEdit.notificationTone || 'chime';
+      if (timeHoursIn) timeHoursIn.value = ruleToEdit.timeLeadHours || 6;
+      if (timeCondIn) timeCondIn.value = ruleToEdit.timeRiskCondition || 'subtasks_pending';
+      if (costPctIn) costPctIn.value = ruleToEdit.costThresholdPct || 85;
+      if (costScopeIn) costScopeIn.value = ruleToEdit.costScope || 'both';
+      if (trigIn) trigIn.value = ruleToEdit.trigger || '';
+      if (actIn) actIn.value = ruleToEdit.action || '';
+      if (enabIn) enabIn.checked = ruleToEdit.enabled !== false;
+    } else {
+      if (idIn) idIn.value = '';
+      if (nameIn) nameIn.value = '';
+      if (catIn) catIn.value = 'tiempos';
+      if (riskIn) riskIn.value = 'critico';
+      if (schedIn) schedIn.value = 'tiempo_real';
+      if (toneIn) toneIn.value = 'chime';
+      if (timeHoursIn) timeHoursIn.value = '6';
+      if (timeCondIn) timeCondIn.value = 'subtasks_pending';
+      if (costPctIn) costPctIn.value = '85';
+      if (costScopeIn) costScopeIn.value = 'both';
+      if (trigIn) trigIn.value = '';
+      if (actIn) actIn.value = '';
+      if (enabIn) enabIn.checked = true;
+    }
+
+    if (nameIn) setTimeout(() => nameIn.focus(), 80);
+  }
+
   closeAllModals() {
     document.querySelectorAll('.planner-modal-backdrop').forEach(m => m.classList.remove('open'));
   }
@@ -547,6 +606,52 @@ class PlannerApp {
         window.plannerAudio.playCheck();
         this.closeAllModals();
         this.navigateToTab('projects', false);
+      });
+    }
+
+    // Guardar Regla de Automatización Predictiva
+    const formAutoRule = document.getElementById('form-modal-automation-rule');
+    if (formAutoRule) {
+      formAutoRule.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const ruleId = document.getElementById('modal-rule-id').value;
+        const schedType = document.getElementById('modal-rule-schedule').value;
+        const scheduleLabels = {
+          tiempo_real: '⚡ Tiempo Real',
+          cada_hora: '🔄 Cada Hora Continuamente',
+          diario_08: '🌅 Diario Matutino (08:00 AM)',
+          diario_18: '🌇 Diario Vespertino (18:00 PM)',
+          semanal_lunes: '📅 Semanal (Lunes 09:00 AM)'
+        };
+
+        const ruleObj = {
+          name: document.getElementById('modal-rule-name').value.trim(),
+          category: document.getElementById('modal-rule-category').value,
+          riskLevel: document.getElementById('modal-rule-risk').value,
+          scheduleType: schedType,
+          scheduleLabel: scheduleLabels[schedType] || '⚡ Tiempo Real',
+          notificationTone: document.getElementById('modal-rule-tone').value,
+          timeLeadHours: parseFloat(document.getElementById('modal-rule-time-hours').value) || 6,
+          timeRiskCondition: document.getElementById('modal-rule-time-condition').value,
+          costThresholdPct: parseFloat(document.getElementById('modal-rule-cost-pct').value) || 85,
+          costScope: document.getElementById('modal-rule-cost-scope').value,
+          trigger: document.getElementById('modal-rule-trigger').value.trim(),
+          action: document.getElementById('modal-rule-action').value.trim(),
+          enabled: document.getElementById('modal-rule-enabled').checked,
+          lastRun: 'Recién configurada'
+        };
+
+        if (ruleId) {
+          window.plannerStore.updateAutomationRule(ruleId, ruleObj);
+        } else {
+          window.plannerStore.addAutomationRule(ruleObj);
+        }
+
+        window.plannerAudio.playCheck();
+        this.closeAllModals();
+        if (this.currentTab === 'automations') {
+          this.navigateToTab('automations', false);
+        }
       });
     }
 

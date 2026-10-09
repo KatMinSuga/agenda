@@ -142,6 +142,52 @@ Las siguientes características forman la base consolidada del sistema y **NO de
   - `.gitignore`
   - `MEMORIA_CAMBIOS.md`
 
+### [Entrada 005] — 09/10/2026 · Avatar Anti-Deformación (Gatito), Ambientación Harry Potter y Motor Predictivo de Tiempos y Costos
+* **Petición del Usuario:**
+  > *"quiero que mejores esto para que no se vea aplaztado si puedes pon la imagen de un gatito o un pinguino muy general para llenar el circulo del perfil, quiero que cambies toda la informacion de la pagina con datos como (nombres, direcciones, etc) y uses estos mismos sacados de harry potter para que no sea tan formal y los ejemplos sean faciles de entender, quiero que mejores el modulo de reglas automaticas y alertas, quiero que pueda existir total control para cada regla, horario y prediccion, tanto de tiempos como costos para tener buenos recordatorios a medida"*
+* **Acciones Realizadas:**
+  1. **Solución Definitiva de Avatar Circular Anti-Deformación:**
+     - Creación de avatares vectoriales SVG escalables en la carpeta `assets/`: `assets/avatar-cat.svg` (gatito Crookshanks con gafas redondas y bufanda Gryffindor) y `assets/avatar-penguin.svg` (pingüino con sombrero mágico de copa).
+     - Aplicación de restricciones CSS estrictas en `css/planner-book.css` (`#user-header-avatar`, `.user-avatar-circle`): `width: 40px`, `height: 40px`, `min-width: 40px`, `min-height: 40px`, `aspect-ratio: 1 / 1`, `border-radius: 50% !important`, `flex-shrink: 0`, `overflow: hidden`, `object-fit: cover`.
+     - Actualización del encabezado en `index.html` y del método reactivo `updateTopHeader()` en `js/app.js` para renderizar el gatito de Hermione Granger sin deformación elíptica.
+  2. **Transformación Temática Total al Universo Harry Potter:**
+     - Actualización integral de la base de datos local en `js/store.js` (clave de almacenamiento actualizada a `notes_planner_db_hp_v2` para autoinstalación limpia):
+       - **Perfil:** Hermione Granger (Prefecta Principal & Directora de Operaciones Mágicas en Hogwarts y S.P.E.W. / P.E.D.D.O.).
+       - **Moneda:** Galeones de oro (🪙 G).
+       - **Tareas:** Auditoría de ingredientes de Poción Multijugos en las mazmorras con Snape, calibración del Giratiempo con McGonagall, revisión de presupuesto para Sortilegios Weasley, informe de derechos de elfos domésticos para el Ministerio.
+       - **Calendario / Eventos:** Aritmancia predictiva con Profesora Vector, ronda nocturna de prefectos por pasillos de Hogwarts, almuerzo y cerveza de mantequilla en Las Tres Escobas, reunión comercial con Fred & George, asamblea de la Orden en el despacho de Dumbledore.
+       - **Proyectos:** Defensa del Castillo y Encantamientos Protectores, Optimización del Cronograma de Aulas con Giratiempo, Expansión de Sortilegios Weasley a Hogsmeade.
+       - **Clientes / VA Hub:** Fred & George Weasley (Sortilegios Weasley), Profesora Minerva McGonagall (Hogwarts), Xenophilius Lovegood (El Quisquilloso).
+       - **Equipo:** Hermione Granger, Harry Potter, Ron Weasley, Luna Lovegood.
+       - **Contactos:** Albus Dumbledore, Severus Snape, Fred & George Weasley, Madame Rosmerta, Garrick Ollivander.
+       - **Finanzas:** Presupuesto de 8,500 Galeones, transacciones con bóveda de Gringotts, materiales de pociones, calderos, pergaminos de vitela y suscripciones a lechuzas mensajeras rápidas.
+       - **Notas:** Minuta del Ejército de Dumbledore en la Sala de los Menesteres, protocolo de formulación de pociones, notas sobre Crookshanks y el Giratiempo.
+       - **Vida Personal:** Hábitos mágicos (lectura de Historia de la Magia, Patronus nutria, paseo junto al Lago Negro, cepillado de Crookshanks), rutinas de prefectura y metas de T.I.M.O.s.
+  3. **Motor Predictivo de Tiempos y Costos con Control Total de Reglas:**
+     - Implementación del algoritmo `runPredictionsDiagnostic()` en `js/store.js`:
+       - **Predicción de Tiempos:** Evalúa horas de holgura restantes antes del vencimiento en tiempo real (`hoursRemaining`), porcentaje de subtareas completadas y semáforo de riesgo (Crítico, Alerta, En Plazo).
+       - **Predicción de Costos:** Evalúa proyectos y paquetes de horas de clientes contra umbrales porcentuales configurables (70%, 80%, 85%, 90%, 100%, 110%) calculando desvíos futuros en Galeones.
+     - Rediseño completo de la interfaz de `js/automations.js`:
+       - Cockpit KPI con 4 tarjetas de diagnóstico en vivo (Reglas activas, Riesgo de tiempos, Desvíos de costos, Alertas preventivas).
+       - Radar visual en dos columnas: Monitor de Plazos y Holguras vs Monitor Presupuestario de Costos con barras de progreso predictivas.
+       - Pestañas de filtrado de reglas: *Todas*, *⏱️ Tiempos*, *🪙 Costos*, *⏳ Horarios*, *⚙️ General*.
+       - Botón "Ejecutar Diagnóstico en Vivo" con evaluación instantánea y campanilla de audio.
+       - Control total en cada tarjeta de regla: interruptor On/Off, insignias de horario programado, umbrales de anticipación/costo, botón de configuración (`data-action="edit-rule"`) y eliminación (`data-action="delete-rule"`).
+     - Creación del Modal Global `#automation-rule-modal` en `index.html` con campos completos: Nombre, Categoría, Severidad, Horario/Frecuencia (Tiempo Real, Cada Hora, Diario 08:00 AM, Diario 18:00 PM, Semanal), Motor de Tiempos (horas de anticipación, condición de holgura), Motor de Costos (% de alerta, ámbito financiero), Disparador, Acción, Tono de notificación e interruptor activo.
+     - Métodos de control reactivo en `js/app.js`: `openAutomationRuleModal()` y escucha del envío del formulario con guardado automático en `window.plannerStore`.
+* **Archivos Modificados:**
+  - `assets/avatar-cat.svg` (creado)
+  - `assets/avatar-penguin.svg` (creado)
+  - `css/planner-book.css`
+  - `css/modules.css`
+  - `index.html`
+  - `js/store.js`
+  - `js/automations.js`
+  - `js/app.js`
+  - `js/projects.js`
+  - `MEMORIA_CAMBIOS.md`
+
 ---
 
 <!-- Las siguientes entradas se añadirán aquí secuencialmente con cada nueva solicitud del usuario -->
+

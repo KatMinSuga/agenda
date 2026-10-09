@@ -66,11 +66,13 @@
       </button>
 
       <!-- Chip de Perfil -->
-      <div class="user-profile-badge" style="display:flex; align-items:center; gap:8px; margin-left:8px;">
-        <span id="user-header-avatar" style="width:32px; height:32px; border-radius:50%; background:var(--accent-gold); color:#2b1f0c; font-weight:800; display:flex; align-items:center; justify-content:center; font-size:0.78rem;">CM</span>
-        <div style="font-size:0.75rem; line-height:1.2;">
-          <strong id="user-header-name" style="display:block; color:#fff;">Carolina Méndez</strong>
-          <span id="user-header-role" style="color:rgba(255,255,255,0.7);">Executive VA</span>
+      <div class="user-profile-badge">
+        <div id="user-header-avatar" class="user-avatar-circle" title="Hermione Granger (Gryffindor)">
+          <img src="assets/avatar-cat.svg" alt="Hermione Granger" class="user-avatar-img">
+        </div>
+        <div class="user-header-text">
+          <strong id="user-header-name">Hermione Granger</strong>
+          <span id="user-header-role">Prefecta Principal & Ops</span>
         </div>
       </div>
     </div>
@@ -374,7 +376,7 @@
           <div class="form-row-2">
             <div class="form-group-clean">
               <label>Participantes</label>
-              <input type="text" id="modal-event-attendees" class="form-control-clean" placeholder="ej: Carolina M., Dr. Salgado">
+              <input type="text" id="modal-event-attendees" class="form-control-clean" placeholder="ej: Hermione G., Harry P., Ron W.">
             </div>
             <div class="form-group-clean">
               <label>Color de Etiqueta</label>
@@ -428,7 +430,7 @@
             </div>
             <div class="form-group-clean">
               <label>Cliente / Proveedor</label>
-              <input type="text" id="modal-trx-client" class="form-control-clean" placeholder="ej: Alpha Capital">
+              <input type="text" id="modal-trx-client" class="form-control-clean" placeholder="ej: Sortilegios Weasley / Gringotts">
             </div>
           </div>
           <div class="form-row-2">
@@ -537,6 +539,147 @@
           <div class="modal-footer-clean">
             <button type="button" class="action-btn secondary modal-close-btn">Cancelar</button>
             <button type="submit" class="action-btn primary">Crear Proyecto</button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- 8. Modal Configuración de Reglas Automáticas & Predicciones -->
+  <div class="planner-modal-backdrop" id="automation-rule-modal">
+    <div class="planner-modal-dialog" style="max-width: 620px;">
+      <div class="modal-header-clean">
+        <h3 style="font-family:var(--font-serif); font-size:1.2rem;">
+          <i data-lucide="sliders"></i> Control de Regla, Horario & Predicción
+        </h3>
+        <button class="modal-close-btn">&times;</button>
+      </div>
+      <form id="form-modal-automation-rule">
+        <input type="hidden" id="modal-rule-id">
+        <div class="modal-body-clean">
+          <div class="form-group-clean">
+            <label>Nombre de la Regla *</label>
+            <input type="text" id="modal-rule-name" class="form-control-clean" required placeholder="ej: Predicción de Retraso Crítico en Elaboración de Pociones">
+          </div>
+
+          <div class="form-row-2">
+            <div class="form-group-clean">
+              <label>Categoría</label>
+              <select id="modal-rule-category" class="form-control-clean">
+                <option value="tiempos">⏱️ Tiempos & Plazos</option>
+                <option value="costos">🪙 Costos & Presupuestos</option>
+                <option value="eventos">⏳ Horarios & Giratiempo</option>
+                <option value="general">⚙️ Operaciones Generales</option>
+              </select>
+            </div>
+            <div class="form-group-clean">
+              <label>Nivel de Severidad</label>
+              <select id="modal-rule-risk" class="form-control-clean">
+                <option value="critico">🔴 Crítico / Alta Prioridad</option>
+                <option value="advertencia">🟡 Advertencia Preventiva</option>
+                <option value="info">🔵 Informativo</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-row-2">
+            <div class="form-group-clean">
+              <label>Horario & Frecuencia de Ejecución</label>
+              <select id="modal-rule-schedule" class="form-control-clean">
+                <option value="tiempo_real">⚡ Tiempo Real (Al modificar cualquier registro)</option>
+                <option value="cada_hora">🔄 Cada Hora Continuamente</option>
+                <option value="diario_08">🌅 Diario Matutino (08:00 AM)</option>
+                <option value="diario_18">🌇 Diario Vespertino (18:00 PM)</option>
+                <option value="semanal_lunes">📅 Semanal (Lunes 09:00 AM)</option>
+              </select>
+            </div>
+            <div class="form-group-clean">
+              <label>Sonido de Notificación</label>
+              <select id="modal-rule-tone" class="form-control-clean">
+                <option value="chime">🔔 Campanilla Pomodoro</option>
+                <option value="alerta">⚠️ Tono de Alerta</option>
+                <option value="click">🖊️ Clic Táctil</option>
+                <option value="none">🔕 Silencioso</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Bloque de Predicción de Tiempos -->
+          <div style="background:#fdfbf7; border:1px solid #ebd9c8; border-radius:6px; padding:12px; margin-bottom:12px;">
+            <div style="font-size:0.78rem; font-weight:800; color:var(--accent-primary); margin-bottom:8px; display:flex; align-items:center; gap:6px;">
+              <i data-lucide="clock"></i> MOTOR PREDICTIVO DE TIEMPOS (HOLGURA Y RETRASOS)
+            </div>
+            <div class="form-row-2">
+              <div class="form-group-clean" style="margin-bottom:0;">
+                <label style="font-size:0.75rem;">Anticipación de Alerta</label>
+                <select id="modal-rule-time-hours" class="form-control-clean" style="font-size:0.82rem; padding:6px 10px;">
+                  <option value="2">2 horas antes del vencimiento</option>
+                  <option value="4">4 horas antes del vencimiento</option>
+                  <option value="6" selected>6 horas antes del vencimiento</option>
+                  <option value="12">12 horas antes del vencimiento</option>
+                  <option value="24">24 horas antes (1 día)</option>
+                  <option value="48">48 horas antes (2 días)</option>
+                </select>
+              </div>
+              <div class="form-group-clean" style="margin-bottom:0;">
+                <label style="font-size:0.75rem;">Condición de Riesgo Temporal</label>
+                <select id="modal-rule-time-condition" class="form-control-clean" style="font-size:0.82rem; padding:6px 10px;">
+                  <option value="subtasks_pending">Quedan subtareas pendientes</option>
+                  <option value="deadline">Vencimiento cercano sin completar</option>
+                  <option value="always">Siempre que falte el tiempo fijado</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <!-- Bloque de Predicción de Costos -->
+          <div style="background:#f7fbf8; border:1px solid #c8ebd1; border-radius:6px; padding:12px; margin-bottom:12px;">
+            <div style="font-size:0.78rem; font-weight:800; color:#226e38; margin-bottom:8px; display:flex; align-items:center; gap:6px;">
+              <i data-lucide="coins"></i> MOTOR PREDICTIVO DE COSTOS & PRESUPUESTOS (GALEONES)
+            </div>
+            <div class="form-row-2">
+              <div class="form-group-clean" style="margin-bottom:0;">
+                <label style="font-size:0.75rem;">Umbral de Alerta de Consumo</label>
+                <select id="modal-rule-cost-pct" class="form-control-clean" style="font-size:0.82rem; padding:6px 10px;">
+                  <option value="70">70% del Presupuesto Consumido</option>
+                  <option value="80">80% del Presupuesto Consumido</option>
+                  <option value="85" selected>85% (Zona Crítica de Advertencia)</option>
+                  <option value="90">90% (Riesgo Inminente de Agotamiento)</option>
+                  <option value="100">100% (Límite Presupuestario Alcanzado)</option>
+                  <option value="110">110% (Sobrecosto Proyectado)</option>
+                </select>
+              </div>
+              <div class="form-group-clean" style="margin-bottom:0;">
+                <label style="font-size:0.75rem;">Ámbito Financiero Evaluado</label>
+                <select id="modal-rule-cost-scope" class="form-control-clean" style="font-size:0.82rem; padding:6px 10px;">
+                  <option value="both">Proyectos y Paquetes de Horas VA</option>
+                  <option value="projects">Solo Presupuesto de Proyectos</option>
+                  <option value="clients">Solo Paquetes de Horas de Clientes</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group-clean">
+            <label>Disparador / Condición (Trigger)</label>
+            <input type="text" id="modal-rule-trigger" class="form-control-clean" required placeholder="ej: Faltan < 6h para entrega y quedan ingredientes/subtareas pendientes">
+          </div>
+
+          <div class="form-group-clean">
+            <label>Acción Automática a Ejecutar</label>
+            <input type="text" id="modal-rule-action" class="form-control-clean" required placeholder="ej: Marcar en rojo, emitir campana sonora y calcular horas de holgura">
+          </div>
+
+          <div style="display:flex; align-items:center; justify-content:space-between; margin-top:14px; padding-top:10px; border-top:1px dashed var(--border-subtle);">
+            <label style="display:flex; align-items:center; gap:8px; cursor:pointer; font-size:0.85rem; font-weight:600;">
+              <input type="checkbox" id="modal-rule-enabled" checked style="accent-color:var(--accent-secondary); width:16px; height:16px;">
+              <span>Activar regla inmediatamente al guardar</span>
+            </label>
+          </div>
+
+          <div class="modal-footer-clean" style="margin-top:14px;">
+            <button type="button" class="action-btn secondary modal-close-btn">Cancelar</button>
+            <button type="submit" class="action-btn primary">Guardar Configuración</button>
           </div>
         </div>
       </form>
