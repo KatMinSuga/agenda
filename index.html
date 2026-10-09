@@ -558,6 +558,76 @@
     </div>
   </div>
 
+  <!-- 7b. Modal Menú de Hito / Entregable de Proyecto -->
+  <div class="planner-modal-backdrop" id="deliverable-editor-modal">
+    <div class="planner-modal-dialog">
+      <div class="modal-header-clean">
+        <h3 style="font-family:var(--font-serif); font-size:1.2rem;">
+          <i data-lucide="flag"></i> <span id="modal-del-header-title">Gestión de Hito / Entregable</span>
+        </h3>
+        <button class="modal-close-btn">&times;</button>
+      </div>
+      <form id="form-modal-deliverable">
+        <input type="hidden" id="modal-del-id">
+        <div class="modal-body-clean">
+          <div class="form-group-clean">
+            <label>Proyecto Vinculado *</label>
+            <select id="modal-del-project" class="form-control-clean" required>
+              <!-- Llenado dinámicamente -->
+            </select>
+          </div>
+
+          <div class="form-group-clean">
+            <label>Título del Hito / Entregable *</label>
+            <input type="text" id="modal-del-title" class="form-control-clean" required placeholder="ej: Implementación del escudo Protego Horribilis">
+          </div>
+
+          <div class="form-group-clean">
+            <label>Descripción / Criterio de Aceptación</label>
+            <textarea id="modal-del-desc" class="form-control-clean" rows="2" placeholder="Detalles de la entrega, condiciones técnicas o requerimientos..."></textarea>
+          </div>
+
+          <div class="form-row-2">
+            <div class="form-group-clean">
+              <label>Fecha Límite de Entrega *</label>
+              <input type="date" id="modal-del-date" class="form-control-clean" value="2026-10-31" required>
+            </div>
+            <div class="form-group-clean">
+              <label>Estado del Hito</label>
+              <select id="modal-del-status" class="form-control-clean">
+                <option value="pendiente" selected>🟡 Pendiente</option>
+                <option value="en_proceso">🔵 En Proceso</option>
+                <option value="completado">🟢 Entregado / Completado</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-row-2">
+            <div class="form-group-clean">
+              <label>Prioridad / Criticidad</label>
+              <select id="modal-del-priority" class="form-control-clean">
+                <option value="alta" selected>🔴 Alta / Crítica</option>
+                <option value="media">🟡 Media</option>
+                <option value="baja">🟢 Baja</option>
+              </select>
+            </div>
+            <div class="form-group-clean">
+              <label>Responsable Asignado</label>
+              <select id="modal-del-assignee" class="form-control-clean">
+                <!-- Llenado dinámicamente con miembros del equipo -->
+              </select>
+            </div>
+          </div>
+
+          <div class="modal-footer-clean">
+            <button type="button" class="action-btn secondary modal-close-btn">Cancelar</button>
+            <button type="submit" class="action-btn primary" id="btn-submit-deliverable">Guardar Hito</button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+
   <!-- 8. Modal Configuración de Reglas Automáticas & Predicciones -->
   <div class="planner-modal-backdrop" id="automation-rule-modal">
     <div class="planner-modal-dialog" style="max-width: 620px;">

@@ -882,6 +882,70 @@ class Store {
     return null;
   }
 
+  // Operaciones de Hitos / Entregables de Proyectos
+  addDeliverable(projectId, deliverable) {
+    const proj = (this.data.projects || []).find(p => p.id === projectId);
+    if (!proj) return null;
+    if (!proj.deliverables) proj.deliverables = [];
+    if (!deliverable.id) deliverable.id = 'del-' + Date.now();
+    if (deliverable.completed === undefined) deliverable.completed = false;
+    proj.deliverables.push(deliverable);
+    
+    // Recalcular progreso automático
+    const total = proj.deliverables.length;
+    const done = proj.deliverables.filter(d => d.completed).length;
+    if (total > 0) {
+      proj.progress = Math.round((done / total) * 100);
+    }
+    this.saveData();
+    return deliverable;
+  }
+
+  updateDeliverable(projectId, deliverableId, updates) {
+    const proj = (this.data.projects || []).find(p => p.id === projectId);
+    if (!proj || !proj.deliverables) return null;
+    const idx = proj.deliverables.findIndex(d => d.id === deliverableId);
+    if (idx !== -1) {
+      proj.deliverables[idx] = { ...proj.deliverables[idx], ...updates };
+      const total = proj.deliverables.length;
+      const done = proj.deliverables.filter(d => d.completed).length;
+      if (total > 0) {
+        proj.progress = Math.round((done / total) * 100);
+      }
+      this.saveData();
+      return proj.deliverables[idx];
+    }
+    return null;
+  }
+
+  deleteDeliverable(projectId, deliverableId) {
+    const proj = (this.data.projects || []).find(p => p.id === projectId);
+    if (!proj || !proj.deliverables) return null;
+    proj.deliverables = proj.deliverables.filter(d => d.id !== deliverableId);
+    const total = proj.deliverables.length;
+    const done = proj.deliverables.filter(d => d.completed).length;
+    proj.progress = total > 0 ? Math.round((done / total) * 100) : 0;
+    this.saveData();
+    return true;
+  }
+
+  toggleDeliverable(projectId, deliverableId) {
+    const proj = (this.data.projects || []).find(p => p.id === projectId);
+    if (!proj || !proj.deliverables) return null;
+    const del = proj.deliverables.find(d => d.id === deliverableId);
+    if (del) {
+      del.completed = !del.completed;
+      const total = proj.deliverables.length;
+      const done = proj.deliverables.filter(d => d.completed).length;
+      if (total > 0) {
+        proj.progress = Math.round((done / total) * 100);
+      }
+      this.saveData();
+      return del;
+    }
+    return null;
+  }
+
   // Operaciones de Clientes & VA
   addClient(client) {
     if (!client.id) client.id = 'cli-' + Date.now();

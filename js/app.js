@@ -894,6 +894,44 @@ class PlannerApp {
       });
     }
 
+    // 13. Guardar Hito / Entregable de Proyecto
+    const formDel = document.getElementById('form-modal-deliverable');
+    if (formDel) {
+      formDel.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const delId = document.getElementById('modal-del-id').value;
+        const projectId = document.getElementById('modal-del-project').value;
+        const title = document.getElementById('modal-del-title').value.trim();
+        const desc = document.getElementById('modal-del-desc').value.trim();
+        const dueDate = document.getElementById('modal-del-date').value;
+        const status = document.getElementById('modal-del-status').value;
+        const priority = document.getElementById('modal-del-priority').value;
+        const assigneeId = document.getElementById('modal-del-assignee').value || null;
+
+        const delObj = {
+          title,
+          description: desc,
+          dueDate,
+          status,
+          priority,
+          assigneeId,
+          completed: status === 'completado'
+        };
+
+        if (delId) {
+          window.plannerStore.updateDeliverable(projectId, delId, delObj);
+        } else {
+          window.plannerStore.addDeliverable(projectId, delObj);
+        }
+
+        window.plannerAudio.playCheck();
+        this.closeAllModals();
+        if (this.currentTab === 'projects') {
+          this.navigateToTab('projects', false);
+        }
+      });
+    }
+
     // Opciones del Quick Entry Modal
     document.querySelectorAll('[data-quick-action]').forEach(btn => {
       btn.addEventListener('click', (e) => {

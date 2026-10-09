@@ -337,6 +337,44 @@ Las siguientes características forman la base consolidada del sistema y **NO de
   - `js/tasks.js`
   - `MEMORIA_CAMBIOS.md`
 
+### [Entrada 010] — 09/10/2026 · Menú y Modal Interactivo de Hitos / Entregables en Proyectos (Eliminación de Browser Prompts, Edición, Eliminación y Recálculo Automático)
+* **Petición del Usuario:**
+  > *"haz el menu de hito"* (Acompañado de captura donde aparecía un diálogo nativo prompt del navegador al pulsar "+ Añadir Hito" en Proyectos & Entregables).
+* **Diagnóstico de Causa Raíz:**
+  - El botón `+ Añadir Hito` en `js/projects.js` utilizaba llamadas arcaicas a `prompt("Título del entregable / hito:")` y `prompt("Fecha límite...")`, desentonando con la estética inmersiva de la agenda Notes.
+  - El botón de cabecera carecía de alineación flex adecuada (`.section-title-bar`), provocando una disposición quebrada.
+  - Los hitos existentes no contaban con opciones para ser editados o eliminados sin tocar la consola.
+* **Acciones Realizadas:**
+  1. **Creación del Modal Global `#deliverable-editor-modal` (`index.html`):**
+     - Ventana modal con diseño tipo Notes y formulario `#form-modal-deliverable`.
+     - Contiene campos detallados: Proyecto Vinculado (`#modal-del-project`), Título del Hito/Entregable (`#modal-del-title`), Criterios de Aceptación / Descripción (`#modal-del-desc`), Fecha Límite (`#modal-del-date`), Estado Inicial (`#modal-del-status`), Nivel de Prioridad (`#modal-del-priority`) y Responsable del Hito (`#modal-del-assignee`).
+  2. **Métodos CRUD y Recálculo en Almacén (`js/store.js`):**
+     - Implementación de `addDeliverable(projectId, deliverable)`, `updateDeliverable(projectId, deliverableId, updates)`, `deleteDeliverable(projectId, deliverableId)` y `toggleDeliverable(projectId, deliverableId)`.
+     - Recálculo dinámico automático de avance: al añadir, editar, eliminar o alternar el estado de cualquier hito, el porcentaje de avance general del proyecto (`proj.progress`) se recalcula en tiempo real en función de los hitos completados y se persiste en `localStorage`.
+  3. **Control y Rediseño de Hitos (`js/projects.js`):**
+     - Encapsulamiento del módulo completo dentro de `<div id="projects-module-root">` para garantizar la destrucción limpia de event listeners entre re-renderizados y evitar escuchas duplicadas.
+     - Erradicación total de los diálogos `prompt()` nativos y apertura fluida de `openDeliverableModal(projId, deliverable)`.
+     - Cada hito en la lista ahora cuenta con:
+       - Checkbox interactivo (`data-action="toggle-deliverable"`).
+       - Título, descripción o criterios de aceptación y fecha límite.
+       - Insignia de prioridad y estatus (*Completado*, *En Proceso*, *Pendiente*).
+       - Botón de edición rápida (`data-action="edit-deliverable"`).
+       - Botón de eliminación rápida (`data-action="delete-deliverable"`).
+  4. **Gestión de Formulario y Audio Táctil (`js/app.js`):**
+     - Escucha del evento submit para `#form-modal-deliverable` con validación de proyecto y título.
+     - Reproducción de retroalimentación sonora sutil mediante el motor de audio sintético al guardar cambios.
+     - Cierre automático de modal y recálculo visual del proyecto seleccionado.
+  5. **Estilos y Acabados Visuales (`css/modules.css`):**
+     - Estilo para `.section-title-bar` con alineación vertical y botón `.action-btn-xs.primary`.
+     - Estilos para `.deliverable-item` con fondo pautado, sombreado sutil al hover, tachado al completarse (`.is-done`), badges de estado y botones discretos `.icon-action-btn-xs`.
+* **Archivos Modificados:**
+  - `css/modules.css`
+  - `index.html`
+  - `js/app.js`
+  - `js/projects.js`
+  - `js/store.js`
+  - `MEMORIA_CAMBIOS.md`
+
 ---
 
 <!-- Las siguientes entradas se añadirán aquí secuencialmente con cada nueva solicitud del usuario -->
