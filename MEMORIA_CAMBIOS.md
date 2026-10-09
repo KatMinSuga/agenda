@@ -405,6 +405,51 @@ Las siguientes características forman la base consolidada del sistema y **NO de
 
 ---
 
+### [Entrada 012] — 09/10/2026 · Aplicación Responsiva para Tabletas y Teléfonos (Compatibilidad Multi-navegador)
+* **Petición del Usuario:**
+  > *"haz la aplicacion responsiva, debe ser compatible con todo navegador ya sea tabletas o telefonos, ajusta con cuidado el diseño para que no pierda de vista la idea original pero se vea adecuado a las pantallas en cuestion, cualquier cambio pasara a ser registrado en MEMORIA_CAMBIOS.md"*
+* **Diagnóstico (medido en navegador a 1024, 768, 375 y 320 px):**
+  1. En teléfono (375 px) 11 de los 12 módulos se salían de la hoja: rejillas con columnas fijas (`340px 1fr` en Proyectos, `320px 1fr` en Notas, `1.4fr 0.6fr` en Finanzas, KPI de 4 columnas, etc.), `minmax()` con mínimos mayores que la pantalla (Contactos 310 px, Equipo 360 px) y cabeceras `.module-header` cuyos botones no envolvían.
+  2. La barra superior (logo y acciones) era más ancha que la pantalla, lo que provocaba desplazamiento horizontal de toda la página.
+  3. En ≤ 1024 px las pestañas divisorias se movían debajo del cuaderno (`order: 2`), a más de 800 px de distancia por el `min-height` del papel, por lo que eran difíciles de alcanzar.
+  4. En los modales, el `<form>` envolvía `.modal-body-clean` y el diálogo tenía `overflow: hidden`, así que en pantallas bajas los botones Guardar/Cancelar quedaban cortados sin poder desplazarse.
+  5. Tablas de Reportes sin contenedor de desplazamiento; `min-width: 280px` en línea en el filtro de Reportes; selectores con opciones largas (Ajustes) más anchos que la tarjeta.
+* **Acciones Realizadas:**
+  1. **Nueva hoja `css/responsive.css`** (cargada al final en `index.html`, después de `themes.css`). Contiene todas las adaptaciones; **el diseño de escritorio (> 1024 px) no cambia** (verificado a 1440 px: pestañas laterales, padding y rejillas originales).
+     - **Tableta (≤ 1024 px):** las 12 pestañas divisorias pasan a una **banda de cuero fija en la parte inferior** (color `--binder-leather` de cada tema y costura superior), con forma de pestaña de cuaderno (esquinas superiores redondeadas, la activa en marfil y elevada). Se desliza horizontalmente si no caben y respeta la zona segura de iPhone/iPad. Las anillas del lomo se conservan (más discretas) en lugar de ocultarse. Cabeceras con botones envolventes, KPI de 4 → 2 columnas, Proyectos/Notas con barra lateral más angosta, Año en 3 columnas, suscripciones de Finanzas con acciones que bajan de línea.
+     - **Tableta vertical (≤ 768 px):** todas las rejillas de 2 columnas se apilan (Hoy, Proyectos, Finanzas, Notas, Vida Personal, Automatización, Reportes, Ajustes, vista Día); vista Semanal con desplazamiento horizontal propio (mín. 640 px); Kanban con columnas deslizables (scroll-snap); filtros, barra de resumen de Tareas, hitos de Proyectos, notificaciones y tarjeta de perfil envolventes.
+     - **Teléfono (≤ 600 px):** barra superior compacta (sin la insignia "NOTES WEB"), marcapáginas más pequeños, cubierta de cuero y papel punteado con márgenes reducidos, anillas reducidas, tarjetas de tarea con etiquetas debajo del título, KPI en 2 columnas, celdas del calendario mensual compactas, formularios a 1 columna, **modales como hoja inferior** con cuerpo desplazable y botones visibles, paleta Ctrl+K anclada arriba, botón "Salir de Modo Zen" centrado.
+     - **Teléfono pequeño (≤ 400 px):** KPI y Año en 1 columna, botones superiores más compactos (verificado a 320 px sin desbordes).
+  2. **Compatibilidad entre navegadores:** `viewport-fit=cover` + `env(safe-area-inset-bottom)` (iPhone con muesca), `-webkit-backdrop-filter` (Safari), `-webkit-text-size-adjust`, campos a 16 px en teléfono (evita el zoom automático de iOS al enfocar), `-webkit-overflow-scrolling: touch`, y `@media (hover: none)` para que los efectos de hover no se "queden pegados" en pantallas táctiles.
+  3. **`js/app.js` → `navigateToTab()`:** cuando la banda de pestañas es deslizable, centra automáticamente la pestaña activa (sin efecto en escritorio).
+  4. **`js/reports.js`:** la tabla de desglose se envolvió en `<div class="report-table-wrap">` para desplazarse horizontalmente en pantallas angostas.
+  5. **`index.html`:** enlace a `css/responsive.css` y `viewport-fit=cover` en la etiqueta viewport.
+* **Notas para futuros cambios:**
+  - Los ajustes responsivos nuevos van en `css/responsive.css`; el bloque antiguo de `@media` en `css/planner-book.css` se dejó intacto y queda sobrescrito por el nuevo archivo.
+  - Lucide convierte cada `<i data-lucide>` en `<svg>`, así que los estilos escritos como `selector i { ... }` no aplican a los iconos ya renderizados. En el buscador de Tareas se corrigió inicialmente solo para ≤ 1024 px (`.search-input-wrapper svg`); el usuario aprobó extenderlo a escritorio en la Entrada 013.
+* **Archivos Modificados:**
+  - `css/responsive.css` (nuevo)
+  - `index.html`
+  - `js/app.js`
+  - `js/reports.js`
+  - `CLAUDE.md`
+  - `MEMORIA_CAMBIOS.md`
+
+---
+
+### [Entrada 013] — 09/10/2026 · Lupa del Buscador Dentro del Campo en Todas las Pantallas
+* **Petición del Usuario:**
+  > *"si corrige y haz el commit"* (aprobación de la corrección pendiente señalada en la Entrada 012).
+* **Diagnóstico:** Lucide reemplaza `<i data-lucide="search">` por un `<svg>`, por lo que la regla original `.search-input-wrapper i { position: absolute; ... }` de `css/modules.css` no se aplicaba y la lupa aparecía encima del campo de búsqueda (Tareas y Contactos), también en escritorio.
+* **Acciones Realizadas:**
+  - La regla `.search-input-wrapper svg` de `css/responsive.css` se movió del bloque `@media (max-width: 1024px)` al ámbito global: la lupa queda dentro del campo, alineada a la izquierda, en todas las anchuras (verificado a 1440 px en Tareas y Contactos).
+  - La regla original de `css/modules.css` se dejó intacta.
+* **Archivos Modificados:**
+  - `css/responsive.css`
+  - `MEMORIA_CAMBIOS.md`
+
+---
+
 <!-- Las siguientes entradas se añadirán aquí secuencialmente con cada nueva solicitud del usuario -->
 
 

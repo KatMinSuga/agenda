@@ -81,6 +81,14 @@ class PlannerApp {
       }
     });
 
+    // En tabletas y teléfonos las pestañas forman una banda deslizable: centrar la activa
+    const tabsBar = document.querySelector('.planner-tabs-sidebar');
+    const activeTabEl = tabsBar && tabsBar.querySelector(`.planner-tab[data-tab="${tabId}"]`);
+    if (activeTabEl && tabsBar.scrollWidth > tabsBar.clientWidth) {
+      const targetLeft = activeTabEl.offsetLeft - (tabsBar.clientWidth - activeTabEl.offsetWidth) / 2;
+      tabsBar.scrollTo({ left: Math.max(0, targetLeft), behavior: 'smooth' });
+    }
+
     // Efecto de cambio de página
     const pageContainer = document.getElementById('planner-active-page');
     if (!pageContainer) return;

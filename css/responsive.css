@@ -1,0 +1,758 @@
+/* ==========================================================================
+   ADAPTABILIDAD RESPONSIVA: TABLETAS Y TELÉFONOS (Entrada 012)
+   Se carga al final para ajustar el cuaderno Notes a pantallas medianas y
+   pequeñas sin alterar el diseño de escritorio (> 1024px).
+   Puntos de corte: 1024px (tableta), 768px (tableta vertical),
+   600px (teléfono) y 400px (teléfono pequeño).
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   COMPATIBILIDAD ENTRE NAVEGADORES (todas las anchuras)
+   -------------------------------------------------------------------------- */
+html {
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
+.top-nav-btn {
+  -webkit-backdrop-filter: blur(8px);
+}
+
+.planner-modal-backdrop {
+  -webkit-backdrop-filter: blur(4px);
+}
+
+img,
+svg,
+canvas {
+  max-width: 100%;
+}
+
+/* Contenedores de tablas con desplazamiento horizontal propio */
+.transactions-table-wrap,
+.habit-table-responsive,
+.report-table-wrap {
+  max-width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Selectores con opciones largas: nunca más anchos que su contenedor */
+.form-select-sm {
+  max-width: 100%;
+  min-width: 0;
+  text-overflow: ellipsis;
+}
+
+/* Iconos Lucide (se convierten en <svg>) dentro del buscador: lupa dentro del campo */
+.search-input-wrapper svg {
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 16px;
+  height: 16px;
+  color: var(--text-light);
+  pointer-events: none;
+}
+
+/* Rejillas con mínimos fijos: nunca exceder el ancho disponible */
+.subtasks-checklist {
+  grid-template-columns: repeat(auto-fill, minmax(min(280px, 100%), 1fr));
+}
+
+.contacts-cards-grid {
+  grid-template-columns: repeat(auto-fill, minmax(min(310px, 100%), 1fr));
+}
+
+.team-management-grid {
+  grid-template-columns: repeat(auto-fit, minmax(min(360px, 100%), 1fr));
+}
+
+.dashboard-kpi-row,
+.va-stats-bar-grid {
+  grid-template-columns: repeat(auto-fit, minmax(min(210px, 100%), 1fr));
+}
+
+.dossier-double-column {
+  grid-template-columns: repeat(auto-fit, minmax(min(240px, 100%), 1fr));
+}
+
+.template-options-grid {
+  grid-template-columns: repeat(auto-fit, minmax(min(200px, 100%), 1fr));
+}
+
+/* Dispositivos táctiles: sin desplazamientos de hover que se "quedan pegados" */
+@media (hover: none) {
+  .planner-tab:hover {
+    transform: none;
+    box-shadow: 3px 3px 6px rgba(0, 0, 0, 0.25);
+  }
+  .ribbon-bookmark:hover,
+  .quick-opt-btn:hover,
+  .action-btn.primary:hover {
+    transform: none;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   TABLETA (≤ 1024px): pestañas divisorias en una banda de cuero inferior
+   -------------------------------------------------------------------------- */
+@media (max-width: 1024px) {
+  body {
+    padding: 12px 10px calc(84px + env(safe-area-inset-bottom, 0px));
+  }
+
+  /* Barra superior: el logotipo cede espacio antes que las acciones */
+  .planner-top-bar {
+    margin-bottom: 12px;
+    gap: 8px;
+  }
+
+  .top-bar-left {
+    flex-shrink: 1;
+  }
+
+  .bookmarks-ribbons-bar {
+    padding-right: 28px;
+  }
+
+  .planner-notebook-container {
+    flex-direction: column;
+  }
+
+  .planner-leather-cover {
+    min-height: 0;
+    padding: 12px 10px 12px 16px;
+    border-radius: 16px;
+  }
+
+  .planner-content-area {
+    min-height: 70vh;
+    padding: 26px 24px 36px 28px;
+  }
+
+  /* Anillas del lomo más discretas */
+  .planner-spine-rings {
+    display: flex;
+    left: -11px;
+    width: 22px;
+  }
+
+  .spiral-ring {
+    width: 22px;
+    height: 10px;
+  }
+
+  /* Pestañas: banda inferior fija, como divisores asomando del cuaderno */
+  .planner-tabs-sidebar {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: 100%;
+    height: auto;
+    margin: 0;
+    order: 0;
+    flex-direction: row;
+    align-items: flex-end;
+    gap: 4px;
+    padding: 8px 10px calc(6px + env(safe-area-inset-bottom, 0px));
+    overflow-x: auto;
+    overflow-y: hidden;
+    -webkit-overflow-scrolling: touch;
+    scroll-snap-type: x proximity;
+    scrollbar-width: none;
+    background: var(--binder-leather);
+    border-top: 3px solid var(--binder-border);
+    box-shadow: 0 -8px 24px rgba(0, 0, 0, 0.35);
+    z-index: 900;
+  }
+
+  .planner-tabs-sidebar::-webkit-scrollbar {
+    display: none;
+  }
+
+  .planner-tab {
+    flex: 1 0 64px;
+    min-width: 64px;
+    max-width: 96px;
+    width: auto;
+    height: 52px;
+    padding: 0 4px;
+    border-radius: 10px 10px 4px 4px;
+    border: 1px solid rgba(0, 0, 0, 0.15);
+    box-shadow: 0 -2px 6px rgba(0, 0, 0, 0.2);
+    scroll-snap-align: center;
+  }
+
+  .planner-tab:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 -3px 8px rgba(0, 0, 0, 0.28);
+  }
+
+  .planner-tab.active {
+    width: auto;
+    transform: translateY(-4px);
+    border-left: 1px solid rgba(0, 0, 0, 0.15);
+    border-top: 3px solid var(--accent-primary);
+    box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.3);
+  }
+
+  /* Cabeceras de módulo: botones que envuelven sin salirse */
+  .module-header {
+    flex-wrap: wrap;
+  }
+
+  .module-header > :first-child {
+    flex: 1 1 320px;
+    min-width: 0;
+  }
+
+  .header-actions {
+    flex-wrap: wrap;
+    flex-shrink: 1;
+    min-width: 0;
+    max-width: 100%;
+  }
+
+  /* Rejillas de 4 tarjetas KPI → 2 columnas */
+  .finance-kpi-row,
+  .predictive-kpi-row,
+  .reports-kpi-row {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .year-grid-12 {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .kanban-board-grid > * ,
+  .dashboard-main-grid > *,
+  .finance-grid-split > *,
+  .automations-layout-grid > *,
+  .reports-charts-grid > *,
+  .settings-grid-layout > *,
+  .personal-grid-layout > *,
+  .notes-workspace-layout > *,
+  .projects-layout-grid > * {
+    min-width: 0;
+  }
+
+  .projects-layout-grid {
+    grid-template-columns: 280px minmax(0, 1fr);
+  }
+
+  .notes-workspace-layout {
+    grid-template-columns: 260px minmax(0, 1fr);
+  }
+
+  /* Finanzas: suscripciones con acciones que bajan de línea si no caben */
+  .sub-row-item-custom {
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+
+  .sub-info-left {
+    min-width: 0;
+  }
+
+  .sub-meta-line {
+    flex-wrap: wrap;
+  }
+
+  /* Modo Zen en tableta */
+  body.zen-focus-mode {
+    padding: 0;
+  }
+
+  body.zen-focus-mode .planner-content-area {
+    padding: 24px 5% 80px;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   TABLETA VERTICAL (≤ 768px): columnas apiladas
+   -------------------------------------------------------------------------- */
+@media (max-width: 768px) {
+  .module-header {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 14px;
+  }
+
+  .module-header > :first-child {
+    flex: 0 1 auto;
+  }
+
+  .planner-page-title {
+    font-size: 1.6rem;
+  }
+
+  .dashboard-main-grid,
+  .projects-layout-grid,
+  .finance-grid-split,
+  .notes-workspace-layout,
+  .personal-grid-layout,
+  .predictive-radar-container,
+  .automations-layout-grid,
+  .reports-charts-grid,
+  .settings-grid-layout,
+  .day-view-layout {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .profile-card-prestigious,
+  .habit-tracker-card {
+    grid-column: span 1;
+  }
+
+  .dossier-header {
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+
+  .dossier-header > :first-child {
+    min-width: 0;
+  }
+
+  .quick-shop-input-bar > input {
+    flex: 1 1 auto;
+    min-width: 0;
+  }
+
+  .profile-inputs-grid {
+    grid-template-columns: minmax(0, 1fr);
+    min-width: 0;
+    flex: 1 1 100%;
+  }
+
+  .profile-layout-horizontal {
+    justify-content: center;
+  }
+
+  .year-grid-12 {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  /* Filtros y controles envolventes */
+  .filters-row,
+  .cal-quick-controls,
+  .filter-dropdowns,
+  .cal-color-palette-bar,
+  .cal-color-pills-list {
+    flex-wrap: wrap;
+  }
+
+  .search-input-wrapper {
+    flex: 1 1 100%;
+    max-width: 100%;
+  }
+
+  /* Vista semanal: desplazamiento horizontal dentro de su tarjeta */
+  .week-view-container {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .week-header-row,
+  .week-body-scroll {
+    min-width: 640px;
+  }
+
+  /* Kanban: columnas deslizables lateralmente */
+  .kanban-board-grid {
+    display: flex;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    padding-bottom: 8px;
+  }
+
+  .kanban-board-grid > .kanban-column {
+    flex: 0 0 82%;
+    scroll-snap-align: start;
+  }
+
+  .paper-card-header {
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  /* Tareas: barra de resumen envolvente */
+  .tasks-summary-bar {
+    flex-wrap: wrap;
+  }
+
+  .progress-mini-bar {
+    flex: 1 1 100%;
+    max-width: 100%;
+    margin-left: 0;
+  }
+
+  /* Proyectos: hitos con metadatos debajo del título */
+  .deliverable-item {
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .del-meta {
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  /* Automatizaciones y notificaciones */
+  .rules-filter-pills {
+    flex-wrap: wrap;
+  }
+
+  .notif-feed-item {
+    flex-wrap: wrap;
+  }
+
+  .notif-body {
+    min-width: 0;
+  }
+
+  .notif-title-row {
+    flex-wrap: wrap;
+    gap: 4px;
+  }
+
+  .notif-action-col {
+    margin-left: auto;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   TELÉFONO (≤ 600px)
+   -------------------------------------------------------------------------- */
+@media (max-width: 600px) {
+  body {
+    padding: 8px 6px calc(78px + env(safe-area-inset-bottom, 0px));
+  }
+
+  /* Barra superior compacta */
+  .planner-logo {
+    font-size: 1.1rem;
+    gap: 6px;
+  }
+
+  .planner-logo-badge {
+    display: none;
+  }
+
+  .top-bar-right {
+    gap: 5px;
+  }
+
+  .top-nav-btn {
+    padding: 7px;
+  }
+
+  .user-profile-badge {
+    margin-left: 0;
+  }
+
+  /* Marcapáginas más pequeños */
+  .bookmarks-ribbons-bar {
+    padding-right: 14px;
+    gap: 6px;
+    margin-bottom: -8px;
+  }
+
+  .ribbon-bookmark {
+    padding: 5px 9px 9px;
+    font-size: 0.66rem;
+    letter-spacing: 0.3px;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+  }
+
+  .ribbon-bookmark i,
+  .ribbon-bookmark svg {
+    width: 12px;
+    height: 12px;
+  }
+
+  /* Cuaderno y papel */
+  .planner-leather-cover {
+    padding: 8px 6px 8px 12px;
+    border-width: 3px;
+    border-radius: 12px;
+  }
+
+  .planner-leather-cover::before {
+    top: 4px;
+    left: 4px;
+    right: 4px;
+    bottom: 4px;
+    border-radius: 9px;
+  }
+
+  .planner-paper-sheet {
+    border-radius: 8px;
+  }
+
+  .planner-paper-sheet::before {
+    background-size: 18px 18px;
+  }
+
+  .planner-content-area {
+    min-height: 60vh;
+    padding: 18px 12px 28px 16px;
+  }
+
+  .planner-spine-rings {
+    left: -8px;
+    width: 16px;
+    top: 20px;
+    bottom: 20px;
+  }
+
+  .spiral-ring {
+    width: 16px;
+    height: 7px;
+  }
+
+  .spiral-ring::after {
+    top: 1px;
+    left: 4px;
+    right: 4px;
+    height: 1px;
+  }
+
+  /* Banda de pestañas */
+  .planner-tabs-sidebar {
+    padding: 6px 6px calc(4px + env(safe-area-inset-bottom, 0px));
+    gap: 3px;
+  }
+
+  .planner-tab {
+    flex: 0 0 58px;
+    min-width: 58px;
+    height: 50px;
+  }
+
+  .planner-tab .tab-label {
+    font-size: 0.56rem;
+    letter-spacing: 0.2px;
+  }
+
+  /* Tipografía editorial */
+  .planner-page-title {
+    font-size: 1.4rem;
+  }
+
+  .planner-page-desc {
+    font-size: 0.82rem;
+  }
+
+  .planner-paper-card {
+    padding: 16px 14px;
+    margin-bottom: 16px;
+  }
+
+  .paper-card-header h4 {
+    font-size: 1.02rem;
+  }
+
+  .header-actions > * {
+    flex: 1 1 auto;
+    justify-content: center;
+  }
+
+  .action-btn {
+    padding: 9px 14px;
+  }
+
+  /* Tareas: etiquetas debajo del título y tarjeta más compacta */
+  .task-card-notes {
+    padding: 14px 12px;
+    gap: 10px;
+  }
+
+  .task-main-row {
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .task-badges {
+    flex-wrap: wrap;
+  }
+
+  .task-card-body {
+    min-width: 0;
+  }
+
+  /* Filtro de reportes: anula el ancho mínimo en línea de 280px */
+  .filter-group-item {
+    min-width: 0 !important;
+    flex: 1 1 100% !important;
+  }
+
+  /* Rejillas KPI */
+  .dashboard-kpi-row,
+  .va-stats-bar-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+  }
+
+  .dash-stat-box {
+    padding: 12px;
+  }
+
+  .stat-number {
+    font-size: 1.35rem;
+  }
+
+  .dossier-kpi-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .backup-actions-grid,
+  .themes-selector-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  /* Calendario mensual compacto */
+  .calendar-nav-bar {
+    padding: 8px 10px;
+  }
+
+  .cal-cell {
+    min-height: 64px;
+    max-height: 96px;
+    padding: 3px;
+    font-size: 0.7rem;
+  }
+
+  /* Formularios: 16px evita el zoom automático de iOS al enfocar */
+  input,
+  select,
+  textarea,
+  .form-control-clean {
+    font-size: 16px;
+  }
+
+  .form-row-2 {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 0;
+  }
+
+  /* Modales tipo hoja inferior */
+  .planner-modal-backdrop {
+    align-items: flex-end;
+    padding: 0;
+  }
+
+  .planner-modal-dialog,
+  .command-palette-box {
+    max-width: 100% !important;
+    border-radius: 16px 16px 0 0;
+    max-height: 92vh;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .command-palette-box {
+    align-self: flex-start;
+    margin-top: 12px;
+    border-radius: 12px;
+    width: calc(100% - 16px);
+    margin-left: 8px;
+    margin-right: 8px;
+  }
+
+  .modal-header-clean {
+    padding: 14px 16px;
+  }
+
+  .planner-modal-dialog > form {
+    display: flex;
+    flex-direction: column;
+    flex: 1 1 auto;
+    min-height: 0;
+  }
+
+  .modal-header-clean {
+    flex-shrink: 0;
+  }
+
+  .modal-body-clean {
+    padding: 16px;
+    max-height: none;
+    flex: 1 1 auto;
+    min-height: 0;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior: contain;
+    padding-bottom: calc(16px + env(safe-area-inset-bottom, 0px));
+  }
+
+  .modal-footer-clean {
+    flex-wrap: wrap;
+  }
+
+  .modal-footer-clean .action-btn {
+    flex: 1 1 auto;
+    justify-content: center;
+    font-size: 0.86rem;
+  }
+
+  .quick-options-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .cmd-input-bar input {
+    font-size: 16px;
+  }
+
+  .cmd-results-wrap {
+    max-height: 60vh;
+  }
+
+  /* Modo Zen en teléfono */
+  body.zen-focus-mode .planner-content-area {
+    padding: 18px 14px 80px;
+  }
+
+  #floating-exit-zen {
+    right: 50%;
+    transform: translateX(50%);
+    bottom: calc(16px + env(safe-area-inset-bottom, 0px));
+    white-space: nowrap;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   TELÉFONO PEQUEÑO (≤ 400px)
+   -------------------------------------------------------------------------- */
+@media (max-width: 400px) {
+  .planner-logo span:first-of-type {
+    font-size: 1rem;
+  }
+
+  .top-nav-btn {
+    padding: 5px;
+  }
+
+  .top-bar-right {
+    gap: 3px;
+  }
+
+  .finance-kpi-row,
+  .predictive-kpi-row,
+  .reports-kpi-row {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .year-grid-12 {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .ribbon-bookmark {
+    padding: 4px 7px 8px;
+  }
+}

@@ -194,6 +194,7 @@ class ReportsModule {
           <span class="report-export-tip">💡 Los datos de esta tabla se exportan exactamente en el archivo Excel</span>
         </div>
 
+        <div class="report-table-wrap">
         <table class="notes-table">
           <thead>
             <tr>
@@ -253,6 +254,7 @@ class ReportsModule {
             )}
           </tbody>
         </table>
+        </div>
       </div>
     `;
 
