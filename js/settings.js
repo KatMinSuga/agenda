@@ -21,24 +21,68 @@ class SettingsModule {
       </div>
 
       <div class="settings-grid-layout">
-        <!-- Tarjeta 1: Perfil y Rol Activo -->
-        <div class="settings-card">
-          <h4><i data-lucide="user-check"></i> Perfil de Usuario & Rol</h4>
-          <div class="profile-preview-box">
-            <div class="profile-avatar-big">${profile.avatar || 'CM'}</div>
-            <div class="profile-fields">
-              <input type="text" id="setting-prof-name" class="form-input-clean" value="${profile.name}" placeholder="Tu Nombre">
-              <input type="text" id="setting-prof-role" class="form-input-clean role" value="${profile.role}" placeholder="Tu Cargo">
-              <input type="text" id="setting-prof-business" class="form-input-clean business" value="${profile.business}" placeholder="Negocio / Empresa">
+        <!-- Tarjeta 1: Perfil y Rol Activo Rediseñado -->
+        <div class="settings-card profile-card-prestigious">
+          <div class="profile-card-header-banner">
+            <div>
+              <span class="role-clearance-badge"><i data-lucide="shield-check"></i> Credencial Oficial · Nivel 1</span>
+              <h4 style="margin:4px 0 0; font-family:var(--font-serif); font-size:1.15rem; color:var(--text-main);">
+                Perfil de Usuario & Credenciales
+              </h4>
+            </div>
+            <span class="house-affinity-tag">Gryffindor Ops</span>
+          </div>
+
+          <div class="profile-layout-horizontal">
+            <!-- Avatar Frame con Crookshanks Cat -->
+            <div class="profile-avatar-frame-wrap">
+              <div class="profile-avatar-circle-prestigious">
+                <img src="${profile.avatar && (profile.avatar.includes('/') || profile.avatar.includes('.svg')) ? profile.avatar : 'assets/avatar-cat.svg'}" alt="Avatar" class="profile-avatar-img-big">
+              </div>
+              <span class="avatar-caption-tag">Crookshanks Familiar</span>
+            </div>
+
+            <!-- Campos de Identidad con Espaciado Generoso -->
+            <div class="profile-inputs-grid">
+              <div class="field-item">
+                <label class="field-label-sm"><i data-lucide="user"></i> Nombre Oficial</label>
+                <input type="text" id="setting-prof-name" class="form-input-clean-prestigious" value="${profile.name || 'Hermione Granger'}" placeholder="Tu Nombre">
+              </div>
+
+              <div class="field-item">
+                <label class="field-label-sm"><i data-lucide="award"></i> Cargo & Título</label>
+                <input type="text" id="setting-prof-role" class="form-input-clean-prestigious" value="${profile.role || 'Prefecta Principal & Directora de Ops'}" placeholder="Tu Cargo">
+              </div>
+
+              <div class="field-item">
+                <label class="field-label-sm"><i data-lucide="building"></i> Organización / Bóveda</label>
+                <input type="text" id="setting-prof-business" class="form-input-clean-prestigious" value="${profile.business || 'Hogwarts Ops & S.P.E.W.'}" placeholder="Negocio / Empresa">
+              </div>
+
+              <div class="field-item">
+                <label class="field-label-sm"><i data-lucide="mail"></i> Correo Institucional</label>
+                <input type="email" id="setting-prof-email" class="form-input-clean-prestigious" value="${profile.email || 'hermione.granger@hogwarts.ac.uk'}" placeholder="tu.correo@hogwarts.ac.uk">
+              </div>
             </div>
           </div>
-          <div class="role-selector-row">
-            <label class="setting-label">Rol Activo del Sistema:</label>
-            <select id="setting-user-role-select" class="form-select-sm">
-              <option value="directora" selected>Director / Asistente Virtual Principal (Acceso Total)</option>
-              <option value="gerente">Gerente de Proyectos</option>
-              <option value="colaborador">Colaborador / Asignado</option>
-            </select>
+
+          <!-- Selector de Rol Activo y Privilegios -->
+          <div class="role-privileges-box">
+            <div class="role-select-line">
+              <label class="setting-label-bold"><i data-lucide="key"></i> Rol Activo del Sistema:</label>
+              <select id="setting-user-role-select" class="form-select-sm" style="font-weight:600;">
+                <option value="directora" selected>Prefecta Principal & Directora de Operaciones (Acceso Total Nivel 1)</option>
+                <option value="gerente">Gerente Táctico de Proyecto (Gestión de Tareas y Cronogramas)</option>
+                <option value="colaborador">Colaborador Especialista (Vista de Asignaciones y Horas)</option>
+              </select>
+            </div>
+
+            <div class="privileges-checklist-row">
+              <span class="privilege-pill"><i data-lucide="check"></i> Control Total de Reglas & Motor Predictivo</span>
+              <span class="privilege-pill"><i data-lucide="check"></i> Acceso a Bóveda Gringotts & Retainers</span>
+              <span class="privilege-pill"><i data-lucide="check"></i> Calibración de Giratiempo</span>
+              <span class="privilege-pill"><i data-lucide="check"></i> Exportación a Excel de Clientes</span>
+            </div>
           </div>
         </div>
 
@@ -202,12 +246,16 @@ class SettingsModule {
     const nameIn = container.querySelector('#setting-prof-name');
     const roleIn = container.querySelector('#setting-prof-role');
     const bizIn = container.querySelector('#setting-prof-business');
+    const emailIn = container.querySelector('#setting-prof-email');
 
     const saveProf = () => {
-      window.plannerStore.data.profile.name = nameIn.value;
-      window.plannerStore.data.profile.role = roleIn.value;
-      window.plannerStore.data.profile.business = bizIn.value;
-      window.plannerStore.data.profile.avatar = (nameIn.value || 'CM').split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase();
+      window.plannerStore.data.profile.name = nameIn ? nameIn.value : 'Hermione Granger';
+      window.plannerStore.data.profile.role = roleIn ? roleIn.value : 'Prefecta Principal & Ops';
+      window.plannerStore.data.profile.business = bizIn ? bizIn.value : 'Hogwarts Ops';
+      if (emailIn) window.plannerStore.data.profile.email = emailIn.value;
+      if (!window.plannerStore.data.profile.avatar || !window.plannerStore.data.profile.avatar.includes('.')) {
+        window.plannerStore.data.profile.avatar = 'assets/avatar-cat.svg';
+      }
       window.plannerStore.saveData();
       window.plannerApp.updateTopHeader();
     };
@@ -215,6 +263,7 @@ class SettingsModule {
     if (nameIn) nameIn.addEventListener('input', saveProf);
     if (roleIn) roleIn.addEventListener('input', saveProf);
     if (bizIn) bizIn.addEventListener('input', saveProf);
+    if (emailIn) emailIn.addEventListener('input', saveProf);
   }
 }
 

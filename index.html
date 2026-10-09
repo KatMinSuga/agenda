@@ -699,6 +699,266 @@
     </div>
   </div>
 
+  <!-- 9. Modal Añadir Colaborador / Equipo -->
+  <div class="planner-modal-backdrop" id="collaborator-editor-modal">
+    <div class="planner-modal-dialog">
+      <div class="modal-header-clean">
+        <h3 style="font-family:var(--font-serif); font-size:1.2rem;"><i data-lucide="user-check"></i> Añadir Colaborador a Grupo / Equipo</h3>
+        <button class="modal-close-btn">&times;</button>
+      </div>
+      <form id="form-modal-collaborator">
+        <div class="modal-body-clean">
+          <div class="form-group-clean">
+            <label>Nombre y Apellido *</label>
+            <input type="text" id="modal-collab-name" class="form-control-clean" required placeholder="ej: Neville Longbottom">
+          </div>
+          <div class="form-row-2">
+            <div class="form-group-clean">
+              <label>Cargo / Especialidad *</label>
+              <input type="text" id="modal-collab-role" class="form-control-clean" required placeholder="ej: Especialista en Herbología & Apoyo">
+            </div>
+            <div class="form-group-clean">
+              <label>Asignar a Grupo o Equipo *</label>
+              <select id="modal-collab-dept" class="form-control-clean" required>
+                <option value="Dirección Estratégica & Prefectura">Dirección Estratégica & Prefectura</option>
+                <option value="Defensa Contra las Artes Oscuras">Defensa Contra las Artes Oscuras</option>
+                <option value="Operaciones & Enlace Sortilegios Weasley">Operaciones & Enlace Sortilegios Weasley</option>
+                <option value="Investigación & Criaturas Mágicas">Investigación & Criaturas Mágicas</option>
+                <option value="Mazmorras & Alquimia">Mazmorras & Alquimia</option>
+                <option value="Herbología & Botánica Mágica">Herbología & Botánica Mágica</option>
+                <option value="Torre del Reloj & Giratiempo">Torre del Reloj & Giratiempo</option>
+                <option value="Logística & Quidditch">Logística & Quidditch</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-row-2">
+            <div class="form-group-clean">
+              <label>Correo Electrónico *</label>
+              <input type="email" id="modal-collab-email" class="form-control-clean" required placeholder="neville@hogwarts.ac.uk">
+            </div>
+            <div class="form-group-clean">
+              <label>Turno / Horario</label>
+              <input type="text" id="modal-collab-shift" class="form-control-clean" value="Jornada Completa (08:00 - 16:00)" placeholder="ej: Media Jornada, Flexible">
+            </div>
+          </div>
+          <div class="form-row-2">
+            <div class="form-group-clean">
+              <label>Estado Inicial de Asistencia</label>
+              <select id="modal-collab-attendance" class="form-control-clean">
+                <option value="Presente" selected>Presente en Despacho/Aula</option>
+                <option value="En Terreno">En Terreno / Misión</option>
+                <option value="Remoto">Remoto / Red Flu</option>
+                <option value="Guardia">De Guardia Nocturna</option>
+              </select>
+            </div>
+            <div class="form-group-clean">
+              <label>Color Distintivo de Avatar</label>
+              <select id="modal-collab-color" class="form-control-clean">
+                <option value="#9C523B">Terracota (#9C523B - Gryffindor)</option>
+                <option value="#3F6253">Verde Bosque (#3F6253 - Slytherin)</option>
+                <option value="#B27D32">Oro Viejo (#B27D32 - Hufflepuff)</option>
+                <option value="#5B4B70">Azul Añil / Lavanda (#5B4B70 - Ravenclaw)</option>
+              </select>
+            </div>
+          </div>
+          <div class="modal-footer-clean">
+            <button type="button" class="action-btn secondary modal-close-btn">Cancelar</button>
+            <button type="submit" class="action-btn primary">Guardar Colaborador</button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- 10. Modal Gestión de Suscripciones & Auditoría -->
+  <div class="planner-modal-backdrop" id="subscription-editor-modal">
+    <div class="planner-modal-dialog">
+      <div class="modal-header-clean">
+        <h3 style="font-family:var(--font-serif); font-size:1.2rem;"><i data-lucide="refresh-cw"></i> Gestión de Suscripción & Historial</h3>
+        <button class="modal-close-btn">&times;</button>
+      </div>
+      <form id="form-modal-subscription">
+        <input type="hidden" id="modal-sub-id">
+        <div class="modal-body-clean">
+          <div class="form-group-clean">
+            <label>Nombre del Servicio / Herramienta *</label>
+            <input type="text" id="modal-sub-name" class="form-control-clean" required placeholder="ej: Bóveda Blindada Gringotts Nivel 7">
+          </div>
+          <div class="form-row-2">
+            <div class="form-group-clean">
+              <label>Costo del Plan (Galeones 🪙 G) *</label>
+              <input type="number" step="0.01" id="modal-sub-amount" class="form-control-clean" required placeholder="45.00">
+            </div>
+            <div class="form-group-clean">
+              <label>Ciclo de Facturación *</label>
+              <select id="modal-sub-cycle" class="form-control-clean">
+                <option value="mensual" selected>Mensual</option>
+                <option value="trimestral">Trimestral</option>
+                <option value="anual">Anual</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-row-2">
+            <div class="form-group-clean">
+              <label>Próxima Renovación *</label>
+              <input type="date" id="modal-sub-renewal" class="form-control-clean" value="2026-11-01" required>
+            </div>
+            <div class="form-group-clean">
+              <label>Categoría</label>
+              <input type="text" id="modal-sub-category" class="form-control-clean" value="Seguridad & Finanzas" placeholder="ej: Comunicaciones, Software">
+            </div>
+          </div>
+          <!-- Apartado tipo Nota para constancia de auditoría -->
+          <div class="form-group-clean" style="background:#fcf9f5; border:1px solid #ebd9c8; border-radius:6px; padding:12px;">
+            <label style="font-weight:700; color:var(--accent-primary); display:flex; align-items:center; gap:6px;">
+              <i data-lucide="clipboard-edit"></i> Constancia / Nota del Cambio (Registro de Auditoría) *
+            </label>
+            <textarea id="modal-sub-note" class="form-control-clean" rows="2" required placeholder="Motivo del cambio de precio, ajuste de plan o fecha..."></textarea>
+            <small style="color:var(--text-muted); font-size:0.75rem;">Quedará constancia con fecha y hora exacta en el historial de notas financieras.</small>
+          </div>
+          <div class="modal-footer-clean">
+            <button type="button" class="action-btn secondary modal-close-btn">Cancelar</button>
+            <button type="submit" class="action-btn primary">Guardar y Registrar Nota</button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- 11. Modal Registro Personal: Hábito o Meta Trimestral -->
+  <div class="planner-modal-backdrop" id="personal-item-modal">
+    <div class="planner-modal-dialog">
+      <div class="modal-header-clean">
+        <h3 style="font-family:var(--font-serif); font-size:1.2rem;"><i data-lucide="heart"></i> Registrar Hábito u Objetivo Personal</h3>
+        <button class="modal-close-btn">&times;</button>
+      </div>
+      <form id="form-modal-personal-item">
+        <div class="modal-body-clean">
+          <div class="form-group-clean">
+            <label>¿Qué deseas registrar?</label>
+            <select id="modal-personal-kind" class="form-control-clean">
+              <option value="habit" selected>✨ Nuevo Hábito Diario / Semanal</option>
+              <option value="goal">🎯 Nueva Meta Trimestral u Objetivo</option>
+            </select>
+          </div>
+
+          <!-- Campos de Hábito -->
+          <div id="personal-fields-habit">
+            <div class="form-group-clean">
+              <label>Nombre del Hábito *</label>
+              <input type="text" id="modal-habit-name" class="form-control-clean" placeholder="ej: Práctica de Encantamiento Patronus (20 min)">
+            </div>
+            <div class="form-group-clean">
+              <label>Icono / Emoji Distintivo</label>
+              <select id="modal-habit-icon" class="form-control-clean">
+                <option value="✨" selected>✨ Magia / Patronus</option>
+                <option value="📖">📖 Lectura / Estudio</option>
+                <option value="🐱">🐱 Cuidado Mascotas (Crookshanks)</option>
+                <option value="🌊">🌊 Paseo / Salud</option>
+                <option value="🌙">🌙 Descanso / Toque de queda</option>
+                <option value="🧪">🧪 Pociones / Precisión</option>
+                <option value="🧘">🧘 Mindfulness / Enfoque</option>
+                <option value="💧">💧 Hidratación</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Campos de Meta Trimestral -->
+          <div id="personal-fields-goal" style="display:none;">
+            <div class="form-group-clean">
+              <label>Título del Objetivo / Meta *</label>
+              <input type="text" id="modal-goal-title" class="form-control-clean" placeholder="ej: Aprobar 12 T.I.M.O.s con calificación de Extraordinario">
+            </div>
+            <div class="form-row-2">
+              <div class="form-group-clean">
+                <label>Categoría</label>
+                <select id="modal-goal-category" class="form-control-clean">
+                  <option value="Académico" selected>Académico</option>
+                  <option value="Causas Sociales">Causas Sociales (P.E.D.D.O.)</option>
+                  <option value="Magia Avanzada">Magia Avanzada</option>
+                  <option value="Salud & Bienestar">Salud & Bienestar</option>
+                  <option value="Proyectos Estratégicos">Proyectos Estratégicos</option>
+                </select>
+              </div>
+              <div class="form-group-clean">
+                <label>Fecha Objetivo</label>
+                <input type="text" id="modal-goal-target-date" class="form-control-clean" value="Diciembre 2026" placeholder="ej: Diciembre 2026, Q4">
+              </div>
+            </div>
+            <div class="form-group-clean">
+              <label>Progreso Inicial (%)</label>
+              <input type="number" min="0" max="100" id="modal-goal-progress" class="form-control-clean" value="25">
+            </div>
+          </div>
+
+          <div class="modal-footer-clean">
+            <button type="button" class="action-btn secondary modal-close-btn">Cancelar</button>
+            <button type="submit" class="action-btn primary">Guardar</button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- 12. Modal Nueva Tarea / Solicitud en Proyecto VA Hub -->
+  <div class="planner-modal-backdrop" id="va-task-request-modal">
+    <div class="planner-modal-dialog">
+      <div class="modal-header-clean">
+        <h3 style="font-family:var(--font-serif); font-size:1.2rem;"><i data-lucide="plus-circle"></i> Nueva Tarea / Solicitud para Proyecto</h3>
+        <button class="modal-close-btn">&times;</button>
+      </div>
+      <form id="form-modal-va-task">
+        <div class="modal-body-clean">
+          <div class="form-group-clean">
+            <label>Proyecto Vinculado *</label>
+            <select id="modal-va-task-project" class="form-control-clean" required>
+              <!-- Llenado dinámicamente -->
+            </select>
+          </div>
+          <div class="form-group-clean">
+            <label>Título de la Tarea / Solicitud *</label>
+            <input type="text" id="modal-va-task-title" class="form-control-clean" required placeholder="ej: Preparar balance urgente de ventas para Sortilegios Weasley">
+          </div>
+          <div class="form-group-clean">
+            <label>Instrucciones o Entregable</label>
+            <textarea id="modal-va-task-desc" class="form-control-clean" rows="2" placeholder="Requerimientos específicos del cliente o acuerdo de junta..."></textarea>
+          </div>
+          <div class="form-row-2">
+            <div class="form-group-clean">
+              <label>Fecha Límite</label>
+              <input type="date" id="modal-va-task-date" class="form-control-clean" value="2026-10-09" required>
+            </div>
+            <div class="form-group-clean">
+              <label>Prioridad</label>
+              <select id="modal-va-task-priority" class="form-control-clean">
+                <option value="urgente">🔴 Urgente</option>
+                <option value="alta" selected>🟠 Alta</option>
+                <option value="media">🟡 Media</option>
+                <option value="baja">🟢 Baja</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-row-2">
+            <div class="form-group-clean">
+              <label>Responsable Asignado</label>
+              <select id="modal-va-task-assignee" class="form-control-clean">
+                <!-- Llenado dinámicamente -->
+              </select>
+            </div>
+            <div class="form-group-clean">
+              <label>Hora Estimada Inicio</label>
+              <input type="time" id="modal-va-task-start" class="form-control-clean" value="14:00">
+            </div>
+          </div>
+          <div class="modal-footer-clean">
+            <button type="button" class="action-btn secondary modal-close-btn">Cancelar</button>
+            <button type="submit" class="action-btn primary">Guardar e Integrar al Proyecto</button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+
   <!-- Scripts en orden de dependencias -->
   <script src="js/store.js"></script>
   <script src="js/audio.js"></script>

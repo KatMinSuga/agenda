@@ -466,6 +466,32 @@ const INITIAL_DATA = {
       { id: "sub-3", name: "Acceso Hemeroteca Archivo Secreto Alejandría", amount: 35, cycle: "mensual", nextRenewal: "2026-10-18", category: "Investigación", active: true },
       { id: "sub-4", name: "Red Flu Corporativa Privada (Hogwarts - Londres)", amount: 20, cycle: "mensual", nextRenewal: "2026-10-25", category: "Transporte Mágico", active: true }
     ],
+    subscriptionHistory: [
+      {
+        id: "sub-hist-1",
+        subscriptionId: "sub-1",
+        subscriptionName: "Bóveda Blindada Gringotts Nivel 7",
+        date: "2026-10-01",
+        action: "Ajuste de Tarifa",
+        oldPrice: 40,
+        newPrice: 45,
+        oldCycle: "mensual",
+        newCycle: "mensual",
+        note: "Actualización de cuota de mantenimiento de protecciones anti-ladrones certificadas por duendes de Gringotts."
+      },
+      {
+        id: "sub-hist-2",
+        subscriptionId: "sub-2",
+        subscriptionName: "Servicio Express Lechuzas Mensajeras Rápidas",
+        date: "2026-09-18",
+        action: "Alta de Suscripción",
+        oldPrice: 0,
+        newPrice: 25,
+        oldCycle: "-",
+        newCycle: "mensual",
+        note: "Contratación de lechuza real de alta velocidad para comunicaciones urgentes con el Ministerio de Magia."
+      }
+    ],
     budgetCategories: [
       { category: "Materiales & Pociones", allocated: 1200, spent: 980 },
       { category: "Equipo Mágico & Nómina", allocated: 3500, spent: 2600 },
@@ -679,6 +705,10 @@ class Store {
         const parsed = JSON.parse(stored);
         // Verificar que contenga los datos temáticos actualizados
         if (parsed && parsed.profile && parsed.profile.name === "Hermione Granger") {
+          if (!parsed.finance) parsed.finance = {};
+          if (!parsed.finance.subscriptionHistory) {
+            parsed.finance.subscriptionHistory = INITIAL_DATA.finance.subscriptionHistory || [];
+          }
           return parsed;
         }
       }
@@ -856,12 +886,139 @@ class Store {
     return entry;
   }
 
+  addClientRequest(clientId, request) {
+    if (!request.id) request.id = 'req-' + Date.now();
+    if (!request.date) request.date = new Date().toISOString().split('T')[0];
+    if (!request.status) request.status = 'pendiente';
+    const client = (this.data.clients || []).find(c => c.id === clientId);
+    if (client) {
+      if (!client.requests) client.requests = [];
+      client.requests.unshift(request);
+      this.saveData();
+      return request;
+    }
+    return null;
+  }
+
+  addCollaborator(collab) {
+    if (!collab.id) collab.id = 'mem-' + Date.now();
+    if (!collab.tasksAssigned) collab.tasksAssigned = 0;
+    if (!collab.attendance) collab.attendance = 'Presente';
+    if (!collab.avatarColor) collab.avatarColor = '#9C523B';
+    if (!this.data.team) this.data.team = [];
+    this.data.team.push(collab);
+    this.saveData();
+    return collab;
+  }
+
   // Operaciones de Finanzas
   addTransaction(trx) {
     if (!trx.id) trx.id = 'trx-' + Date.now();
     this.data.finance.transactions.unshift(trx);
     this.saveData();
     return trx;
+  }
+
+  // Operaciones de Suscripciones y Registro de Auditoría
+  addSubscription(sub, note = "") {
+    if (!sub.id) sub.id = 'sub-' + Date.now();
+    if (sub.active === undefined) sub.active = true;
+    if (!this.data.finance.subscriptions) this.data.finance.subscriptions = [];
+    if (!this.data.finance.subscriptionHistory) this.data.finance.subscriptionHistory = [];
+    
+    this.data.finance.subscriptions.push(sub);
+    this.data.finance.subscriptionHistory.unshift({
+      id: 'sub-hist-' + Date.now(),
+      subscriptionId: sub.id,
+      subscriptionName: sub.name,
+      date: new Date().toISOString().split('T')[0],
+      action: "Alta de Suscripción",
+      oldPrice: 0,
+      newPrice: Number(sub.amount),
+      oldCycle: "-",
+      newCycle: sub.cycle || "mensual",
+      note: note.trim() || "Nueva suscripción agregada al control financiero."
+    });
+    this.saveData();
+    return sub;
+  }
+
+  updateSubscription(id, updates, note = "") {
+    if (!this.data.finance.subscriptions) this.data.finance.subscriptions = [];
+    if (!this.data.finance.subscriptionHistory) this.data.finance.subscriptionHistory = [];
+    const idx = this.data.finance.subscriptions.findIndex(s => s.id === id);
+    if (idx !== -1) {
+      const oldSub = this.data.finance.subscriptions[idx];
+      const oldPrice = oldSub.amount;
+      const oldCycle = oldSub.cycle;
+      this.data.finance.subscriptions[idx] = { ...oldSub, ...updates };
+      const newSub = this.data.finance.subscriptions[idx];
+
+      let actionDesc = "Actualización de Parámetros";
+      if (updates.amount !== undefined && Number(updates.amount) !== Number(oldPrice)) {
+        actionDesc = `Cambio de Precio (${oldPrice} G ➔ ${updates.amount} G)`;
+      } else if (updates.cycle !== undefined && updates.cycle !== oldCycle) {
+        actionDesc = `Cambio de Plan (${oldCycle} ➔ ${updates.cycle})`;
+      } else if (updates.active !== undefined) {
+        actionDesc = updates.active ? "Reactivación de Plan" : "Pausa / Baja Temporal";
+      }
+
+      this.data.finance.subscriptionHistory.unshift({
+        id: 'sub-hist-' + Date.now(),
+        subscriptionId: id,
+        subscriptionName: newSub.name,
+        date: new Date().toISOString().split('T')[0],
+        action: actionDesc,
+        oldPrice: Number(oldPrice),
+        newPrice: Number(newSub.amount),
+        oldCycle: oldCycle,
+        newCycle: newSub.cycle,
+        note: note.trim() || `Modificación de plan realizada el ${new Date().toLocaleDateString()}.`
+      });
+      this.saveData();
+      return newSub;
+    }
+    return null;
+  }
+
+  deleteSubscription(id, note = "") {
+    if (!this.data.finance.subscriptions) return;
+    if (!this.data.finance.subscriptionHistory) this.data.finance.subscriptionHistory = [];
+    const sub = this.data.finance.subscriptions.find(s => s.id === id);
+    if (sub) {
+      this.data.finance.subscriptionHistory.unshift({
+        id: 'sub-hist-' + Date.now(),
+        subscriptionId: id,
+        subscriptionName: sub.name,
+        date: new Date().toISOString().split('T')[0],
+        action: "Cancelación / Baja Definitiva",
+        oldPrice: Number(sub.amount),
+        newPrice: 0,
+        oldCycle: sub.cycle,
+        newCycle: "cancelada",
+        note: note.trim() || "Baja voluntaria del servicio suscrito."
+      });
+      this.data.finance.subscriptions = this.data.finance.subscriptions.filter(s => s.id !== id);
+      this.saveData();
+    }
+  }
+
+  addSubscriptionNote(subscriptionId, noteText) {
+    if (!this.data.finance.subscriptionHistory) this.data.finance.subscriptionHistory = [];
+    const sub = (this.data.finance.subscriptions || []).find(s => s.id === subscriptionId);
+    this.data.finance.subscriptionHistory.unshift({
+      id: 'sub-hist-' + Date.now(),
+      subscriptionId: subscriptionId || 'general',
+      subscriptionName: sub ? sub.name : 'Anotación Financiera',
+      date: new Date().toISOString().split('T')[0],
+      action: "Nota Informativa",
+      oldPrice: sub ? sub.amount : 0,
+      newPrice: sub ? sub.amount : 0,
+      oldCycle: sub ? sub.cycle : '-',
+      newCycle: sub ? sub.cycle : '-',
+      note: noteText.trim()
+    });
+    this.saveData();
   }
 
   // Operaciones de Notas
@@ -924,6 +1081,48 @@ class Store {
   addShoppingItem(item) {
     if (!item.id) item.id = 'shp-' + Date.now();
     this.data.personal.shoppingList.push(item);
+    this.saveData();
+  }
+
+  addPersonalHabit(habit) {
+    if (!habit.id) habit.id = 'hab-' + Date.now();
+    if (!habit.days) habit.days = {};
+    if (habit.streak === undefined) habit.streak = 0;
+    if (!this.data.personal.habits) this.data.personal.habits = [];
+    this.data.personal.habits.push(habit);
+    this.saveData();
+    return habit;
+  }
+
+  deletePersonalHabit(id) {
+    if (!this.data.personal.habits) return;
+    this.data.personal.habits = this.data.personal.habits.filter(h => h.id !== id);
+    this.saveData();
+  }
+
+  addPersonalGoal(goal) {
+    if (!goal.id) goal.id = 'gol-' + Date.now();
+    if (goal.progress === undefined) goal.progress = 0;
+    if (!this.data.personal.goals) this.data.personal.goals = [];
+    this.data.personal.goals.push(goal);
+    this.saveData();
+    return goal;
+  }
+
+  updatePersonalGoal(id, updates) {
+    if (!this.data.personal.goals) return null;
+    const g = this.data.personal.goals.find(goal => goal.id === id);
+    if (g) {
+      Object.assign(g, updates);
+      this.saveData();
+      return g;
+    }
+    return null;
+  }
+
+  deletePersonalGoal(id) {
+    if (!this.data.personal.goals) return;
+    this.data.personal.goals = this.data.personal.goals.filter(g => g.id !== id);
     this.saveData();
   }
 
@@ -1094,11 +1293,31 @@ class Store {
 
   // Operaciones de Notificaciones
   markNotificationRead(id) {
-    const n = this.data.notifications.find(item => item.id === id);
+    const n = (this.data.notifications || []).find(item => item.id === id);
     if (n) {
       n.read = true;
       this.saveData();
     }
+  }
+
+  toggleNotificationRead(id) {
+    const n = (this.data.notifications || []).find(item => item.id === id);
+    if (n) {
+      n.read = !n.read;
+      this.saveData();
+      return n;
+    }
+    return null;
+  }
+
+  clearReadNotifications() {
+    this.data.notifications = (this.data.notifications || []).filter(n => !n.read);
+    this.saveData();
+  }
+
+  markAllNotificationsRead() {
+    (this.data.notifications || []).forEach(n => { n.read = true; });
+    this.saveData();
   }
 
   // Backup & Restauración

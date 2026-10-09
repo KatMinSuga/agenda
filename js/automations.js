@@ -223,23 +223,43 @@ class AutomationsModule {
 
         <!-- Registro de Actividad & Notificaciones en Vivo -->
         <div class="automations-log-card">
-          <div class="card-top-row">
-            <h4><i data-lucide="bell"></i> Historial de Alertas & Notificaciones</h4>
-            <button class="btn-text-sm" id="btn-clear-notifications">Limpiar leídas</button>
+          <div class="notif-header-toolbar">
+            <div>
+              <h4 style="display:flex; align-items:center; gap:8px; margin:0 0 2px;"><i data-lucide="bell"></i> Historial de Alertas & Notificaciones</h4>
+              <span style="font-size:0.75rem; color:var(--text-muted);">${unreadNotifsCount} no leídas · ${notifications.length} en total</span>
+            </div>
+            <div class="notif-toolbar-actions">
+              <button class="action-btn-xs secondary" id="btn-mark-all-notifs-read" title="Marcar todas las alertas como leídas">
+                <i data-lucide="check-check"></i> Todas leídas
+              </button>
+              <button class="action-btn-xs danger-subtle" id="btn-clear-read-notifications" title="Eliminar las alertas que ya revisaste">
+                <i data-lucide="trash-2"></i> Limpiar leídas
+              </button>
+            </div>
           </div>
 
           <div class="notifications-feed">
             ${notifications.length === 0 ? `<p class="empty-hint">Bandeja de notificaciones al día. Cero alertas pendientes.</p>` : notifications.map(notif => `
-              <div class="notif-feed-item ${notif.read ? 'is-read' : 'is-unread'} type-${notif.type}" data-notif-id="${notif.id}" title="Clic para marcar como leída">
+              <div class="notif-feed-item ${notif.read ? 'is-read' : 'is-unread'} type-${notif.type}" data-notif-id="${notif.id}">
                 <div class="notif-icon-wrap">
-                  <i data-lucide="${notif.type === 'alerta' ? 'alert-triangle' : (notif.type === 'sistema' ? 'dollar-sign' : 'info')}"></i>
+                  <i data-lucide="${notif.type === 'alerta' ? 'alert-triangle' : (notif.type === 'sistema' ? 'coins' : 'info')}"></i>
                 </div>
                 <div class="notif-body">
                   <div class="notif-title-row">
-                    <strong>${notif.title}</strong>
+                    <div style="display:flex; align-items:center; gap:6px;">
+                      <span class="notif-status-dot ${notif.read ? 'read' : 'unread'}"></span>
+                      <strong>${notif.title}</strong>
+                      <span class="notif-badge-pill ${notif.read ? 'read' : 'unread'}">${notif.read ? 'Leída' : 'Nueva'}</span>
+                    </div>
                     <span class="notif-time">${notif.time}</span>
                   </div>
                   <p class="notif-msg">${notif.message}</p>
+                </div>
+                <div class="notif-action-col">
+                  <button class="btn-toggle-notif ${notif.read ? 'is-read' : 'is-unread'}" data-action="toggle-notif-read" data-notif-id="${notif.id}" title="${notif.read ? 'Marcar como no leída' : 'Marcar como leída'}">
+                    <i data-lucide="${notif.read ? 'check-circle-2' : 'circle'}"></i>
+                    <span>${notif.read ? 'Leída' : 'Marcar'}</span>
+                  </button>
                 </div>
               </div>
             `).join('')}
@@ -328,20 +348,42 @@ class AutomationsModule {
     });
 
     // 7. Limpiar notificaciones leídas
-    const btnClear = container.querySelector('#btn-clear-notifications');
+    const btnClear = container.querySelector('#btn-clear-read-notifications');
     if (btnClear) {
       btnClear.addEventListener('click', () => {
-        window.plannerStore.data.notifications = window.plannerStore.data.notifications.filter(n => !n.read);
-        window.plannerStore.saveData();
+        window.plannerStore.clearReadNotifications();
+        window.plannerAudio.playCheck();
         this.render(container);
       });
     }
 
-    // 8. Clic en notificación para marcar como leída
+    // 8. Marcar todas las notificaciones como leídas
+    const btnMarkAll = container.querySelector('#btn-mark-all-notifs-read');
+    if (btnMarkAll) {
+      btnMarkAll.addEventListener('click', () => {
+        window.plannerStore.markAllNotificationsRead();
+        window.plannerAudio.playCheck();
+        this.render(container);
+      });
+    }
+
+    // 9. Clic en botón individual para marcar/desmarcar leída
+    container.querySelectorAll('[data-action="toggle-notif-read"]').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const notifId = e.currentTarget.dataset.notifId;
+        window.plannerStore.toggleNotificationRead(notifId);
+        window.plannerAudio.playCheck();
+        this.render(container);
+      });
+    });
+
+    // 10. Clic en la tarjeta de notificación para alternar leída
     container.querySelectorAll('.notif-feed-item').forEach(item => {
       item.addEventListener('click', (e) => {
+        if (e.target.closest('button')) return;
         const notifId = e.currentTarget.dataset.notifId;
-        window.plannerStore.markNotificationRead(notifId);
+        window.plannerStore.toggleNotificationRead(notifId);
         this.render(container);
       });
     });

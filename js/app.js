@@ -681,6 +681,137 @@ class PlannerApp {
       });
     }
 
+    // 7. Guardar Colaborador Modal
+    const formCollab = document.getElementById('form-modal-collaborator');
+    if (formCollab) {
+      formCollab.addEventListener('submit', (e) => {
+        e.preventDefault();
+        window.plannerStore.addCollaborator({
+          name: document.getElementById('modal-collab-name').value.trim(),
+          role: document.getElementById('modal-collab-role').value.trim(),
+          department: document.getElementById('modal-collab-dept').value,
+          email: document.getElementById('modal-collab-email').value.trim(),
+          shift: document.getElementById('modal-collab-shift').value.trim(),
+          attendance: document.getElementById('modal-collab-attendance').value,
+          avatarColor: document.getElementById('modal-collab-color').value,
+          tasksAssigned: 0
+        });
+
+        window.plannerAudio.playCheck();
+        this.closeAllModals();
+        if (this.currentTab === 'contacts') {
+          this.navigateToTab('contacts', false);
+        }
+      });
+    }
+
+    // 8. Guardar Suscripción Modal con Historial/Nota
+    const formSub = document.getElementById('form-modal-subscription');
+    if (formSub) {
+      formSub.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const subId = document.getElementById('modal-sub-id').value;
+        const subObj = {
+          name: document.getElementById('modal-sub-name').value.trim(),
+          amount: parseFloat(document.getElementById('modal-sub-amount').value) || 0,
+          cycle: document.getElementById('modal-sub-cycle').value,
+          nextRenewal: document.getElementById('modal-sub-renewal').value,
+          category: document.getElementById('modal-sub-category').value.trim()
+        };
+        const note = document.getElementById('modal-sub-note').value.trim();
+
+        if (subId) {
+          window.plannerStore.updateSubscription(subId, subObj, note);
+        } else {
+          window.plannerStore.addSubscription(subObj, note);
+        }
+
+        window.plannerAudio.playCheck();
+        this.closeAllModals();
+        if (this.currentTab === 'finance') {
+          this.navigateToTab('finance', false);
+        }
+      });
+    }
+
+    // 9. Guardar Hábito o Meta Trimestral Modal
+    const formPersonal = document.getElementById('form-modal-personal-item');
+    if (formPersonal) {
+      formPersonal.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const kind = document.getElementById('modal-personal-kind').value;
+        if (kind === 'habit') {
+          const name = document.getElementById('modal-habit-name').value.trim();
+          if (name) {
+            window.plannerStore.addPersonalHabit({
+              name: name,
+              icon: document.getElementById('modal-habit-icon').value || '✨',
+              streak: 0,
+              days: {}
+            });
+          }
+        } else {
+          const title = document.getElementById('modal-goal-title').value.trim();
+          if (title) {
+            window.plannerStore.addPersonalGoal({
+              title: title,
+              category: document.getElementById('modal-goal-category').value,
+              targetDate: document.getElementById('modal-goal-target-date').value.trim() || 'Diciembre 2026',
+              progress: parseInt(document.getElementById('modal-goal-progress').value, 10) || 0
+            });
+          }
+        }
+
+        window.plannerAudio.playCheck();
+        this.closeAllModals();
+        if (this.currentTab === 'personal') {
+          this.navigateToTab('personal', false);
+        }
+      });
+    }
+
+    // 10. Guardar Tarea / Solicitud para Proyecto VA Hub
+    const formVATask = document.getElementById('form-modal-va-task');
+    if (formVATask) {
+      formVATask.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const projectId = document.getElementById('modal-va-task-project').value;
+        const title = document.getElementById('modal-va-task-title').value.trim();
+        const desc = document.getElementById('modal-va-task-desc').value.trim();
+        const dueDate = document.getElementById('modal-va-task-date').value;
+        const priority = document.getElementById('modal-va-task-priority').value;
+        const assigneeId = document.getElementById('modal-va-task-assignee').value || null;
+        const startTime = document.getElementById('modal-va-task-start').value || '14:00';
+
+        const projects = window.plannerStore.get('projects') || [];
+        const p = projects.find(proj => proj.id === projectId);
+
+        window.plannerStore.addTask({
+          title: title,
+          description: desc,
+          startDate: dueDate,
+          dueDate: dueDate,
+          startTime: startTime,
+          endTime: '15:30',
+          priority: priority,
+          status: 'pendiente',
+          category: p ? p.title : 'Operaciones VA',
+          projectId: projectId,
+          clientId: p ? p.clientId : null,
+          assigneeId: assigneeId,
+          subtasks: [
+            { id: 'sub-' + Date.now(), title: 'Revisión y puesta en marcha inicial', completed: false }
+          ]
+        });
+
+        window.plannerAudio.playCheck();
+        this.closeAllModals();
+        if (this.currentTab === 'vabox') {
+          this.navigateToTab('vabox', false);
+        }
+      });
+    }
+
     // Opciones del Quick Entry Modal
     document.querySelectorAll('[data-quick-action]').forEach(btn => {
       btn.addEventListener('click', (e) => {

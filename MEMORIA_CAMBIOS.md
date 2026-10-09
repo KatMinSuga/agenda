@@ -233,7 +233,62 @@ Las siguientes características forman la base consolidada del sistema y **NO de
   - `js/app.js`
   - `MEMORIA_CAMBIOS.md`
 
+### [Entrada 007] — 09/10/2026 · Reestructuración Integral de 8 Módulos (VA Hub con Tareas y Cronómetro, Colaboradores y Equipos, Suscripciones con Auditoría, Cuaderno con Plantillas y Checkboxes, Hábitos y Metas, Notificaciones Leídas, Métricas Multi-Período/Proyecto y Perfil de Usuario)
+* **Petición del Usuario:**
+  > *"quiero que realices estos cambios (el Módulo 04 · Asistente Virtual & Clientes, debemos restructurar el apartado para poder tener los proyectos con sus repectivas tareas, y teniendo cada uno el conteo de tiempo cuando se active el cronometro ara registrar el tiempo dedicado a ese proyecto y llevar un mejor control de las horas de trabajo invertidas en ese proyecto o subtarea del proyecto, para futuros cobros o juntas de revisión, debe poderse agregar una solicitud o tarea nueva por si mientras se trabaja surge algo nuevo dentro del proyecto. es importante que este apartado tampoco exceda el tamaño general d ela agenda para no salirse de la pantalla del diseño; el Módulo 05 · Personas & Colaboradores, debe tener un menú y diseño para agregar colaboradores el la parte de nuevo contacto y para agregar estos colaboradores a algún grupo o equipo; el Módulo 06 · Control Financiero, las suscripciones deben poder gestionarse, tanto para agregar mas como para quitar o cmabiar el precio del pplan, simplemente debe quedar constancia de cuando se realizo el cambio, en un apartado tipo nota; el Módulo 07 · Cuaderno & Documentos, necesita un menú para escoger plantillas, el apartado de nueva nota debe ser editable tanto en el apartado de la etiqueta a la que pertenece como en si necesita agregar checkboxes; el Módulo 08 · Vida Personal & Hábitos, debe poderse tener un menú para registrar un nuevo habito, meta trimestral u objetivo personal para llevar un mejor control, asi mismo me gustaria una mejora en la distribución del diseño que se vea mas controlado y editable sin dejar de ser minimalista; el Módulo 10 · Automatización Inteligente & Motor Predictivo, debe poderse marcar en las notificaciones cuales ya fueron leidas y acomodar de mejor manera el botón para limpiar las notificaciones leidas; el Módulo 10 · Métricas & Auditoría, quiero que puedas escoger el total de métricas por, dia, semana, mes y año. y que sea por proyecto o en total de proyectos, asi poder entregar el Excel dependiendo de lo que se necesita, y poder ser una manera de entregar el resumen de la operación a el cliente del proyecto o un resumen de todo para la contabilidad y organización; el Módulo 11 · Seguridad & Personalización, solo mejora el apartado de perfil de usuario y rol, quiero un mejor diseño y espaciado de las cosas )"*
+* **Acciones Realizadas:**
+  1. **Módulo 04 · Asistente Virtual & Clientes (`js/vabox.js`):**
+     - Reestructuración con árbol visual de Clientes y Proyectos vinculados a sus respectivas tareas/solicitudes.
+     - Cronómetro interactivo por proyecto o subtarea para registrar en vivo horas dedicadas, cálculo de costo facturable y minutos acumulados para cobros y juntas de revisión.
+     - Botón y modal on-the-fly `+ Solicitud / Tarea` para incorporar nuevas tareas a un proyecto mientras se trabaja.
+     - Modal de Acta de Revisión y Cobro con cálculo de tarifa horaria (🪙 G/hora) y detalle de horas invertidas.
+     - Contención estricta de maquetación en `.va-hub-wrapper` (`box-sizing: border-box`, `max-width: 100%`, `overflow-x: hidden`) impidiendo cualquier desborde fuera de la agenda.
+  2. **Módulo 05 · Personas & Colaboradores (`js/contacts-team.js`):**
+     - Menú y diseño en la sección de contactos para registrar colaboradores y vincularlos directamente a un grupo o equipo (Hogwarts Prefectos, Gryffindor Quidditch, Departamento de Aurores, S.P.E.W.).
+     - Filtro visual por grupos y opción rápida para reasignar a cualquier colaborador a otro equipo con un solo clic.
+     - Creación del modal `#collaborator-editor-modal` en `index.html`.
+  3. **Módulo 06 · Control Financiero (`js/finance.js`):**
+     - Gestión completa de suscripciones: agregar nuevas suscripciones, editar plan/precio y cancelar suscripciones.
+     - Apartado tipo nota de pergamino *"Constancia & Notas de Modificaciones"* (`subscriptionHistory`) que almacena de forma inmutable la fecha, hora, tipo de acción, precio anterior, nuevo precio y el motivo/nota del cambio.
+     - Creación del modal `#subscription-editor-modal` en `index.html`.
+  4. **Módulo 07 · Cuaderno & Documentos (`js/notes.js`):**
+     - Menú desplegable y galería de plantillas preconfiguradas (*Minuta de Reunión*, *Formulación de Pociones*, *Brief de Proyecto*, *Plan Semanal*, *Revisión 1:1*).
+     - Campos editables de etiqueta/categoría tanto en la creación como en el visor de notas.
+     - Barra de herramientas con inserción de casillas de verificación interactivas (`- [ ]`, `- [x]`) y conmutador visual dinámico para marcar y desmarcar listas de verificación directamente en el visor de notas.
+  5. **Módulo 08 · Vida Personal & Hábitos (`js/personal.js`):**
+     - Menú y modal `#personal-item-modal` para dar de alta nuevos hábitos diarios, metas trimestrales u objetivos personales.
+     - Rediseño equilibrado y minimalista: cuadrícula compacta de hábitos con rachas de días y eliminación, metas trimestrales con botones de ajuste rápido de progreso `[-5%]` y `[+5%]`, y barra ágil para añadir compras al vuelo.
+  6. **Módulo 10 · Automatización Inteligente & Motor Predictivo (`js/automations.js`):**
+     - Capacidad de marcar notificaciones individualmente como leídas o no leídas con retroalimentación visual (indicador de punto y badge).
+     - Reorganización de la barra de herramientas superior con botones limpios y bien espaciados: *Marcar todas leídas* y *Limpiar leídas*.
+  7. **Módulo 10 (11 en menú) · Métricas & Auditoría (`reports.js`):**
+     - Selectores interactivos de período: *Día*, *Semana*, *Mes* y *Año*.
+     - Selector de alcance: *Todos los Proyectos (Total)* o *Proyecto Específico*.
+     - Recálculo dinámico de KPIs (productividad, horas trabajadas, avance, presupuesto ejecutado y desvíos) y gráficos en tiempo real.
+     - Exportación de Excel (CSV) a la medida: genera informe adaptado según el filtro aplicado (resumen operacional para clientes o reporte global consolidado para contabilidad).
+  8. **Módulo 11 (12 en menú) · Seguridad & Personalización (`js/settings.js`):**
+     - Rediseño del perfil de usuario y rol: tarjeta de identificación espaciosa y elegante, preservación garantizada del avatar SVG de Crookshanks (`assets/avatar-cat.svg`), cuadrícula de privilegios de rol (acceso total, auditoría financiera, reasignación, etc.) y formulario de edición sin desbordes.
+  9. **Soporte Global y Modales (`index.html`, `js/store.js`, `js/app.js`, `css/modules.css`):**
+     - Métodos de almacén reactivo para suscripciones, colaboradores, notas de auditoría, hábitos, metas y notificaciones.
+     - Modales globales integrados sin dependencias externas.
+     - Estilos CSS complementarios garantizando consistencia estética Notes y protección anti-desborde.
+* **Archivos Modificados:**
+  - `css/modules.css`
+  - `index.html`
+  - `js/app.js`
+  - `js/automations.js`
+  - `js/contacts-team.js`
+  - `js/finance.js`
+  - `js/notes.js`
+  - `js/personal.js`
+  - `js/reports.js`
+  - `js/settings.js`
+  - `js/store.js`
+  - `js/vabox.js`
+  - `MEMORIA_CAMBIOS.md`
+
 ---
 
 <!-- Las siguientes entradas se añadirán aquí secuencialmente con cada nueva solicitud del usuario -->
+
 
